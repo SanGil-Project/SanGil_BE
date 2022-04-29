@@ -53,4 +53,10 @@ public class User {
         this.userImgUrl = userImageUrl;
         this.userTitle = userTitle;
     }
+
+    public User(String username, String nickname, String password) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+    }
 }
