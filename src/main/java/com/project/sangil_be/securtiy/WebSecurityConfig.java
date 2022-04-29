@@ -1,7 +1,9 @@
 package com.project.sangil_be.securtiy;
 
+import com.project.sangil_be.securtiy.filter.FormLoginFilter;
 import com.project.sangil_be.securtiy.filter.JwtAuthFilter;
 import com.project.sangil_be.securtiy.jwt.HeaderTokenExtractor;
+import com.project.sangil_be.securtiy.provider.FormLoginAuthProvider;
 import com.project.sangil_be.securtiy.provider.JWTAuthProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
         auth
-//                .authenticationProvider(formLoginAuthProvider())
+                .authenticationProvider(formLoginAuthProvider())
                 .authenticationProvider(jwtAuthProvider);
     }
 
@@ -89,25 +91,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/forbidden.html");
     }
 
-//    @Bean
-//    public FormLoginFilter formLoginFilter() throws Exception {
-//        FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
-//        formLoginFilter.setFilterProcessesUrl("/user/login");
-//        formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
-//        formLoginFilter.afterPropertiesSet();
-//        return formLoginFilter;
-//    }
+    @Bean
+    public FormLoginFilter formLoginFilter() throws Exception {
+        FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
+        formLoginFilter.setFilterProcessesUrl("/user/login");
+        formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
+        formLoginFilter.afterPropertiesSet();
+        return formLoginFilter;
+    }
 
 
-//    @Bean
-//    public FormLoginSuccessHandler formLoginSuccessHandler() {
-//        return new FormLoginSuccessHandler();
-//    }
-//
-//    @Bean
-//    public FormLoginAuthProvider formLoginAuthProvider() {
-//        return new FormLoginAuthProvider(encodePassword());
-//    }
+    @Bean
+    public FormLoginSuccessHandler formLoginSuccessHandler() {
+        return new FormLoginSuccessHandler();
+    }
+
+    @Bean
+    public FormLoginAuthProvider formLoginAuthProvider() {
+        return new FormLoginAuthProvider(encodePassword());
+    }
 
     private JwtAuthFilter jwtFilter() throws Exception {
         List<String> skipPathList = new ArrayList<>();
