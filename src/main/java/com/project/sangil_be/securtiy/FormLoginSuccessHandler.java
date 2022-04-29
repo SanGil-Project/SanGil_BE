@@ -1,7 +1,5 @@
 package com.project.sangil_be.securtiy;
 
-import com.google.gson.Gson;
-import com.project.sangil_be.dto.LoginResponseDto;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -22,12 +20,6 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
         response.addHeader(AUTH_HEADER, TOKEN_TYPE + " " + token);
 
-        //추가
-        System.out.println(token);
-        LoginResponseDto dto=new LoginResponseDto();
-        dto.setUsername(userDetails.getUsername());
-        String resp= new Gson().toJson(dto);
-        response.getWriter().write(resp);
     }
 
 }

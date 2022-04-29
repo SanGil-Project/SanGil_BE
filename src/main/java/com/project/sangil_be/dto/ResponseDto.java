@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LoginResponseDto {
+public class ResponseDto {
+    private boolean result;
 
-    private String username;
-
+    public ResponseDto(Boolean result) {
+        this.result = result;
+    }
 }

@@ -1,4 +1,4 @@
-package com.project.sangil_be.model;//package com.project.mountainroad_be.model;
+package com.project.sangil_be.model;
 //
 //import lombok.Getter;
 //import lombok.NoArgsConstructor;
