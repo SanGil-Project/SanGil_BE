@@ -1,6 +1,5 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.api.weatherService;
 import com.project.sangil_be.dto.ResponseDto;
 import com.project.sangil_be.dto.SignUpRequestDto;
 import com.project.sangil_be.model.User;

@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-/*
+        /*
          * 1.
          * UsernamePasswordAuthenticationFilter 이전에 FormLoginFilter, JwtFilter 를 등록합니다.
          * FormLoginFilter : 로그인 인증을 실시합니다.
@@ -98,10 +98,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
         formLoginFilter.setFilterProcessesUrl("/user/login");
         formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
+//        formLoginFilter.setAuthenticationFailureHandler(formLoginFailureHandler());
         formLoginFilter.afterPropertiesSet();
         return formLoginFilter;
     }
 
+//    @Bean
+//    public FormLoginFailureHandler formLoginFailureHandler() {
+//        return new FormLoginFailureHandler();
+//    }
 
     @Bean
     public FormLoginSuccessHandler formLoginSuccessHandler() {
@@ -123,9 +128,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // h2-console 허용
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
-
         // 회원 관리 API 허용
-//        skipPathList.add("GET,/user/**");
+        skipPathList.add("GET,/user/**");
         skipPathList.add("POST,/user/signup");
 
         skipPathList.add("GET,/");
@@ -146,7 +150,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return filter;
     }
-
 
     @Bean
     @Override
