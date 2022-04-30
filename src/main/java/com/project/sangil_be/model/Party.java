@@ -20,6 +20,9 @@ public class Party {
     private String partyContent;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String mountain;
 
     @Column(nullable = false)

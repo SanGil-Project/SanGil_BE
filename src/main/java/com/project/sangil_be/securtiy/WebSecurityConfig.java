@@ -98,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
         formLoginFilter.setFilterProcessesUrl("/user/login");
         formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
+//        formLoginFilter.setAuthenticationFailureHandler(authFailureHandler());
         formLoginFilter.afterPropertiesSet();
         return formLoginFilter;
     }
@@ -112,6 +113,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public FormLoginAuthProvider formLoginAuthProvider() {
         return new FormLoginAuthProvider(encodePassword());
     }
+
+//    @Bean
+//    public AuthFailureHandler authFailureHandler() {
+//        return new AuthFailureHandler();
+//    }
 
     private JwtAuthFilter jwtFilter() throws Exception {
         List<String> skipPathList = new ArrayList<>();
