@@ -3,7 +3,7 @@ package com.project.sangil_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.sangil_be.dto.NaverUserInfoDto;
+import com.project.sangil_be.dto.SocialLoginDto;
 import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
@@ -48,7 +48,7 @@ public class NaverUserService {
         String accessToken = getAccessToken(code, state);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        NaverUserInfoDto naverUserInfo = getNaverUserInfo(accessToken);
+        SocialLoginDto naverUserInfo = getNaverUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
         User naverUser = getUser(naverUserInfo);
@@ -93,7 +93,7 @@ public class NaverUserService {
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialLoginDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
@@ -118,11 +118,11 @@ public class NaverUserService {
         String username = provider + "_" + jsonNode.get("response").get("id").asText();
         String nickname = jsonNode.get("response").get("nickname").asText();
 
-        return new NaverUserInfoDto(username, nickname);
+        return new SocialLoginDto(username, nickname);
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(NaverUserInfoDto naverUserInfo) {
+    private User getUser(SocialLoginDto naverUserInfo) {
 
         String naverusername =naverUserInfo.getUsername();
         User naverUser = userRepository.findByUsername(naverusername)

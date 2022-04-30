@@ -17,7 +17,6 @@ import java.util.Optional;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    final weatherService weatherService;
 
     public ResponseDto registerUser(SignUpRequestDto requestDto) {
         Boolean result = true;
