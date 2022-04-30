@@ -1,5 +1,6 @@
 package com.project.sangil_be.service;
 
+import com.project.sangil_be.api.weatherService;
 import com.project.sangil_be.dto.ResponseDto;
 import com.project.sangil_be.dto.SignUpRequestDto;
 import com.project.sangil_be.model.User;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    final weatherService weatherService;
 
     public ResponseDto registerUser(SignUpRequestDto requestDto) {
         Boolean result = true;
@@ -37,6 +39,7 @@ public class UserService {
         userRepository.save(user);
 
         ResponseDto responseDto = new ResponseDto(result);
+
         return responseDto;
 
     }
