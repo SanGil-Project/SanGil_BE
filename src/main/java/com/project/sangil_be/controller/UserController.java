@@ -1,9 +1,9 @@
 package com.project.sangil_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.sangil_be.dto.KakaoUserInfoDto;
 import com.project.sangil_be.dto.ResponseDto;
 import com.project.sangil_be.dto.SignUpRequestDto;
+import com.project.sangil_be.dto.SocialLoginDto;
 import com.project.sangil_be.dto.UserResponseDto;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.GoogleUserService;
@@ -27,7 +27,7 @@ public class UserController {
 
     // 카카오 로그인
     @GetMapping("/user/kakao/callback")
-    public KakaoUserInfoDto kakaoLogin(
+    public SocialLoginDto kakaoLogin(
             @RequestParam String code,
             HttpServletResponse response
     ) throws JsonProcessingException {
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     // 로그인 체크
-    @GetMapping("/api/user/loginCheck")
+    @GetMapping("/user/loginCheck")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return new UserResponseDto(userDetails);
     }

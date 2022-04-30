@@ -3,7 +3,7 @@ package com.project.sangil_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.sangil_be.dto.GoogleUserInfoDto;
+import com.project.sangil_be.dto.SocialLoginDto;
 import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
@@ -48,7 +48,7 @@ public class GoogleUserService {
         String accessToken = getAccessToken(code);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        GoogleUserInfoDto googleUserInfo = getGoogleUserInfo(accessToken);
+        SocialLoginDto googleUserInfo = getGoogleUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
         User foundUser = getUser(googleUserInfo);
@@ -93,7 +93,7 @@ public class GoogleUserService {
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private GoogleUserInfoDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialLoginDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
@@ -118,12 +118,12 @@ public class GoogleUserService {
         String username = provider + "_" + jsonNode.get("sub").asText();
         String nickname = jsonNode.get("name").asText();
 
-        return new GoogleUserInfoDto(username, nickname);
+        return new SocialLoginDto(username, nickname);
 
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(GoogleUserInfoDto googleUserInfo) {
+    private User getUser(SocialLoginDto googleUserInfo) {
 
         String googlename = googleUserInfo.getUsername();
         User googleUser = userRepository.findByUsername(googlename).orElse(null);

@@ -15,8 +15,6 @@ public class GpsTransfer {
         this.lng = lng;
     }
 
-
-
     public double getLat() {
         return lat;
     }
@@ -100,7 +98,7 @@ public class GpsTransfer {
         }
         else {
 //            rs.x = lat_X; //기존의 x좌표
-//            rs.y = lng_Y; //기존의 경도
+//            rs.y = lng_Y; //기존의 y좌표
             double xlat = gpt.getxLat();
             double ylng = gpt.getyLng();
             double xn = xlat - XO;
