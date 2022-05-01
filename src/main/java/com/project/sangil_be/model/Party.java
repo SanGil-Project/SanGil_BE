@@ -1,5 +1,6 @@
 package com.project.sangil_be.model;
 
+import com.project.sangil_be.utils.TimeStamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,10 +12,13 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Party {
+public class Party extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partyId;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private String partyContent;
@@ -42,5 +46,23 @@ public class Party {
     private User user;
 
     @OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PartyComment> PartyCommens;
+    private List<PartyComment> PartyComments;
+
+    public Party(String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent) {
+        this.title = title;
+        this.mountain = mountain;
+        this.address = address;
+        this.partyDate = partyDate;
+        this.maxPeople = maxPeople;
+        this.curPeople = curPeople;
+        this.partyContent = partyContent;
+    }
+
+    public void update(String mountain, String address, String partyDate, int maxPeople, String partyContent) {
+        this.mountain = mountain;
+        this.address = address;
+        this.partyDate = partyDate;
+        this.maxPeople = maxPeople;
+        this.partyContent = partyContent;
+    }
 }
