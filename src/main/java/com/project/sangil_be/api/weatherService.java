@@ -115,39 +115,39 @@ public class weatherService {
             }
 
         }
-        int currentTemp = Integer.parseInt(T1H.get(0)); // 현재 기온
+        String currentTemp = T1H.get(0)+"℃"; // 현재 기온
         String precipitation = PTY.get(0); // 현재 강수형태
         String skyCondition = SKY.get(0); // 현재 하늘상태
 
-        // 기온에 따른 문구
-        String tempMsg;
-        if (currentTemp >= 35) {
-            tempMsg = "등산 자제해주세요";
-        } else if (currentTemp < 35 && currentTemp >= 30) {
-            tempMsg = "";
-        } else if (currentTemp < 30 && currentTemp >= 25) {
-            tempMsg = "";
-        } else if (currentTemp < 25 && currentTemp >= 20) {
-            tempMsg = "";
-        } else if (currentTemp < 20 && currentTemp >= 15) {
-            tempMsg = "";
-        } else if (currentTemp < 15 && currentTemp >= 10) {
-            tempMsg = "";
-        } else if (currentTemp < 10 && currentTemp >= 5) {
-            tempMsg = "";
-        } else if (currentTemp < 5 && currentTemp >= 0) {
-            tempMsg = "";
-        } else if (currentTemp < 0 && currentTemp >= -5) {
-            tempMsg = "";
-        } else if (currentTemp < -5 && currentTemp >= -10) {
-            tempMsg = "";
-        } else if (currentTemp < -10 && currentTemp >= -15) {
-            tempMsg = "";
-        } else if (currentTemp < -15 && currentTemp >= -20) {
-            tempMsg = "";
-        } else {
-            tempMsg = "";
-        }
+//        // 기온에 따른 문구
+//        String tempMsg;
+//        if (currentTemp >= 35) {
+//            tempMsg = "등산 자제해주세요";
+//        } else if (currentTemp < 35 && currentTemp >= 30) {
+//            tempMsg = "";
+//        } else if (currentTemp < 30 && currentTemp >= 25) {
+//            tempMsg = "";
+//        } else if (currentTemp < 25 && currentTemp >= 20) {
+//            tempMsg = "";
+//        } else if (currentTemp < 20 && currentTemp >= 15) {
+//            tempMsg = "";
+//        } else if (currentTemp < 15 && currentTemp >= 10) {
+//            tempMsg = "";
+//        } else if (currentTemp < 10 && currentTemp >= 5) {
+//            tempMsg = "";
+//        } else if (currentTemp < 5 && currentTemp >= 0) {
+//            tempMsg = "";
+//        } else if (currentTemp < 0 && currentTemp >= -5) {
+//            tempMsg = "";
+//        } else if (currentTemp < -5 && currentTemp >= -10) {
+//            tempMsg = "";
+//        } else if (currentTemp < -10 && currentTemp >= -15) {
+//            tempMsg = "";
+//        } else if (currentTemp < -15 && currentTemp >= -20) {
+//            tempMsg = "";
+//        } else {
+//            tempMsg = "";
+//        }
 
         // 강수 형태 이미지url
         String precipitationUrl;

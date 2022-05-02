@@ -22,7 +22,6 @@ public class Validator {
 
     public void blankContent(PartyRequestDto partyRequestDto) {
         if(partyRequestDto.getPartyContent() == null){
-            System.out.println();
             throw new IllegalArgumentException("내용을 입력해 주세요.");
         }
     }

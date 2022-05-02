@@ -29,6 +29,7 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final Validator validator;
 
+    // 동호회 모임 게시판 작성
     @Transactional
     public PartyListDto writeParty(UserDetailsImpl userDetails, PartyRequestDto partyRequestDto) throws IOException {
         //내용이 입력되어 있는지 확인
