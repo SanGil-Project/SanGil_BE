@@ -41,8 +41,10 @@ public class PartyService {
         int curPeople = 1;
 
         //Party에 작성한 내용 및 현재 모집인원 수 추가
-        Party party = new Party(partyRequestDto.getTitle(), partyRequestDto.getMountain(), partyRequestDto.getAddress(),
-                                partyRequestDto.getPartyDate(), partyRequestDto.getMaxPeople(), curPeople, partyRequestDto.getPartyContent());
+        Party party = new Party(partyRequestDto.getTitle(), partyRequestDto.getMountain(),
+                                partyRequestDto.getAddress(), partyRequestDto.getPartyDate(),
+                                partyRequestDto.getMaxPeople(), curPeople,
+                                partyRequestDto.getPartyContent(), user);
 
         //레파지토리에 저장
         partyRepository.save(party);
