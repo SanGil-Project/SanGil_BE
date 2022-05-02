@@ -1,7 +1,7 @@
 package com.project.sangil_be.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.sangil_be.utils.TimeStamped;
+import com.project.sangil_be.utils.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class PartyComment extends TimeStamped {
+public class PartyComment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partyCommentId;
