@@ -32,6 +32,9 @@ dependencies {
     //기상API JSON
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
+    //aws
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
+
 }
 
 tasks.named('test') {
