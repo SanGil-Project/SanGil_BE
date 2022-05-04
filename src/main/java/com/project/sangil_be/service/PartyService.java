@@ -29,6 +29,7 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final Validator validator;
 
+    // 등산 모임 참가 작성
     @Transactional
     public PartyListDto writeParty(UserDetailsImpl userDetails, PartyRequestDto partyRequestDto) throws IOException {
         //내용이 입력되어 있는지 확인
@@ -53,7 +54,8 @@ public class PartyService {
                                 party.getAddress(), party.getPartyDate(), party.getMaxPeople(), party.getCurPeople());
     }
 
-    //모든 동호회 리스트 가져오기
+    // complete 수정 필요
+    // 모든 동호회 리스트 가져오기
     @Transactional
     public Page<PartyListDto> getAllParty(int pageNum) {
         List<Party> partyList = partyRepository.findAllByOrderByCreatedAtDesc();
@@ -90,11 +92,12 @@ public class PartyService {
         Party party = partyRepository.findById(partyId).orElse(null);;
         PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
                                                            party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent(), party.getPartyComments());
+                                                           party.getCurPeople(), party.getPartyContent());
 
         return partyDetailDto;
     }
 
+    // api에 맞게 수정 필요
     //동호회 수정 코드
     @Transactional
     public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
@@ -105,7 +108,7 @@ public class PartyService {
 
         PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
                                                            party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent(), party.getPartyComments());
+                                                           party.getCurPeople(), party.getPartyContent());
         return partyDetailDto;
     }
 

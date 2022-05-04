@@ -46,8 +46,6 @@ public class User {
     @JoinColumn(name = "feedId")
     private List<Feed> feeds;
 
-
-
     public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle) {
         this.username = username;
         this.password = encodedPassword;

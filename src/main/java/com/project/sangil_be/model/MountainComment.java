@@ -1,6 +1,5 @@
 package com.project.sangil_be.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,14 +10,14 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class CourseComment {
+public class MountainComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long courseCommentId;
+    private Long mountainCommentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "courseId")
-    @JsonIgnore
+    @Column(nullable = false)
+    private String mountainComment;
 
-    private Course course;
+    @Column(nullable = false)
+    private int star;
 }

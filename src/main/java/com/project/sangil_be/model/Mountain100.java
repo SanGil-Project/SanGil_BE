@@ -20,7 +20,7 @@ public class Mountain100 {
     @Column(nullable = false)
     private String mountain;
 
-    @Column
+    @Column(nullable = false)
     private String mountainInfo;
 
     @Column(nullable = false)

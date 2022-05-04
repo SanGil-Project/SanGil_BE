@@ -39,12 +39,12 @@ public class Party extends Timestamped {
     @Column(nullable = false)
     private int curPeople;
 
+    @Column(nullable = false)
+    private String partyTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
-
-    @OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PartyComment> PartyComments;
 
     public Party(String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent, User user) {
         this.title = title;
