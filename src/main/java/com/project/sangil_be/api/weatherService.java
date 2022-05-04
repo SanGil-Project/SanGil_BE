@@ -115,11 +115,11 @@ public class weatherService {
             }
 
         }
-        String currentTemp = T1H.get(0)+"℃"; // 현재 기온
+        int currentTemp = Integer.parseInt(T1H.get(0)); // 현재 기온
         String precipitation = PTY.get(0); // 현재 강수형태
         String skyCondition = SKY.get(0); // 현재 하늘상태
 
-//        // 기온에 따른 문구
+        // 기온에 따른 문구
 //        String tempMsg;
 //        if (currentTemp >= 35) {
 //            tempMsg = "등산 자제해주세요";

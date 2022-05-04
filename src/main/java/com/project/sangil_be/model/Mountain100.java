@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.swing.plaf.ComponentUI;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,10 +32,10 @@ public class Mountain100 {
     @Column(nullable = false)
     private Float heigth;
 
-    @Column(nullable = false)
+    @Column
     private Double lat;
 
-    @Column(nullable = false)
+    @Column
     private Double lng;
 
 }
