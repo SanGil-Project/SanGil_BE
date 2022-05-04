@@ -1,7 +1,5 @@
 package com.project.sangil_be.dto;
 
-import com.project.sangil_be.model.Party;
-import com.project.sangil_be.model.PartyComment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,11 +16,10 @@ public class PartyDetailDto {
     private String partyContent;
     private int maxPeople;
     private int curPeople;
-    private List<PartyComment> partyComments;
     private int totalPage;
     private int currentPage;
 
-    public PartyDetailDto(Long partyId, String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent, List<PartyComment> partyComments) {
+    public PartyDetailDto(Long partyId, String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent) {
         this.partyId = partyId;
         this.title = title;
         this.mountain = mountain;
@@ -31,6 +28,5 @@ public class PartyDetailDto {
         this.maxPeople = maxPeople;
         this.curPeople = curPeople;
         this.partyContent = partyContent;
-        this.partyComments = partyComments;
     }
 }

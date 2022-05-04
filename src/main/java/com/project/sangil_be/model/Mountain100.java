@@ -30,10 +30,10 @@ public class Mountain100 {
     @Column(nullable = false)
     private Float heigth;
 
-    @Column(nullable = false)
+    @Column
     private Double lat;
 
-    @Column(nullable = false)
+    @Column
     private Double lng;
 
 }
