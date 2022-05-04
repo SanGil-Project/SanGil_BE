@@ -10,18 +10,14 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Course {
+public class MountainComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long courseId;
+    private Long mountainCommentId;
 
-    @Column
-    private String course;
+    @Column(nullable = false)
+    private String mountainComment;
 
-    @Column
-    private Long mountainId;
-
-    @Column
-    private String courseTime;
-
+    @Column(nullable = false)
+    private int star;
 }

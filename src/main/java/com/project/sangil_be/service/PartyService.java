@@ -20,7 +20,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +28,7 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final Validator validator;
 
+    // 등산 모임 참가 작성
     @Transactional
     public PartyListDto writeParty(UserDetailsImpl userDetails, PartyRequestDto partyRequestDto) throws IOException {
         //내용이 입력되어 있는지 확인
@@ -53,7 +53,8 @@ public class PartyService {
                                 party.getAddress(), party.getPartyDate(), party.getMaxPeople(), party.getCurPeople());
     }
 
-    //모든 동호회 리스트 가져오기
+    // complete 수정 필요
+    // 모든 동호회 리스트 가져오기
     @Transactional
     public Page<PartyListDto> getAllParty(int pageNum) {
         List<Party> partyList = partyRepository.findAllByOrderByCreatedAtDesc();
@@ -87,15 +88,15 @@ public class PartyService {
     //동호회 상세페이지
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
-        Optional<Party> party = partyRepository.findById(partyId);
-        
-        PartyDetailDto partyDetailDto = new PartyDetailDto(party.get().getPartyId(), party.get().getTitle(), party.get().getMountain(),
-                                                           party.get().getAddress(), party.get().getPartyDate(), party.get().getMaxPeople(),
-                                                           party.get().getCurPeople(), party.get().getPartyContent());
+        Party party = partyRepository.findById(partyId).orElse(null);;
+        PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+                                                           party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
+                                                           party.getCurPeople(), party.getPartyContent());
 
         return partyDetailDto;
     }
 
+    // api에 맞게 수정 필요
     //동호회 수정 코드
     @Transactional
     public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
@@ -106,7 +107,7 @@ public class PartyService {
 
         PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
                                                            party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent();
+                                                           party.getCurPeople(), party.getPartyContent());
         return partyDetailDto;
     }
 

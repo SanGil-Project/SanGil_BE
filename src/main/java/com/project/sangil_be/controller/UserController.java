@@ -60,7 +60,7 @@ public class UserController {
     }
 
     // 로그인 체크
-    @GetMapping("/user/loginCheck")
+    @GetMapping("/api/user/loginCheck")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return new UserResponseDto(userDetails);
     }

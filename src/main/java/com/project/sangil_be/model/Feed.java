@@ -21,6 +21,4 @@ public class Feed {
     @Column(nullable = false)
     private String feedContent;
 
-    @Column(nullable = false)
-    private String colorType;
 }

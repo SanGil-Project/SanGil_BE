@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.swing.plaf.ComponentUI;
+import java.util.List;
 
 @Getter
 @Setter

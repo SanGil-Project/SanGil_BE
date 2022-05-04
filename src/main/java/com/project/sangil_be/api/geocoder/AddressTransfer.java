@@ -25,8 +25,9 @@ public class AddressTransfer {
             URLConnection conn = url.openConnection();
             conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
-            BufferedReader rd = null;
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+//            BufferedReader rd = null;
+//            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
             StringBuffer docJson = new StringBuffer();
 
             String line;
