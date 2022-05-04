@@ -1,22 +1,23 @@
 package com.project.sangil_be.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @Setter
-public class Like {
+@Entity
+@NoArgsConstructor
+public class Attend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
-
-    @Column(nullable = false)
-    private Long feedId;
+    private Long attendId;
 
     @Column(nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
+    private Long partyId;
 }

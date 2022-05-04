@@ -1,6 +1,5 @@
 package com.project.sangil_be.utils;
 
-import com.project.sangil_be.dto.PartyCommentRequestDto;
 import com.project.sangil_be.dto.PartyListDto;
 import com.project.sangil_be.dto.PartyRequestDto;
 import org.springframework.data.domain.Page;
@@ -26,9 +25,4 @@ public class Validator {
         }
     }
 
-    public void blankComment(PartyCommentRequestDto commentRequestDto) {
-        if(commentRequestDto.getPartyComment() == null) {
-            throw new IllegalArgumentException("댓글을 입력해 주세요.");
-        }
-    }
 }

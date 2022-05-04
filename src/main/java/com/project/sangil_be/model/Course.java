@@ -15,13 +15,13 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
 
-    @Column
+    @Column(nullable = false)
     private String course;
 
-    @Column
+    @Column(nullable = false)
     private Long mountainId;
 
-    @Column
+    @Column(nullable = false)
     private String courseTime;
 
 }

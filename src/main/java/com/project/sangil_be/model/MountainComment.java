@@ -16,6 +16,9 @@ public class MountainComment {
     private Long mountainCommentId;
 
     @Column(nullable = false)
+    private Long mountain100Id;
+
+    @Column(nullable = false)
     private String mountainComment;
 
     @Column(nullable = false)

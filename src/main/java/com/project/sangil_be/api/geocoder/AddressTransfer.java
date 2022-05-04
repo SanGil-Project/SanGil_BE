@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 public class AddressTransfer {
 
     public String getKakaoApiFromAddress(String roadFullAddr) {
-        String apiKey = "06e3bff5ef349e61c991c32638076152";
+        String apiKey = "245ce1b09ef32883e79ec2cf78d891cd";
         String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
         String jsonString = null;
 

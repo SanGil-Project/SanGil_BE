@@ -38,4 +38,8 @@ public class Mountain100 {
     @Column
     private Double lng;
 
+    public void update(Double lat, Double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 }
