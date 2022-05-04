@@ -1,6 +1,6 @@
 package com.project.sangil_be.model;
 
-import com.project.sangil_be.utils.TimeStamped;
+import com.project.sangil_be.utils.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Party extends TimeStamped {
+public class Party extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partyId;

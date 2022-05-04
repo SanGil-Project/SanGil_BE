@@ -87,10 +87,10 @@ public class PartyService {
     //동호회 상세페이지
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
-        Optional<Party> party = partyRepository.findById(partyId);;
-        PartyDetailDto partyDetailDto = new PartyDetailDto(party.get().getPartyId(), party.get().getTitle(), party.get().getMountain(),
-                                                           party.get().getAddress(), party.get().getPartyDate(), party.get().getMaxPeople(),
-                                                           party.get().getCurPeople(), party.get().getPartyContent(), party.get().getPartyComments());
+        Party party = partyRepository.findById(partyId).orElse(null);;
+        PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+                                                           party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
+                                                           party.getCurPeople(), party.getPartyContent(), party.getPartyComments());
 
         return partyDetailDto;
     }
