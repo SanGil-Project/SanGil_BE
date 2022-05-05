@@ -1,5 +1,6 @@
 package com.project.sangil_be.utils;
 
+
 import com.project.sangil_be.dto.MCommentRequestDto;
 import com.project.sangil_be.dto.PartyListDto;
 import com.project.sangil_be.dto.PartyRequestDto;
@@ -33,4 +34,5 @@ public class Validator {
             throw new IllegalArgumentException("댓글을 입력하세요");
         }
     }
+
 }
