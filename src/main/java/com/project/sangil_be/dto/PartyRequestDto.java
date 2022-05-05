@@ -10,6 +10,7 @@ public class PartyRequestDto {
     private String mountain;
     private String address;
     private String partyDate;
+    private String partyTime;
     private int maxPeople;
     private String partyContent;
 }
