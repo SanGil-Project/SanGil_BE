@@ -1,7 +1,9 @@
 package com.project.sangil_be.utils;
 
+import com.project.sangil_be.dto.MCommentRequestDto;
 import com.project.sangil_be.dto.PartyListDto;
 import com.project.sangil_be.dto.PartyRequestDto;
+import com.project.sangil_be.dto.SearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Component
 public class Validator {
+
 
     public Page<PartyListDto> overPages(List<PartyListDto> partiesList, int start, int end, Pageable pageable, int page) {
         Page<PartyListDto> pages = new PageImpl<>(partiesList.subList(start, end), pageable, partiesList.size());
@@ -25,4 +28,9 @@ public class Validator {
         }
     }
 
+    public void emptyMComment(MCommentRequestDto mCommentRequestDto) {
+        if (mCommentRequestDto.getMountainComment() == null) {
+            throw new IllegalArgumentException("댓글을 입력하세요");
+        }
+    }
 }

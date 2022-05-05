@@ -1,5 +1,7 @@
 package com.project.sangil_be.model;
 
+import com.project.sangil_be.dto.MCommentRequestDto;
+import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +21,23 @@ public class MountainComment {
     private Long mountain100Id;
 
     @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
     private String mountainComment;
 
     @Column(nullable = false)
     private int star;
+
+    public MountainComment(Long mountainId, UserDetailsImpl userDetails, MCommentRequestDto mCommentRequestDto) {
+        this.mountain100Id = mountainId;
+        this.userId = userDetails.getUser().getUserId();
+        this.mountainComment = mCommentRequestDto.getMountainComment();
+        this.star = mCommentRequestDto.getStar();
+    }
+
+    public void update(MCommentRequestDto mCommentRequestDto) {
+        this.mountainComment = mCommentRequestDto.getMountainComment();
+        this.star = mCommentRequestDto.getStar();
+    }
 }

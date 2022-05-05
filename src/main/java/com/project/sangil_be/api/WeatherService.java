@@ -1,9 +1,11 @@
 package com.project.sangil_be.api;
 
+import com.project.sangil_be.dto.WeatherDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,12 +19,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class weatherService {
+@Service
+public class WeatherService {
 
-    private void weather() throws IOException, ParseException {
+    public WeatherDto weather(double lat, double lng) throws IOException, ParseException {
 
-        double lat = 37.556671;
-        double lng = 127.198374;
 
         // 위도 경도를 x,y 좌표로 바꿔줌
         GpsTransfer gpsTransfer = new GpsTransfer();
@@ -119,63 +120,25 @@ public class weatherService {
         String precipitation = PTY.get(0); // 현재 강수형태
         String skyCondition = SKY.get(0); // 현재 하늘상태
 
-        // 기온에 따른 문구
-//        String tempMsg;
-//        if (currentTemp >= 35) {
-//            tempMsg = "등산 자제해주세요";
-//        } else if (currentTemp < 35 && currentTemp >= 30) {
-//            tempMsg = "";
-//        } else if (currentTemp < 30 && currentTemp >= 25) {
-//            tempMsg = "";
-//        } else if (currentTemp < 25 && currentTemp >= 20) {
-//            tempMsg = "";
-//        } else if (currentTemp < 20 && currentTemp >= 15) {
-//            tempMsg = "";
-//        } else if (currentTemp < 15 && currentTemp >= 10) {
-//            tempMsg = "";
-//        } else if (currentTemp < 10 && currentTemp >= 5) {
-//            tempMsg = "";
-//        } else if (currentTemp < 5 && currentTemp >= 0) {
-//            tempMsg = "";
-//        } else if (currentTemp < 0 && currentTemp >= -5) {
-//            tempMsg = "";
-//        } else if (currentTemp < -5 && currentTemp >= -10) {
-//            tempMsg = "";
-//        } else if (currentTemp < -10 && currentTemp >= -15) {
-//            tempMsg = "";
-//        } else if (currentTemp < -15 && currentTemp >= -20) {
-//            tempMsg = "";
-//        } else {
-//            tempMsg = "";
-//        }
-
         // 강수 형태 이미지url
-        String precipitationUrl;
+        String weatherUrl = "없음";
         if (precipitation.equals("0")) {
-            precipitationUrl = "없음";
-        } else if (precipitation.equals("1")) {
-            precipitationUrl = "비";
-        } else if (precipitation.equals("2")) {
-            precipitationUrl = "비/눈";
-        } else if (precipitation.equals("3")) {
-            precipitationUrl = "눈";
-        } else if (precipitation.equals("5")) {
-            precipitationUrl = "빗방울";
-        } else if (precipitation.equals("6")) {
-            precipitationUrl = "빗방울눈날림";
-        } else if (precipitation.equals("7")) {
-            precipitationUrl = "눈날림";
+            weatherUrl = "없음";
+        } else if (precipitation.equals("1")||precipitation.equals("5")||precipitation.equals("6")) {
+            weatherUrl = "비";
+        } else if (precipitation.equals("2")||precipitation.equals("3")||precipitation.equals("7")) {
+            weatherUrl = "눈";
         }
 
         // 하늘 상태 이미지url
-        String skyConditionUrl;
         if (skyCondition.equals("1")) {
-            skyConditionUrl = "맑음";
+            weatherUrl = "맑음";
         } else if (skyCondition.equals("3")) {
-            skyConditionUrl = "구름많음";
+            weatherUrl = "구름많음";
         } else if (skyCondition.equals("4")) {
-            skyConditionUrl = "흐림";
+            weatherUrl = "흐림";
         }
+        return new WeatherDto(currentTemp,weatherUrl);
     }
 
 }

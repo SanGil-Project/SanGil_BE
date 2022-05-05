@@ -1,13 +1,17 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.dto.PartyListResponseDto;
-import com.project.sangil_be.dto.SearchBeforeDto;
+import com.project.sangil_be.dto.MountainResponseDto;
+import com.project.sangil_be.dto.SearchAfterDto;
+import com.project.sangil_be.dto.SearchDto;
 import com.project.sangil_be.service.MountainService;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,8 +19,23 @@ import java.util.List;
 public class MountainController {
     private final MountainService mountainService;
 
+    // 검색 전 페이지
     @GetMapping("/api/mountain/search/before")
-    public List<SearchBeforeDto.MountainInfo> getAllParty() {
+    public List<SearchDto> show10() {
         return mountainService.Show10();
+    }
+
+    // 검색 후 페이지
+    @GetMapping("/api/mountain/search{keyword}{pageNum}")
+    public SearchAfterDto searchMountain(
+            @RequestParam(value = "keyword") String keyword,
+            @RequestParam("pageNum") int pageNum){
+        return new SearchAfterDto(mountainService.searhMountain(keyword,pageNum-1));
+    }
+
+    // 산 상세 페이지
+    @GetMapping("/api/mountain/{mountainId}")
+    public MountainResponseDto detailMountain(@PathVariable Long mountainId) throws IOException, ParseException {
+        return mountainService.detailMountain(mountainId);
     }
 }
