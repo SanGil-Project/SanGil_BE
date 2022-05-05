@@ -1,6 +1,7 @@
 package com.project.sangil_be.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,10 +9,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Like {
+@NoArgsConstructor
+public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long goodId;
 
     @Column(nullable = false)
     private Long feedId;
@@ -19,4 +21,8 @@ public class Like {
     @Column(nullable = false)
     private Long userId;
 
+    public Good(Feed feed, User user) {
+        this.feedId = feed.getFeedId();
+        this.userId = user.getUserId();
+    }
 }

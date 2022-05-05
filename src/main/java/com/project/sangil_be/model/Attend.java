@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Join {
+public class Attend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long joinId;
+    private Long attendId;
 
     @Column(nullable = false)
     private Long userId;
