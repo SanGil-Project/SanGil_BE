@@ -13,7 +13,7 @@ public class XYTransferDto {
     private Double lng;
 
     public XYTransferDto(Double lat, Double lng) {
-        this.lat=lat;
-        this.lng=lng;
+        this.lat=lng;
+        this.lng=lat;
     }
 }

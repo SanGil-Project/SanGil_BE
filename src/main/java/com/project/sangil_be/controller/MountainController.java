@@ -26,7 +26,7 @@ public class MountainController {
     }
 
     // 검색 후 페이지
-    @GetMapping("/api/mountain/search{keyword}{pageNum}")
+    @GetMapping("/api/mountain/search")
     public SearchAfterDto searchMountain(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam("pageNum") int pageNum){
