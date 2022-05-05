@@ -113,6 +113,7 @@ public class MountainService {
         }
     }
 
+    // 페이징 처리 수정
     // 산 상세 페이지
     public MountainResponseDto detailMountain(Long mountainId) throws IOException, ParseException {
         Mountain100 mountain100 = mountain100Repository.findById(mountainId).orElseThrow(
