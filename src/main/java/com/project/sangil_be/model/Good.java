@@ -3,7 +3,6 @@ package com.project.sangil_be.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 
 @Entity
@@ -25,4 +24,5 @@ public class Good {
         this.feedId = feed.getFeedId();
         this.userId = user.getUserId();
     }
+
 }

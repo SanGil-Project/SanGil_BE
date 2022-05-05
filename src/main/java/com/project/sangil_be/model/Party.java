@@ -1,13 +1,11 @@
 package com.project.sangil_be.model;
 
-
 import com.project.sangil_be.utils.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -42,26 +40,36 @@ public class Party extends Timestamped {
     @Column(nullable = false)
     private String partyTime;
 
+    @Column(nullable = false)
+    private boolean completed;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    public Party(String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent, User user) {
+    public Party(String title, String mountain, String address, String partyDate,
+                 String partyTime, int maxPeople, int curPeople, String partyContent,
+                 boolean completed, User user) {
         this.title = title;
         this.mountain = mountain;
         this.address = address;
         this.partyDate = partyDate;
+        this.partyTime = partyTime;
         this.maxPeople = maxPeople;
         this.curPeople = curPeople;
         this.partyContent = partyContent;
+        this.completed = completed;
         this.user = user;
     }
 
-    public void update(String mountain, String address, String partyDate, int maxPeople, String partyContent) {
-        this.mountain = mountain;
-        this.address = address;
+    public void update(String partyDate, String partyTime, int maxPeople, String partyContent) {
         this.partyDate = partyDate;
+        this.partyTime = partyTime;
         this.maxPeople = maxPeople;
         this.partyContent = partyContent;
+    }
+
+    public void updateCurpeople(int result) {
+        this.curPeople = result;
     }
 }

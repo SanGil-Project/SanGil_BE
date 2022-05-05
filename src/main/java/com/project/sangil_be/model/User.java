@@ -43,8 +43,9 @@ public class User {
     @JoinColumn(name = "locationId")
     private List<Location> locations;
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "feedId") //있으면 안된다
+//  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
     public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle) {

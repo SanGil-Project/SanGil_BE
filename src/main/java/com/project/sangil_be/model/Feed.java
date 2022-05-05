@@ -32,4 +32,5 @@ public class Feed extends Timestamped {
         this.feedImgUrl = feedImageUrl;
         this.user = user;
     }
+
 }

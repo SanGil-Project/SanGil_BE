@@ -20,4 +20,10 @@ public class Attend {
 
     @Column(nullable = false)
     private Long partyId;
+
+    public Attend(Long userId, Long partyId) {
+        this.userId = userId;
+        this.partyId = partyId;
+    }
+
 }

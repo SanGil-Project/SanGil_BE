@@ -3,7 +3,7 @@ package com.project.sangil_be.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,10 +16,13 @@ public class PartyDetailDto {
     private String partyContent;
     private int maxPeople;
     private int curPeople;
+    private LocalDateTime createdAt;
     private int totalPage;
     private int currentPage;
 
-    public PartyDetailDto(Long partyId, String title, String mountain, String address, String partyDate, int maxPeople, int curPeople, String partyContent) {
+    public PartyDetailDto(Long partyId, String title, String mountain,
+                          String address, String partyDate, int maxPeople,
+                          int curPeople, String partyContent, LocalDateTime createdAt) {
         this.partyId = partyId;
         this.title = title;
         this.mountain = mountain;
@@ -28,5 +31,6 @@ public class PartyDetailDto {
         this.maxPeople = maxPeople;
         this.curPeople = curPeople;
         this.partyContent = partyContent;
+        this.createdAt = createdAt;
     }
 }
