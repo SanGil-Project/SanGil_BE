@@ -14,6 +14,7 @@ public class BookMarkService {
 
     private final BookMarkRepository bookMarkRepository;
 
+    //북마크 생성
     public String myBookMark(Long mountainId, UserDetailsImpl userDetails) {
         BookMark bookMark = bookMarkRepository.findByMountain100IdAndUserId(mountainId, userDetails.getUser().getUserId());
         if(bookMark == null) {

@@ -55,6 +55,7 @@ public class PartyService {
         //레파지토리에 저장
         partyRepository.save(party);
 
+        //참여하기에 생성한 유저의 내용 저장
         Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId());
 
         attendRepository.save(attend);
@@ -141,12 +142,14 @@ public class PartyService {
         }
     }
 
+    //동호회 참여하기 기능 구현
     public String attendParty(Long partyId, UserDetailsImpl userDetails) {
         Attend attend = attendRepository.findByPartyId(partyId);
         Party party = partyRepository.findById(partyId).orElseThrow(
                 ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
         );
 
+        //중복 참여 제한
         if(attend.getUserId().equals(userDetails.getUser().getUserId())) {
             return "중복참여를 할 수 없습니다!";
         }else{
