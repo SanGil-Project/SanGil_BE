@@ -68,7 +68,8 @@ public class FeedService {
 
         return goodCheckResponseDto;
     }
-
+    
+    @Transactional
     public void deletefeed(Long feedId, Optional<Feed> feed) {
 
         feedRepository.deleteById(feedId);
