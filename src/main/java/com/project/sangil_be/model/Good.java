@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long goodId;
 
     @Column(nullable = false)
     private Long feedId;

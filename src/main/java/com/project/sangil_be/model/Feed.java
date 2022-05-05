@@ -21,4 +21,8 @@ public class Feed {
     @Column(nullable = false)
     private String feedContent;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userId")
+    private User user;
+
 }
