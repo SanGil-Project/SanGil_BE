@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Attend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long joinId;
+    private Long attendId;
 
     @Column(nullable = false)
     private Long userId;

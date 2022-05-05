@@ -43,7 +43,6 @@ public class User {
     private List<Location> locations;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "feedId")
     private List<Feed> feeds;
 
     public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle) {

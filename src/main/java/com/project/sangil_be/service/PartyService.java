@@ -78,14 +78,14 @@ public class PartyService {
         }
     }
 
-    //페이지 정렬
+    // 페이지 정렬
     private Pageable getPageable(int page) {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
         return PageRequest.of(page, 6, sort);
     }
 
-    //동호회 상세페이지
+    // 동호회 상세페이지
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
         Party party = partyRepository.findById(partyId).orElse(null);;
@@ -97,7 +97,7 @@ public class PartyService {
     }
 
     // api에 맞게 수정 필요
-    //동호회 수정 코드
+    // 동호회 수정 코드
     @Transactional
     public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
         Party party = partyRepository.findById(partyId).orElseThrow(
@@ -111,7 +111,7 @@ public class PartyService {
         return partyDetailDto;
     }
 
-    //동호회 모임 삭제 코드
+    // 동호회 모임 삭제 코드
     @Transactional
     public void deleteParty(Long partyId) {
         try {
