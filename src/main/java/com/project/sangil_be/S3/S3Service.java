@@ -26,9 +26,8 @@ public class S3Service {
     public String bucket;  // S3 버킷 이름
 
     // 최초 게시글 작성 시 업로드
-    public String upload(MultipartFile file){
-        String fileName = createFileName(file.getOriginalFilename());
-
+    public String upload(MultipartFile file, String dirName){
+        String fileName = dirName + "/" + createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
@@ -45,28 +44,21 @@ public class S3Service {
     }
 
     // 글 수정 시 기존 s3에 있는 이미지 정보 삭제,
-    public String reupload(MultipartFile file,String currentFilePath){
-        String fileName = createFileName(file.getOriginalFilename()); // 파일명 랜덤화
+    public String reupload(MultipartFile file, String currentFilePath, String imageKey){
+        String fileName = currentFilePath + "/" + createFileName(file.getOriginalFilename()); // 파일명 랜덤화
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-        if(!"".equals(currentFilePath) && currentFilePath != null) {
-            boolean isExistObject = amazonS3Client.doesObjectExist(bucket, currentFilePath);
-            System.out.println(isExistObject);
-            if (!isExistObject) {
-                amazonS3Client.deleteObject(bucket, currentFilePath);
-                System.out.println("기존 파일 삭제");
-            }
-        }
-        System.out.println("기존 파일 없음");
+
+        amazonS3Client.deleteObject(bucket, imageKey);
 
         try(InputStream inputStream = file.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             return amazonS3Client.getUrl(bucket, fileName).toString();
         }catch (IOException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패");
         }
 
     }
@@ -84,6 +76,12 @@ public class S3Service {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
+
+    }
+
+    public void deletefeed(String imageKey) {
+
+        amazonS3Client.deleteObject(bucket, imageKey);
 
     }
 }

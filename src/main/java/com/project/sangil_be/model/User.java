@@ -1,5 +1,6 @@
 package com.project.sangil_be.model;
 
+import com.project.sangil_be.dto.UsernameRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,7 +43,9 @@ public class User {
     @JoinColumn(name = "locationId")
     private List<Location> locations;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
     public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle) {
@@ -59,4 +62,12 @@ public class User {
         this.password = password;
     }
 
+    public void editusername(UsernameRequestDto usernameRequestDto) {
+
+        this.username = usernameRequestDto.getUsername();
+    }
+
+    public void editimage(String profileImageUrl) {
+        this.userImgUrl = profileImageUrl;
+    }
 }

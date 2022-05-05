@@ -1,10 +1,8 @@
 package com.project.sangil_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.sangil_be.dto.ResponseDto;
-import com.project.sangil_be.dto.SignUpRequestDto;
-import com.project.sangil_be.dto.SocialLoginDto;
-import com.project.sangil_be.dto.UserResponseDto;
+import com.project.sangil_be.dto.*;
+import com.project.sangil_be.model.User;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.GoogleUserService;
 import com.project.sangil_be.service.KakaoUserService;
@@ -13,8 +11,10 @@ import com.project.sangil_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @RestController
@@ -63,5 +63,19 @@ public class UserController {
     @GetMapping("/api/user/loginCheck")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return new UserResponseDto(userDetails);
+    }
+
+    //username 수정
+    @PutMapping("/api/mypages/profilename")
+    public void editname(@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        userService.editname(usernameRequestDto, user);
+    }
+
+    //userimageUrl 수정
+    @PutMapping("/api/mypages/profileUrl")
+    public void editimage(@RequestParam("file") MultipartFile multipartFile, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        userService.editimage(multipartFile, user);
     }
 }

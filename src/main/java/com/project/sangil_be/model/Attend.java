@@ -25,4 +25,5 @@ public class Attend {
         this.userId = userId;
         this.partyId = partyId;
     }
+
 }
