@@ -41,8 +41,8 @@ public class ServiceImpl {
             Map<String, String> adList = (Map<String, String>) docList.get(0);
             XYMap.put("x", adList.get("x"));
             XYMap.put("y", adList.get("y"));
-            mountain100Dto.setLat(Double.valueOf(XYMap.get("x")));
-            mountain100Dto.setLng(Double.valueOf(XYMap.get("y")));
+            mountain100Dto.setLng(Double.valueOf(XYMap.get("x")));
+            mountain100Dto.setLat(Double.valueOf(XYMap.get("y")));
 
 //            AddressTransfer addressTransfer = new AddressTransfer();
 //

@@ -118,7 +118,8 @@ public class MountainService {
         Mountain100 mountain100 = mountain100Repository.findById(mountainId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-
+        System.out.println("lat : "+mountain100.getLat());
+        System.out.println("lng : "+mountain100.getLng());
         WeatherDto weatherDto = weatherService.weather(mountain100.getLat(),mountain100.getLng());
 
         List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountainId);

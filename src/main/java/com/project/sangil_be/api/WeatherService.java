@@ -24,7 +24,6 @@ public class WeatherService {
 
     public WeatherDto weather(double lat, double lng) throws IOException, ParseException {
 
-
         // 위도 경도를 x,y 좌표로 바꿔줌
         GpsTransfer gpsTransfer = new GpsTransfer();
         gpsTransfer.setLat(lat);
@@ -61,8 +60,8 @@ public class WeatherService {
         urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*요청자료형식(XML/JSON) Default: XML*/
         urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(localDate, "UTF-8")); /*‘21년 6월 28일 발표*/
         urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(time, "UTF-8")); /*06시 발표(정시단위) */
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(String.valueOf((int) gpsTransfer.getxLat()), "UTF-8")); /*예보지점의 X 좌표값*/
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(String.valueOf((int) gpsTransfer.getyLng()), "UTF-8")); /*예보지점의 Y 좌표값*/
+        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(String.valueOf((int) gpsTransfer.getyLng()), "UTF-8")); /*예보지점의 X 좌표값*/
+        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(String.valueOf((int) gpsTransfer.getxLat()), "UTF-8")); /*예보지점의 Y 좌표값*/
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -83,8 +82,8 @@ public class WeatherService {
 //        conn.disconnect();
 //        System.out.println("이게바로" + sb);
 
-        String data = sb.toString();
 
+        String data = sb.toString();
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(data);
         // response 키를 가지고 데이터를 파싱
