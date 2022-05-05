@@ -12,12 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Attend {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long joinId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long attendId;
 
     @Column(nullable = false)
     private Long userId;
 
     @Column(nullable = false)
     private Long partyId;
+
+    public Attend(Long userId, Long partyId) {
+        this.userId = userId;
+        this.partyId = partyId;
+    }
 }

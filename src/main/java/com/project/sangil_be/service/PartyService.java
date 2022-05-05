@@ -3,8 +3,10 @@ package com.project.sangil_be.service;
 import com.project.sangil_be.dto.PartyDetailDto;
 import com.project.sangil_be.dto.PartyListDto;
 import com.project.sangil_be.dto.PartyRequestDto;
+import com.project.sangil_be.model.Attend;
 import com.project.sangil_be.model.Party;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.AttendRepository;
 import com.project.sangil_be.repository.PartyRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
@@ -26,6 +28,7 @@ import java.util.List;
 public class PartyService {
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
+    private final AttendRepository attendRepository;
     private final Validator validator;
 
     // 등산 모임 참가 작성
@@ -40,17 +43,26 @@ public class PartyService {
         //만들어지면 처음 모임 인원 수는 1
         int curPeople = 1;
 
+        //컴플리트 기본은 true
+        boolean completed = true;
+
         //Party에 작성한 내용 및 현재 모집인원 수 추가
         Party party = new Party(partyRequestDto.getTitle(), partyRequestDto.getMountain(),
                                 partyRequestDto.getAddress(), partyRequestDto.getPartyDate(),
-                                partyRequestDto.getMaxPeople(), curPeople,
-                                partyRequestDto.getPartyContent(), user);
+                                partyRequestDto.getPartyTime(), partyRequestDto.getMaxPeople(),
+                                curPeople, partyRequestDto.getPartyContent(), completed, user);
 
         //레파지토리에 저장
         partyRepository.save(party);
 
-        return new PartyListDto(party.getPartyId(), party.getTitle(), party.getPartyContent(), party.getMountain(),
-                                party.getAddress(), party.getPartyDate(), party.getMaxPeople(), party.getCurPeople());
+        Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId());
+
+        attendRepository.save(attend);
+
+        return new PartyListDto(party.getPartyId(), party.getUser().getUsername(), party.getTitle(),
+                                party.getPartyContent(), party.getMountain(), party.getAddress(),
+                                party.getPartyDate(), party.getPartyTime(), party.getMaxPeople(),
+                                party.getCurPeople(), completed, party.getCreatedAt());
     }
 
     // complete 수정 필요
@@ -71,8 +83,15 @@ public class PartyService {
 
     private void setPartyList(List<Party> partyList, List<PartyListDto> partyListDto) {
         for (Party party : partyList) {
-            PartyListDto partyDto = new PartyListDto(party.getPartyId(), party.getTitle(), party.getPartyContent(), party.getMountain(),
-                                                     party.getAddress(), party.getPartyDate(), party.getMaxPeople(), party.getCurPeople());
+            boolean completed = true;
+            if(party.getMaxPeople() <= party.getCurPeople()) {
+                completed = false;
+            }
+
+            PartyListDto partyDto = new PartyListDto(party.getPartyId(), party.getUser().getUsername(), party.getTitle(),
+                                                     party.getPartyContent(), party.getMountain(), party.getAddress(),
+                                                     party.getPartyDate(), party.getPartyTime(), party.getMaxPeople(),
+                                                     party.getCurPeople(), completed, party.getCreatedAt());
 
             partyListDto.add(partyDto);
         }
@@ -91,7 +110,7 @@ public class PartyService {
         Party party = partyRepository.findById(partyId).orElse(null);;
         PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
                                                            party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent());
+                                                           party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
 
         return partyDetailDto;
     }
@@ -103,11 +122,12 @@ public class PartyService {
         Party party = partyRepository.findById(partyId).orElseThrow(
                 ()-> new IllegalArgumentException("찾는 게시글이 없습니다.")
         );
-        party.update(partyRequestDto.getMountain(), partyRequestDto.getAddress(), partyRequestDto.getPartyDate(), partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
+        party.update(partyRequestDto.getPartyDate(), partyRequestDto.getPartyTime(),
+                     partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
 
         PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
                                                            party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent());
+                                                           party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
         return partyDetailDto;
     }
 
@@ -118,6 +138,23 @@ public class PartyService {
             partyRepository.deleteById(partyId);
         }catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("게시글을 삭제하지 못했습니다.");
+        }
+    }
+
+    public String attendParty(Long partyId, UserDetailsImpl userDetails) {
+        Attend attend = attendRepository.findByPartyId(partyId);
+        Party party = partyRepository.findById(partyId).orElseThrow(
+                ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
+        );
+
+        if(attend.getUserId().equals(userDetails.getUser().getUserId())) {
+            return "중복참여를 할 수 없습니다!";
+        }else{
+            Attend saveAttend = new Attend(userDetails.getUser().getUserId(), partyId);
+            int result = party.getCurPeople() + 1;
+            party.updateCurpeople(result);
+            attendRepository.save(saveAttend);
+            return "true";
         }
     }
 }

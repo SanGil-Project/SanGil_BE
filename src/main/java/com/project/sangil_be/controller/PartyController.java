@@ -1,9 +1,6 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.dto.PartyDetailDto;
-import com.project.sangil_be.dto.PartyListDto;
-import com.project.sangil_be.dto.PartyRequestDto;
-import com.project.sangil_be.dto.PartyListResponseDto;
+import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.Party;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.PartyService;
@@ -35,6 +32,12 @@ public class PartyController {
     @GetMapping("/api/party/{partyId}")
     public PartyDetailDto findParty (@PathVariable Long partyId) {
         return partyService.findParty(partyId);
+    }
+
+    //동호회 모임 참가기
+    @PostMapping("/api/party/attend/{partyId}")
+    public String attendParty (@PathVariable Long partyId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return partyService.attendParty(partyId, userDetails);
     }
 
     //동호회 내용 수정
