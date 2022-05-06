@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -77,5 +77,11 @@ public class UserController {
     public void editimage(@RequestParam("file") MultipartFile multipartFile, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         userService.editimage(multipartFile, user);
+    }
+
+    //마이페이지 즐겨찾기한 산
+    @GetMapping("/api/mypages/bookmark")
+    public List<BookMarkResponseDto> getBookMarkMountain (@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.getBookMarkMountain(userDetails);
     }
 }

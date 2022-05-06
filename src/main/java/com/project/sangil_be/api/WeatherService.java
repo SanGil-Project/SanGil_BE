@@ -31,7 +31,7 @@ public class WeatherService {
         gpsTransfer.transfer(gpsTransfer, 0);
 
         // 현재 날짜
-        LocalDate seoulNow = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate seoulNow = LocalDate.now(ZoneId.of("Asia/Shanghai"));
         String month;
         String day;
         if (seoulNow.getMonthValue() < 10) {
@@ -47,10 +47,17 @@ public class WeatherService {
         String localDate = String.valueOf(seoulNow.getYear()) + month + day;
 
         // 현재 시간
-        LocalTime now = LocalTime.now(ZoneId.of("Asia/Seoul"));
-        String hour = String.valueOf(now).split(":")[0];
+        LocalTime now = LocalTime.now(ZoneId.of("Asia/Shanghai"));
+        String h1 = String.valueOf(now).split(":")[0];
+//        int h2 = Integer.parseInt(h1)-1;
+//        String hour;
+//        if (h2 < 10) {
+//            hour = "0" + String.valueOf(h2);
+//        } else {
+//            hour = String.valueOf(h2);
+//        }
         String minute = String.valueOf(now).split(":")[1];
-        String time = hour + minute;
+        String time = h1 + minute;
 
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst"); /*URL*/ // 초단기예보조회
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "="
@@ -84,6 +91,7 @@ public class WeatherService {
 
 
         String data = sb.toString();
+
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(data);
         // response 키를 가지고 데이터를 파싱

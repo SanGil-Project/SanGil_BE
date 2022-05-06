@@ -29,6 +29,7 @@ public class PartyService {
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
     private final AttendRepository attendRepository;
+//    private final PlanRepository planRepository;
     private final Validator validator;
 
     // 등산 모임 참가 작성
@@ -57,8 +58,10 @@ public class PartyService {
 
         //참여하기에 생성한 유저의 내용 저장
         Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId());
+//        Plan plan = new Plan(userDetails.getUser().getUserId(), party.getPartyId());
 
         attendRepository.save(attend);
+//        planRepository.save(plan);
 
         return new PartyListDto(party.getPartyId(), party.getUser().getUsername(), party.getTitle(),
                                 party.getPartyContent(), party.getMountain(), party.getAddress(),
@@ -141,21 +144,28 @@ public class PartyService {
     }
 
     //동호회 참여하기 기능 구현
+    @Transactional
     public String attendParty(Long partyId, UserDetailsImpl userDetails) {
-        Attend attend = attendRepository.findByPartyId(partyId);
+        Attend attend = attendRepository.findByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
         Party party = partyRepository.findById(partyId).orElseThrow(
                 ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
         );
 
+
         //중복 참여 제한
-        if(attend.getUserId().equals(userDetails.getUser().getUserId())) {
-            return "중복참여를 할 수 없습니다!";
-        }else{
+        if(attend==null) {
             Attend saveAttend = new Attend(userDetails.getUser().getUserId(), partyId);
+//            Plan plan = new Plan(userDetails.getUser().getUserId(), party.getPartyId());
             int result = party.getCurPeople() + 1;
             party.updateCurpeople(result);
             attendRepository.save(saveAttend);
+//            planRepository.save(plan);
             return "true";
+        }else{
+            attendRepository.deleteByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
+            int result = party.getCurPeople() - 1;
+            party.updateCurpeople(result);
+            return "false";
         }
     }
 }

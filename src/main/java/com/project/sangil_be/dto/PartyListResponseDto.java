@@ -18,4 +18,5 @@ public class PartyListResponseDto {
         this.totalPage = partyListDtoPage.getTotalPages();
         this.currentPage = partyListDtoPage.getNumber();
     }
+
 }
