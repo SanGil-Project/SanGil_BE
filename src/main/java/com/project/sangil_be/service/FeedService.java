@@ -9,11 +9,19 @@ import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +31,7 @@ public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final Validator validator;
 
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
 
@@ -81,5 +90,33 @@ public class FeedService {
 
         s3Service.deletefeed(imageKey);
 
+    }
+
+    @Transactional
+    public Page<FeedResponseDto> getFeeds(int pageNum) {
+        List<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc();
+        Pageable pageable = getPagealbe(pageNum);
+        List<FeedResponseDto> feedResponseDtoList= new ArrayList<>();
+        setFeedList(feedList, feedResponseDtoList);
+
+        int start = pageNum * 6;
+        int end = Math.min((start + 6), feedList.size());
+
+        return validator.overPagesFeed(feedResponseDtoList, start, end, pageable, pageNum);
+    }
+
+    private void setFeedList(List<Feed> feedList, List<FeedResponseDto> feedResponseDtoList) {
+        for(Feed feed : feedList) {
+            Long goodCount = goodRepository.findByFeedId(feed.getFeedId());
+            FeedResponseDto feedDto = new FeedResponseDto(feed.getUser(), feed, goodCount);
+
+            feedResponseDtoList.add(feedDto);
+        }
+    }
+
+    private Pageable getPagealbe(int page) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        return PageRequest.of(page, 6, sort);
     }
 }

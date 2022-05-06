@@ -78,7 +78,7 @@ public class PartyService {
         int start = pageNum * 6;
         int end = Math.min((start + 6), partyList.size());
 
-        return validator.overPages(partyListDto, start, end, pageable, pageNum);
+        return validator.overPagesParty(partyListDto, start, end, pageable, pageNum);
     }
 
 
@@ -109,11 +109,10 @@ public class PartyService {
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
         Party party = partyRepository.findById(partyId).orElse(null);;
-        PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
-                                                           party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
 
-        return partyDetailDto;
+        return new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+                                  party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
+                                  party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
     }
 
     // api에 맞게 수정 필요
@@ -126,10 +125,9 @@ public class PartyService {
         party.update(partyRequestDto.getPartyDate(), partyRequestDto.getPartyTime(),
                      partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
 
-        PartyDetailDto partyDetailDto = new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
-                                                           party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                                           party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
-        return partyDetailDto;
+        return new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+                                  party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
+                                  party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
     }
 
     // 동호회 모임 삭제 코드
