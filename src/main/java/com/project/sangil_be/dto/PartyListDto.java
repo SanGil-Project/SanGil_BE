@@ -37,4 +37,12 @@ public class PartyListDto {
         this.completed = completed;
         this.createdAt = createdAt;
     }
+
+    public PartyListDto(String title, LocalDateTime createdAt, int maxPeople, int curPeople, String partyDate) {
+        this.title = title;
+        this.createdAt = createdAt;
+        this.maxPeople = maxPeople;
+        this.curPeople = curPeople;
+        this.partyDate = partyDate;
+    }
 }

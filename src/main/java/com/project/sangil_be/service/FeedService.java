@@ -11,6 +11,7 @@ import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -38,7 +39,6 @@ public class FeedService {
 
         FeedResponseDto feedResponseDto = new FeedResponseDto(user,feed, 0L );
         return feedResponseDto;
-
 
     }
 
