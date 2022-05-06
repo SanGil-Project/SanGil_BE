@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,9 +24,9 @@ public class MCommentService {
 
     // 댓글 작성
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
-        Optional<MountainComment> comment = mountainCommentRepository.findByUserId(userDetails.getUser().getUserId());
+        List<MountainComment> comment = mountainCommentRepository.findAllByUserId(userDetails.getUser().getUserId());
         String msg;
-        if (comment.isPresent()) {
+        if (comment.size()>1) {
             msg = "중복";
         } else {
             msg = "작성 가능";

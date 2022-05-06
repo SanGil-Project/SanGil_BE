@@ -115,15 +115,14 @@ public class MountainService {
 
     // 페이징 처리 수정
     // 산 상세 페이지
-    public MountainResponseDto detailMountain(Long mountainId) throws IOException, ParseException {
+    public MountainResponseDto detailMountain(Long mountainId, int pageNum) throws IOException, ParseException {
         Mountain100 mountain100 = mountain100Repository.findById(mountainId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-        System.out.println("lat : "+mountain100.getLat());
-        System.out.println("lng : "+mountain100.getLng());
         WeatherDto weatherDto = weatherService.weather(mountain100.getLat(),mountain100.getLng());
 
-        List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountainId);
+        List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100IdOrderByCreatedAtDesc(mountainId);
+        Pageable pageable = getPageable(pageNum);
         List<CommentListDto> commentLists = new ArrayList<>();
         int star = 0;
         float starAvr = 0;
@@ -142,12 +141,19 @@ public class MountainService {
             commentLists.add(comments);
         }
 
+        int start = pageNum * 6;
+        int end = Math.min((start + 6), mountainComments.size());
+        Page<CommentListDto> page = new PageImpl<>(commentLists.subList(start, end), pageable, commentLists.size());
+        CommentDto commentDto = new CommentDto(page);
+
         List<Course> courses = courseRepository.findAllByMountain100Id(mountainId);
         List<CourseListDto> courseLists = new ArrayList<>();
         for (int i = 0; i < courses.size(); i++) {
             CourseListDto courseListDto = new CourseListDto(courses.get(i));
             courseLists.add(courseListDto);
         }
-        return new MountainResponseDto(mountain100, weatherDto, String.format("%.1f",starAvr), courseLists, commentLists);
+        return new MountainResponseDto(mountain100, weatherDto, String.format("%.1f",starAvr), courseLists, commentDto);
     }
+
+
 }
