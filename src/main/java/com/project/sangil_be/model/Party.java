@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -70,6 +71,8 @@ public class Party extends Timestamped {
     }
 
     public void updateCurpeople(int result) {
+
         this.curPeople = result;
     }
+
 }
