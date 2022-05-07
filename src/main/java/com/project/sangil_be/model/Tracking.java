@@ -1,5 +1,8 @@
 //package com.project.sangil_be.model;
 //
+
+//import com.project.sangil_be.dto.TrackingRequestDto;
+
 //import lombok.Getter;
 //import lombok.NoArgsConstructor;
 //import lombok.Setter;
@@ -29,4 +32,15 @@
 //
 //    @Column(nullable = false)
 //    private Long completedId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "userId")
+//    private User user;
+//
+//    public Tracking(TrackingRequestDto requestDto, User user) {
+//        this.lat = requestDto.getLat();
+//        this.lng = requestDto.getLng();
+//        this.timer = requestDto.getTimer();
+//        this.user = user;
+//    }
 //}

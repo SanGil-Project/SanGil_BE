@@ -11,8 +11,16 @@ import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+=======
 import org.springframework.data.domain.*;
+>>>>>>> de1fe887814e7019225612f2f344d379f813899c
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +37,7 @@ public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final Validator validator;
 
 
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
@@ -89,7 +98,6 @@ public class FeedService {
 
     }
 
-
     public FeedResponseDto detail(Long feedId, User user) {
 
         Feed feed = feedRepository.findById(feedId).orElseThrow(
@@ -133,5 +141,4 @@ public class FeedService {
         Sort sort = Sort.by(direction, "id");
         return PageRequest.of(pageNum, 15, sort);
     }
-
 }

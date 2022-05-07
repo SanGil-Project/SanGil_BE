@@ -1,6 +1,5 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.S3.S3Service;
 import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
@@ -8,7 +7,6 @@ import com.project.sangil_be.model.Feed;
 import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
-import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.FeedService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -53,15 +50,11 @@ public class FeedController {
         return feedService.myfeeds(user, pageNum-1);
     }
 
-
-
     //피드 좋아요
     @PostMapping("/api/feeds/good/{feedId}")
     public GoodCheckResponseDto goodCheck(@PathVariable("feedId") Long feedId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         User user = userDetails.getUser();
         return feedService.goodCheck(feedId, user);
-
     }
 
     //피드 삭제
