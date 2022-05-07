@@ -10,19 +10,23 @@
 //@Setter
 //@Entity
 //@NoArgsConstructor
-//public class Plan {
+//public class Tracking {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long planId;
+//    private Long trackingId;
 //
 //    @Column(nullable = false)
-//    private Long userId;
+//    private Double lat;
 //
 //    @Column(nullable = false)
-//    private Long partyId;
+//    private Double lng;
 //
-//    public Plan(Long userId, Long partyId) {
-//        this.userId = userId;
-//        this.partyId = partyId;
-//    }
+//    @Column(nullable = false)
+//    private String timer;
+//
+//    @Column(nullable = false)
+//    private Double distance;
+//
+//    @Column(nullable = false)
+//    private Long completedId;
 //}

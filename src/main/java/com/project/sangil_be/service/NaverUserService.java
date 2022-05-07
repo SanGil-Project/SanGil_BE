@@ -138,7 +138,7 @@ public class NaverUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="초보자";
+            String userTitle="등린이";
 
             naverUser = new User(naverusername, encodedPassword,nickname,userImageUrl,userTitle);
             userRepository.save(naverUser);
