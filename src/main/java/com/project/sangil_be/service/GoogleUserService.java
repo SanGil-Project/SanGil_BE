@@ -134,7 +134,7 @@ public class GoogleUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="초보자";
+            String userTitle="등린이";
 
             googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle);
         }

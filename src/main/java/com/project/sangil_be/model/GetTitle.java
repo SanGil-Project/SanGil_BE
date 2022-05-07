@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Complete {
+public class GetTitle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long completeId;
+    private Long getTitleId;
 
     @Column(nullable = false)
-    private Long userId;
+    private String userTitle;
 
     @Column(nullable = false)
-    private Long partyId;
+    private String userTitleImgUrl;
 }
