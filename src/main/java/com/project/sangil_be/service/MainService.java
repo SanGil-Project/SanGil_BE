@@ -5,6 +5,7 @@ import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

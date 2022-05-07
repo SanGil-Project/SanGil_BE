@@ -28,12 +28,12 @@ public class MainController {
     }
 
     @GetMapping("/api/main/mountains")
-    public List<Mountain10ResponseDto> get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<Top10MountainDto> get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainService.get10Mountains(userDetails);
     }
+
     @GetMapping("api/main/feeds/{pageNum}")
     public FeedListResponseDto mainfeeds (@PathVariable("pageNum")int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
-
         return mainService.mainfeeds(pageNum-1,userDetails);
     }
 }
