@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sangil_be.dto.XYTransferDto;
 import com.project.sangil_be.model.Mountain100;
 import com.project.sangil_be.repository.Mountain100Repository;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,7 +75,9 @@ public class ServiceImpl {
         AddressTransfer addressTransfer = new AddressTransfer();
         for (int i = 0; i < 100; i++) {
             Mountain100 mountain100 = mountain100Repository.findAll().get(i);
+            System.out.println(mountain100.getMountainAddress());
             XYTransferDto mountain100Dto = new XYTransferDto(
+
                     getXYMapfromJson(addressTransfer.getKakaoApiFromAddress(mountain100.getMountainAddress())).getLat(),
                     getXYMapfromJson(addressTransfer.getKakaoApiFromAddress(mountain100.getMountainAddress())).getLng());
             mountain100.update(mountain100Dto.getLat(),mountain100Dto.getLng());

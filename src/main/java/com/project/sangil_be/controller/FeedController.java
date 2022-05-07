@@ -1,6 +1,7 @@
 package com.project.sangil_be.controller;
 
 import com.project.sangil_be.S3.S3Service;
+import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
 import com.project.sangil_be.model.Feed;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,6 +37,22 @@ public class FeedController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return feedService.saveFeed(feedContent, multipartFile, userDetails);
     }
+
+    //피드 상세
+    @GetMapping("api/feeds/detail/{feedId}")
+    public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        return feedService.detail(feedId, user);
+    }
+
+    //나의 피드
+    @GetMapping("api/myfeeds/{pageNum}")
+    public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+
+        return feedService.myfeeds(user, pageNum-1);
+    }
+
 
 
     //피드 좋아요

@@ -1,10 +1,7 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.dto.*;
-import com.project.sangil_be.model.Attend;
-import com.project.sangil_be.model.Mountain100;
-import com.project.sangil_be.model.MountainComment;
-import com.project.sangil_be.model.Party;
+import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +24,8 @@ public class MainService {
     private final MountainCommentRepository mountainCommentRepository;
     private final BookMarkRepository bookMarkRepository;
     private final AttendRepository attendRepository;
+    private final FeedRepository feedRepository;
+    private final GoodRepository goodRepository;
 
     @Transactional
     public PlanResponseDto getPlan(UserDetailsImpl userDetails) {
@@ -95,6 +93,36 @@ public class MainService {
             mountain10ResponseDtos.add(mountain10ResponseDto);
         }
         return mountain10ResponseDtos;
+    }
+
+    public FeedListResponseDto mainfeeds(int pageNum, UserDetailsImpl userDetails) {
+
+        List<Feed> feed = feedRepository.findAll();
+
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+
+        for (Feed feeds : feed){
+
+            int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(),userDetails.getUser().getUserId());
+
+            feedResponseDtos.add(new FeedResponseDto(feeds,goodCnt,goodStatus));
+
+        }
+
+        Pageable pageable = getPageable(pageNum);
+
+        int start = pageNum * 15;
+        int end = Math.min((start + 15), feed.size());
+
+        Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
+        return new FeedListResponseDto(page);
+    }
+
+    private Pageable getPageable(int pageNum) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        return PageRequest.of(pageNum, 15, sort);
     }
 
 
