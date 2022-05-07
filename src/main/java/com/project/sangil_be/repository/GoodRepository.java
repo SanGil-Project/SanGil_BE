@@ -1,6 +1,5 @@
 package com.project.sangil_be.repository;
 
-import com.project.sangil_be.model.Feed;
 import com.project.sangil_be.model.Good;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +12,9 @@ public interface GoodRepository extends JpaRepository<Good, Long> {
 
     boolean existsByFeedIdAndUserId(Long feedId, Long user);
 
-    List<Good> findByFeedId(Feed feed);
+    List<Good> findByFeedId(Long feed);
 
     void deleteByFeedId(Long feedId);
+
+//    Good existsByFeedIdAndUserId(Long feedId, Long userId);
 }
