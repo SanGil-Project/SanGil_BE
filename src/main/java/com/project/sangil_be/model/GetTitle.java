@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Location {
+public class GetTitle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long locationId;
+    private Long getTitleId;
 
     @Column(nullable = false)
-    private Double lat;
+    private String userTitle;
 
     @Column(nullable = false)
-    private Double lng;
+    private String userTitleImgUrl;
 }

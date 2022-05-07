@@ -10,7 +10,7 @@
 //@Setter
 //@Entity
 //@NoArgsConstructor
-//public class Complete {
+//public class Completed {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long completeId;
@@ -19,5 +19,5 @@
 //    private Long userId;
 //
 //    @Column(nullable = false)
-//    private Long partyId;
+//    private Long mountain100Id;
 //}

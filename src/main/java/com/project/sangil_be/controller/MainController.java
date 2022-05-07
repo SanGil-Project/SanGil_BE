@@ -1,8 +1,8 @@
 package com.project.sangil_be.controller;
 
 import com.project.sangil_be.dto.FeedListResponseDto;
-import com.project.sangil_be.dto.Mountain10ResponseDto;
 import com.project.sangil_be.dto.PlanResponseDto;
+import com.project.sangil_be.dto.Top10MountainDto;
 import com.project.sangil_be.dto.TwoPartyListResponseDto;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.FeedService;
@@ -38,7 +38,12 @@ public class MainController {
     }
 
     @GetMapping("/api/main/mountains")
-    public List<Mountain10ResponseDto> get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<Top10MountainDto> get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainService.get10Mountains(userDetails);
+    }
+
+    @GetMapping("api/main/feeds/{pageNum}")
+    public FeedListResponseDto mainfeeds (@PathVariable("pageNum")int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return mainService.mainfeeds(pageNum-1,userDetails);
     }
 }

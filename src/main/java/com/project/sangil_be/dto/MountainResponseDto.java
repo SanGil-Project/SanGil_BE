@@ -17,9 +17,9 @@ public class MountainResponseDto {
     private Float height;
     private String starAvr;
     private List<CourseListDto> courseLists;
-    private List<CommentListDto> commentLists;
+    private CommentDto commentDto;
 
-    public MountainResponseDto(Mountain100 mountain100, WeatherDto weatherDto, String starAvr, List<CourseListDto> courseLists, List<CommentListDto> commentLists) {
+    public MountainResponseDto(Mountain100 mountain100, WeatherDto weatherDto, String starAvr, List<CourseListDto> courseLists, CommentDto commentDto) {
         this.mountainId = mountain100.getMountain100Id();
         this.mountain = mountain100.getMountain();
         this.weather = weatherDto.getWeather();
@@ -30,6 +30,6 @@ public class MountainResponseDto {
         this.height = mountain100.getHeight();
         this.starAvr = starAvr;
         this.courseLists = courseLists;
-        this.commentLists = commentLists;
+        this.commentDto = commentDto;
     }
 }

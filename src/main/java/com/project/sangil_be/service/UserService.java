@@ -91,7 +91,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     //유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
     public List<BookMarkResponseDto> getBookMarkMountain(UserDetailsImpl userDetails) {

@@ -10,7 +10,6 @@ import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.FeedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +33,21 @@ public class FeedController {
             @RequestParam("feedContent") String feedContent,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return feedService.saveFeed(feedContent, multipartFile, userDetails);
+    }
+
+    //피드 상세
+    @GetMapping("api/feeds/detail/{feedId}")
+    public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        return feedService.detail(feedId, user);
+    }
+
+    //나의 피드
+    @GetMapping("api/myfeeds/{pageNum}")
+    public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+
+        return feedService.myfeeds(user, pageNum-1);
     }
 
     //피드 좋아요

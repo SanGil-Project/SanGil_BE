@@ -34,8 +34,8 @@ public class MountainController {
     }
 
     // 산 상세 페이지
-    @GetMapping("/api/mountain/{mountainId}")
-    public MountainResponseDto detailMountain(@PathVariable Long mountainId) throws IOException, ParseException {
-        return mountainService.detailMountain(mountainId);
+    @GetMapping("/api/mountain/{mountainId}/{pageNum}")
+    public MountainResponseDto detailMountain(@PathVariable Long mountainId, @PathVariable int pageNum) throws IOException, ParseException {
+        return mountainService.detailMountain(mountainId,pageNum-1);
     }
 }

@@ -1,6 +1,8 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.S3.S3Service;
+import com.project.sangil_be.dto.AllFeedDto;
+import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
 import com.project.sangil_be.model.Feed;
@@ -11,10 +13,14 @@ import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+=======
+import org.springframework.data.domain.*;
+>>>>>>> de1fe887814e7019225612f2f344d379f813899c
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +39,7 @@ public class FeedService {
     private final GoodRepository goodRepository;
     private final Validator validator;
 
+
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
 
         User user = userDetails.getUser();
@@ -41,10 +48,12 @@ public class FeedService {
         Feed feed = new Feed(feedContent, feedImageUrl, user);
         feedRepository.save(feed);
 
-        LocalDateTime createdAt = feed.getCreatedAt();
+//        LocalDateTime createdAt = feed.getCreatedAt();
+
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
 
 
-        FeedResponseDto feedResponseDto = new FeedResponseDto(user,feed, 0L );
+        FeedResponseDto feedResponseDto = new FeedResponseDto(user,feed, 0 , goodStatus);
         return feedResponseDto;
 
     }
@@ -68,11 +77,9 @@ public class FeedService {
 
 
         }
-        boolean result = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
 
-        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(result);
-
-        System.out.println(goodCheckResponseDto);
+        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodStatus);
 
         return goodCheckResponseDto;
     }
@@ -91,31 +98,47 @@ public class FeedService {
 
     }
 
-    @Transactional
-    public Page<FeedResponseDto> getFeeds(int pageNum) {
-        List<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc();
-        Pageable pageable = getPagealbe(pageNum);
-        List<FeedResponseDto> feedResponseDtoList= new ArrayList<>();
-        setFeedList(feedList, feedResponseDtoList);
+    public FeedResponseDto detail(Long feedId, User user) {
 
-        int start = pageNum * 6;
-        int end = Math.min((start + 6), feedList.size());
+        Feed feed = feedRepository.findById(feedId).orElseThrow(
+                () -> new IllegalArgumentException("해당 피드가 없습니다.")
+        );
 
-        return validator.overPagesFeed(feedResponseDtoList, start, end, pageable, pageNum);
+        int goodCnt = goodRepository.findByFeedId(feedId).size();
+
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(),user.getUserId());
+
+        FeedResponseDto feedResponseDto = new FeedResponseDto(feed, goodCnt, goodStatus);
+
+        return feedResponseDto;
     }
 
-    private void setFeedList(List<Feed> feedList, List<FeedResponseDto> feedResponseDtoList) {
-        for(Feed feed : feedList) {
-            Long goodCount = goodRepository.findByFeedId(feed.getFeedId());
-            FeedResponseDto feedDto = new FeedResponseDto(feed.getUser(), feed, goodCount);
+    public FeedListResponseDto myfeeds(User user, int pageNum) {
 
-            feedResponseDtoList.add(feedDto);
+        List<Feed> feed = feedRepository.findByUser(user);
+
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+
+        for(Feed feeds : feed){
+
+            int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(),user.getUserId());
+
+            feedResponseDtos.add(new FeedResponseDto(feeds,goodCnt,goodStatus));
+
         }
+        Pageable pageable = getPageable(pageNum);
+
+        int start = pageNum * 15;
+        int end = Math.min((start + 15), feed.size());
+
+        Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
+        return new FeedListResponseDto(page);
     }
 
-    private Pageable getPagealbe(int page) {
+    private Pageable getPageable(int pageNum) {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
-        return PageRequest.of(page, 6, sort);
+        return PageRequest.of(pageNum, 15, sort);
     }
 }
