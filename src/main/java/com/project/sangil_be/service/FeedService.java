@@ -12,7 +12,14 @@ import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+=======
 import org.springframework.data.domain.*;
+>>>>>>> de1fe887814e7019225612f2f344d379f813899c
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
