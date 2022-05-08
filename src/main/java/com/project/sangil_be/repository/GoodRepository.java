@@ -12,15 +12,8 @@ public interface GoodRepository extends JpaRepository<Good, Long> {
 
     boolean existsByFeedIdAndUserId(Long feedId, Long user);
 
-<<<<<<< HEAD
     void deleteByFeedId(Long feedId);
 
-    Long findByFeedId(Long feedId);
-=======
     List<Good> findByFeedId(Long feed);
 
-    void deleteByFeedId(Long feedId);
-
-//    Good existsByFeedIdAndUserId(Long feedId, Long userId);
->>>>>>> de1fe887814e7019225612f2f344d379f813899c
 }

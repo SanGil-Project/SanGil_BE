@@ -79,7 +79,7 @@ public class MainService {
         int star=0;
         float starAvr=0;
         for (int i = 0; i < mountain100List.size(); i++) {
-            int cnt = bookMarkRepository.countAllByMountain100Id(mountain100List.get(i).getMountain100Id());
+            int bookMarkCnt = bookMarkRepository.countAllByMountain100Id(mountain100List.get(i).getMountain100Id());
             boolean bookMark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100List.get(i).getMountain100Id(),userDetails.getUser().getUserId());
             List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100List.get(i).getMountain100Id());
             if (mountainComments.size() == 0) {
@@ -88,7 +88,7 @@ public class MainService {
                 star+=mountainComments.get(i).getStar();
                 starAvr = (float)star/mountainComments.size();
             }
-            Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountain100List.get(i),String.format("%.1f",starAvr),bookMark,cnt);
+            Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountain100List.get(i),String.format("%.1f",starAvr),bookMark,bookMarkCnt);
             mountain10ResponseDtos.add(mountain10ResponseDto);
         }
         Collections.sort(mountain10ResponseDtos, new CntComparator().reversed());
@@ -153,9 +153,9 @@ public class MainService {
     class CntComparator implements Comparator<Mountain10ResponseDto>{
         @Override
         public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
-            if (t1.getCount() > t2.getCount()) {
+            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
                 return 1;
-            } else if (t1.getCount() < t2.getCount()) {
+            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
                 return -1;
             }
             return 0;
