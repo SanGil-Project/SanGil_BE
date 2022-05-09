@@ -1,4 +1,4 @@
-package com.project.sangil_be.api.geocoder;
+package com.project.sangil_be.utils.geocoder;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sangil_be.dto.XYTransferDto;
 import com.project.sangil_be.model.Mountain100;
 import com.project.sangil_be.repository.Mountain100Repository;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

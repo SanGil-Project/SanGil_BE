@@ -1,4 +1,4 @@
-package com.project.sangil_be.api;
+package com.project.sangil_be.utils;
 
 public class GpsTransfer {
 

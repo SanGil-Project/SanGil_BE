@@ -1,5 +1,9 @@
 package com.project.sangil_be.service;
 
+import com.project.sangil_be.utils.Direction;
+import com.project.sangil_be.utils.DistanceToUser;
+import com.project.sangil_be.utils.GeometryUtil;
+import com.project.sangil_be.utils.Location;
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
@@ -79,7 +83,7 @@ public class MainService {
         int star=0;
         float starAvr=0;
         for (int i = 0; i < mountain100List.size(); i++) {
-            int cnt = bookMarkRepository.countAllByMountain100Id(mountain100List.get(i).getMountain100Id());
+            int bookMarkCnt = bookMarkRepository.countAllByMountain100Id(mountain100List.get(i).getMountain100Id());
             boolean bookMark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100List.get(i).getMountain100Id(),userDetails.getUser().getUserId());
             List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100List.get(i).getMountain100Id());
             if (mountainComments.size() == 0) {
@@ -88,7 +92,7 @@ public class MainService {
                 star+=mountainComments.get(i).getStar();
                 starAvr = (float)star/mountainComments.size();
             }
-            Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountain100List.get(i),String.format("%.1f",starAvr),bookMark,cnt);
+            Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountain100List.get(i),String.format("%.1f",starAvr),bookMark,bookMarkCnt);
             mountain10ResponseDtos.add(mountain10ResponseDto);
         }
         Collections.sort(mountain10ResponseDtos, new CntComparator().reversed());
@@ -143,6 +147,48 @@ public class MainService {
     }
 
 
+    // 자기 주변 산
+    public NearbyMountainDto nearby(int pageNum,UserDetailsImpl userDetails) {
+        double lat = 37.45988; // 내 위치 y
+        double lng = 126.9519; // 내 위치 x
+        double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
+
+        Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());
+        Location southWest = GeometryUtil.calculate(lat, lng, distance, Direction.SOUTHWEST.getBearing());
+
+        double x1 = northEast.getLat();
+        double y1 = northEast.getLng();
+        double x2 = southWest.getLat();
+        double y2 = southWest.getLng();
+
+
+        List<Mountain100> mountain100s = mountain100Repository.findAll(x2,x1,y2,y1);
+        List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
+        int star=0;
+        double starAvr=0;
+        for (Mountain100 mountain100 : mountain100s) {
+            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100.getMountain100Id());
+            if (mountainComments.size() == 0) {
+                starAvr = 0;
+            } else {
+                for (int i = 0; i < mountainComments.size(); i++) {
+                    star += mountainComments.get(i).getStar();
+                }
+                starAvr = (float) star / mountainComments.size();
+            }
+            Boolean bookmark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100.getMountain100Id(),userDetails.getUser().getUserId());
+            double dis = DistanceToUser.distance(lat,lng,mountain100.getLat(),mountain100.getLng(),"kilometer");
+            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain100,String.format("%.1f",starAvr),bookmark,String.format("%.1f",dis));
+            nearbyMountainListDtos.add(nearbyMountainListDto);
+        }
+        Pageable pageable = getPageable(pageNum);
+        int start = pageNum * 7;
+        int end = Math.min((start + 7), mountain100s.size());
+        Page<NearbyMountainListDto> page = new PageImpl<>(nearbyMountainListDtos.subList(start, end), pageable, nearbyMountainListDtos.size());
+        return new NearbyMountainDto(page);
+    }
+
+
     class PartyDateComparator implements Comparator<Party> {
         @Override
         public int compare(Party d1, Party d2) {
@@ -153,9 +199,9 @@ public class MainService {
     class CntComparator implements Comparator<Mountain10ResponseDto>{
         @Override
         public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
-            if (t1.getCount() > t2.getCount()) {
+            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
                 return 1;
-            } else if (t1.getCount() < t2.getCount()) {
+            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
                 return -1;
             }
             return 0;

@@ -15,4 +15,6 @@ public interface BookMarkRepository extends JpaRepository <BookMark, Long> {
     List<BookMark> findAllByUserId(Long userId);
 
     int countAllByMountain100Id(Long mountain100Id);
+
+//    Boolean existsByMountain100Id(Long mountain100Id);
 }
