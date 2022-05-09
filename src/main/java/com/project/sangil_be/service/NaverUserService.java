@@ -114,19 +114,20 @@ public class NaverUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        Long socialId = jsonNode.get("response").asLong();
         String provider = "naver";
         String username = provider + "_" + jsonNode.get("response").get("id").asText();
         String nickname = jsonNode.get("response").get("nickname").asText();
 
-        return new SocialLoginDto(username, nickname);
+        return new SocialLoginDto(username, nickname, socialId);
     }
 
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto naverUserInfo) {
 
         String naverusername =naverUserInfo.getUsername();
-        User naverUser = userRepository.findByUsername(naverusername)
-                .orElse(null);
+        Long socialId = naverUserInfo.getSocialId();
+        User naverUser = userRepository.findBySocialId(socialId);
 
         if (naverUser == null) {
             // 회원가입
@@ -141,7 +142,7 @@ public class NaverUserService {
             String userTitle="등린이";
             String userTitleImgUrl="없음";
 
-            naverUser = new User(naverusername, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
+            naverUser = new User(naverusername,socialId, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(naverUser);
 
         }

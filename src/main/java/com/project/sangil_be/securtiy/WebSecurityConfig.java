@@ -132,12 +132,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/user/**");
         skipPathList.add("PUT,/api/test"); // test
         skipPathList.add("GET,/api/main/parties");
+        skipPathList.add("GET,/api/main/mountains");
+        skipPathList.add("GET,/api/main/nearby/**");
+        skipPathList.add("GET,/api/main/feeds/**");
         skipPathList.add("POST,/user/signup");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
 
         skipPathList.add("GET,/favicon.ico");
+
+
+        skipPathList.add("GET,/ws/**");
+
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PlanListDto {
+    private Long partyId;
     private String title;
     private LocalDateTime createdAt;
     private int maxPoeple;
@@ -16,6 +17,7 @@ public class PlanListDto {
     private String msg;
 
     public PlanListDto(Party party,String msg) {
+        this. partyId = party.getPartyId();
         this.title = party.getTitle();
         this.createdAt = party.getCreatedAt();
         this.maxPoeple = party.getMaxPeople();

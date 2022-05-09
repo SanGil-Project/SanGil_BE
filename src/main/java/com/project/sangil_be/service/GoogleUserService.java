@@ -114,11 +114,12 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        Long socialId = jsonNode.get("sub").asLong();
         String provider = "google";
         String username = provider + "_" + jsonNode.get("sub").asText();
         String nickname = jsonNode.get("name").asText();
 
-        return new SocialLoginDto(username, nickname);
+        return new SocialLoginDto(username, nickname,socialId);
 
     }
 
@@ -126,7 +127,8 @@ public class GoogleUserService {
     private User getUser(SocialLoginDto googleUserInfo) {
 
         String googlename = googleUserInfo.getUsername();
-        User googleUser = userRepository.findByUsername(googlename).orElse(null);
+        Long socialId = googleUserInfo.getSocialId();
+        User googleUser = userRepository.findBySocialId(socialId);
 
         if (googleUser == null) {
             String nickname = googleUserInfo.getNickname();
@@ -137,8 +139,10 @@ public class GoogleUserService {
             String userTitle="등린이";
             String userTitleImgUrl="없음";
 
-            googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
+            googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
+            userRepository.save(googleUser);
         }
+
 
         return googleUser;
     }
