@@ -1,7 +1,7 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.S3.S3Service;
-import com.project.sangil_be.api.DistanceToUser;
+import com.project.sangil_be.utils.DistanceToUser;
 import com.project.sangil_be.dto.BookMarkResponseDto;
 import com.project.sangil_be.dto.ResponseDto;
 import com.project.sangil_be.dto.SignUpRequestDto;

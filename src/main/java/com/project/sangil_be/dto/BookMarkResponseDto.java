@@ -25,4 +25,8 @@ public class BookMarkResponseDto {
         this.starAvr = starAvr;
         this.distance = distance;
     }
+
+    public BookMarkResponseDto(String mountain100) {
+        this.mountainName=mountain100;
+    }
 }

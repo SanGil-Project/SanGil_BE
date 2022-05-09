@@ -1,10 +1,6 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.dto.FeedListResponseDto;
-import com.project.sangil_be.dto.PlanResponseDto;
-import com.project.sangil_be.dto.Top10MountainDto;
-import com.project.sangil_be.dto.TwoPartyListResponseDto;
-import com.project.sangil_be.model.Mountain100;
+import com.project.sangil_be.dto.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.MainService;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +36,9 @@ public class MainController {
         return mainService.mainfeeds(pageNum-1,userDetails);
     }
 
+    // 자기 주변 산
+    @GetMapping("/api/main/nearby/{pageNum}")
+    public NearbyMountainDto nearby(@PathVariable("pageNum")int pageNum,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mainService.nearby(pageNum-1,userDetails);
+    }
 }

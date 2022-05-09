@@ -17,8 +17,6 @@ public class PartyDetailDto {
     private int maxPeople;
     private int curPeople;
     private LocalDateTime createdAt;
-    private int totalPage;
-    private int currentPage;
 
     public PartyDetailDto(Long partyId, String title, String mountain,
                           String address, String partyDate, int maxPeople,

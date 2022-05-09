@@ -1,6 +1,7 @@
 package com.project.sangil_be.api;
 
 import com.project.sangil_be.dto.WeatherDto;
+import com.project.sangil_be.utils.GpsTransfer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

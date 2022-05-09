@@ -35,6 +35,8 @@ dependencies {
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 
+    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.1.Final'
+
 }
 
 tasks.named('test') {

@@ -1,5 +1,9 @@
 package com.project.sangil_be.service;
 
+import com.project.sangil_be.utils.Direction;
+import com.project.sangil_be.utils.DistanceToUser;
+import com.project.sangil_be.utils.GeometryUtil;
+import com.project.sangil_be.utils.Location;
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
@@ -140,6 +144,48 @@ public class MainService {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
         return PageRequest.of(pageNum, 15, sort);
+    }
+
+
+    // 자기 주변 산
+    public NearbyMountainDto nearby(int pageNum,UserDetailsImpl userDetails) {
+        double lat = 37.45988; // 내 위치 y
+        double lng = 126.9519; // 내 위치 x
+        double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
+
+        Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());
+        Location southWest = GeometryUtil.calculate(lat, lng, distance, Direction.SOUTHWEST.getBearing());
+
+        double x1 = northEast.getLat();
+        double y1 = northEast.getLng();
+        double x2 = southWest.getLat();
+        double y2 = southWest.getLng();
+
+
+        List<Mountain100> mountain100s = mountain100Repository.findAll(x2,x1,y2,y1);
+        List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
+        int star=0;
+        double starAvr=0;
+        for (Mountain100 mountain100 : mountain100s) {
+            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100.getMountain100Id());
+            if (mountainComments.size() == 0) {
+                starAvr = 0;
+            } else {
+                for (int i = 0; i < mountainComments.size(); i++) {
+                    star += mountainComments.get(i).getStar();
+                }
+                starAvr = (float) star / mountainComments.size();
+            }
+            Boolean bookmark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100.getMountain100Id(),userDetails.getUser().getUserId());
+            double dis = DistanceToUser.distance(lat,lng,mountain100.getLat(),mountain100.getLng(),"kilometer");
+            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain100,String.format("%.1f",starAvr),bookmark,String.format("%.1f",dis));
+            nearbyMountainListDtos.add(nearbyMountainListDto);
+        }
+        Pageable pageable = getPageable(pageNum);
+        int start = pageNum * 7;
+        int end = Math.min((start + 7), mountain100s.size());
+        Page<NearbyMountainListDto> page = new PageImpl<>(nearbyMountainListDtos.subList(start, end), pageable, nearbyMountainListDtos.size());
+        return new NearbyMountainDto(page);
     }
 
 
