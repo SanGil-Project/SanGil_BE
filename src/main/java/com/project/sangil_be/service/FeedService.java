@@ -1,7 +1,6 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.S3.S3Service;
-import com.project.sangil_be.dto.AllFeedDto;
 import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
@@ -13,19 +12,11 @@ import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-=======
 import org.springframework.data.domain.*;
->>>>>>> de1fe887814e7019225612f2f344d379f813899c
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
