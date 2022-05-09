@@ -119,7 +119,7 @@ public class PartyService {
         Party party = partyRepository.findById(partyId).orElse(null);;
 
         for (Attend attends : attend){
-            User user = userRepository.findByuserId(attends.getUserId());
+            User user = userRepository.findByUserId(attends.getUserId());
             partymemberDto.add(new PartymemberDto(user));
         }
 

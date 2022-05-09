@@ -1,11 +1,8 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.S3.S3Service;
+import com.project.sangil_be.dto.*;
 import com.project.sangil_be.utils.DistanceToUser;
-import com.project.sangil_be.dto.BookMarkResponseDto;
-import com.project.sangil_be.dto.ResponseDto;
-import com.project.sangil_be.dto.SignUpRequestDto;
-import com.project.sangil_be.dto.UsernameRequestDto;
 import com.project.sangil_be.model.BookMark;
 import com.project.sangil_be.model.Mountain100;
 import com.project.sangil_be.model.MountainComment;
@@ -53,8 +50,9 @@ public class UserService {
         String userImageUrl = "없음";
         String userTitle = "없음";
         String userTitleImgUrl="없음";
+        Long socialId = 0L;
 
-        User user = new User(username, password, nickname, userImageUrl, userTitle,userTitleImgUrl);
+        User user = new User(username, socialId,password, nickname, userImageUrl, userTitle,userTitleImgUrl);
         userRepository.save(user);
 
         ResponseDto responseDto = new ResponseDto(result);
@@ -65,11 +63,10 @@ public class UserService {
 
     @Transactional
     public void editname(UsernameRequestDto usernameRequestDto, User user) {
-
         user.editusername(usernameRequestDto);
         userRepository.save(user);
+        }
 
-    }
 
 //    @Transactional
 //    public void firstimage(MultipartFile multipartFile, User user) {
@@ -130,4 +127,14 @@ public class UserService {
         return bookMarkResponseDtos;
     }
 
+    public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
+
+        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
+        System.out.println(user.getUsername());
+        if(user.getUsername().equals(usernameRequestDto.getUsername())){
+            return "false";
+        }else{
+            return "true";
+        }
+    }
 }

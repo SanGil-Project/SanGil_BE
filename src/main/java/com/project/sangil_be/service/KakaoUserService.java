@@ -24,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -106,12 +107,13 @@ public class KakaoUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        Long socialId = jsonNode.get("id").asLong();
         String provider = "kakao";
         String username = provider + "_" + jsonNode.get("id").asText(); // 로그인 아이디
         String nickname = jsonNode.get("properties") // 마이페이지 닉네임
                 .get("nickname").asText();
 
-        return new SocialLoginDto(username, nickname);
+        return new SocialLoginDto(username, nickname, socialId);
 
     }
 
@@ -119,8 +121,8 @@ public class KakaoUserService {
     private User registerKakaoUserIfNeed (SocialLoginDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         String kakaousername =kakaoUserInfo.getUsername();
-        User kakaoUser = userRepository.findByUsername(kakaousername)
-                .orElse(null);
+        Long socialId = kakaoUserInfo.getSocialId();
+        User kakaoUser = userRepository.findBySocialId(socialId);
 
         if (kakaoUser == null) {
             // 회원가입
@@ -135,7 +137,7 @@ public class KakaoUserService {
             String userTitle="등린이";
             String userTitleImgUrl="없음";
 
-            kakaoUser = new User(kakaousername, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
+            kakaoUser = new User(kakaousername,socialId,encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);
 
         }

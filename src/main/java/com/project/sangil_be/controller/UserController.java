@@ -64,6 +64,11 @@ public class UserController {
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return new UserResponseDto(userDetails);
     }
+    //닉네임 중복체크
+    @PostMapping("/api/mypages/usernameCheck")
+    public String usernameCheck (@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.usernameCheck(usernameRequestDto,userDetails);
+    }
 
     //username 수정
     @PutMapping("/api/mypages/profilename")
@@ -84,4 +89,6 @@ public class UserController {
     public List<BookMarkResponseDto> getBookMarkMountain (@RequestParam double lat,@RequestParam double lng,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.getBookMarkMountain(lat,lng,userDetails);
     }
+
+
 }
