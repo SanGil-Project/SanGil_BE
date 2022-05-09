@@ -25,6 +25,7 @@ public class MountainController {
         return mountainService.Show10();
     }
 
+    // mountainId 필요
     // 검색 후 페이지
     @GetMapping("/api/mountain/search")
     public SearchAfterDto searchMountain(

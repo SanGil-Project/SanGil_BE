@@ -20,10 +20,4 @@ public class UserResponseDto {
         this.userTitle = userDetails.getUser().getUserTitle();
     }
 
-    public UserResponseDto(Optional<User> user) {
-        this.userId = user.get().getUserId();
-        this.username = user.get().getUsername();
-        this.userImageUrl = user.get().getUserImgUrl();
-        this.userTitle = user.get().getUserTitle();
-    }
 }

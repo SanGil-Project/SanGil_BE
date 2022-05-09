@@ -148,9 +148,9 @@ public class MainService {
 
 
     // 자기 주변 산
-    public NearbyMountainDto nearby(int pageNum,UserDetailsImpl userDetails) {
-        double lat = 37.45988; // 내 위치 y
-        double lng = 126.9519; // 내 위치 x
+    public NearbyMountainDto nearby(double lat, double lng, int pageNum,UserDetailsImpl userDetails) {
+//        double lat = 37.45988; // 내 위치 y
+//        double lng = 126.9519; // 내 위치 x
         double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
 
         Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());

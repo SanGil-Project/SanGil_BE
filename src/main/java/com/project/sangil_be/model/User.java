@@ -32,6 +32,9 @@ public class User {
     @Column
     private String userTitle;
 
+    @Column
+    private String userTitleImgUrl;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Party> parties;
 
@@ -43,12 +46,13 @@ public class User {
 //  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
-    public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle) {
+    public User(String username, String encodedPassword, String nickname, String userImageUrl, String userTitle, String userTitleImgUrl) {
         this.username = username;
         this.password = encodedPassword;
         this.nickname = nickname;
         this.userImgUrl = userImageUrl;
         this.userTitle = userTitle;
+        this.userTitleImgUrl=userTitleImgUrl;
     }
 
     public User(String username, String nickname, String password) {

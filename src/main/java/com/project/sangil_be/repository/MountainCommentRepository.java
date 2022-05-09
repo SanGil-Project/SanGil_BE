@@ -14,5 +14,7 @@ public interface MountainCommentRepository extends JpaRepository<MountainComment
 
     List<MountainComment> findAllByUserId(Long userId);
 
+    boolean existsByUserIdAndMountain100Id(Long userId, Long mountain100Id);
+
 //    Optional<MountainComment> findAllByUserId(Long userId);
 }

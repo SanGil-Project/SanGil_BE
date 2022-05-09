@@ -81,7 +81,7 @@ public class UserController {
 
     //마이페이지 즐겨찾기한 산
     @GetMapping("/api/mypages/bookmark")
-    public List<BookMarkResponseDto> getBookMarkMountain (@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.getBookMarkMountain(userDetails);
+    public List<BookMarkResponseDto> getBookMarkMountain (@RequestParam double lat,@RequestParam double lng,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.getBookMarkMountain(lat,lng,userDetails);
     }
 }
