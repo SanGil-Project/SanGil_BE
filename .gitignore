@@ -39,3 +39,4 @@ out/
 #custom
 application.properties
 aws.yml
+application.yml

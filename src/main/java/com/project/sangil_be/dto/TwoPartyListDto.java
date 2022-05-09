@@ -4,6 +4,7 @@ import com.project.sangil_be.model.Party;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class TwoPartyListDto {
 
     private String title;
-    private String partyDate;
+    private LocalDate partyDate;
     private int maxPeople;
     private int curPeople;
     private LocalDateTime createdAt;

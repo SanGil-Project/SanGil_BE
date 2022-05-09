@@ -15,17 +15,17 @@ public class Mountain10ResponseDto {
     private String mountainAddress;
     private String starAvr;
     private boolean bookmark;
-    private int count;
+    private int bookMarkCnt;
 
 
 
-    public Mountain10ResponseDto(Mountain100 mountain100,String starAvr,Boolean bookmark, int cnt) {
+    public Mountain10ResponseDto(Mountain100 mountain100,String starAvr,Boolean bookmark, int bookMarkCnt) {
         this.mountainId = mountain100.getMountain100Id();
         this.mountainName = mountain100.getMountain();
         this.mountainImgUrl = mountain100.getMountainImgUrl();
         this.mountainAddress = mountain100.getMountainAddress();
         this.starAvr = starAvr;
         this.bookmark = bookmark;
-        this.count = cnt;
+        this.bookMarkCnt = bookMarkCnt;
     }
 }

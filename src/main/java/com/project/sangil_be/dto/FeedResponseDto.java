@@ -18,9 +18,9 @@ public class FeedResponseDto {
 
     private String username;
 
-    private String userImageUrl;
+    private String userImgUrl;
 
-    private String feedImageUrl;
+    private String feedImgUrl;
 
     private String feedContent;
 
@@ -33,8 +33,8 @@ public class FeedResponseDto {
     public FeedResponseDto(User user, Feed feed, int l, boolean goodStatus) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
-        this.userImageUrl = user.getUserImgUrl();
-        this.feedImageUrl = feed.getFeedImgUrl();
+        this.userImgUrl = user.getUserImgUrl();
+        this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();
         this.createdAt = feed.getCreatedAt();
         this.goodCnt = l;
@@ -45,8 +45,8 @@ public class FeedResponseDto {
 
         this.userId = feed.getUser().getUserId();
         this.username = feed.getUser().getUsername();
-        this.userImageUrl = feed.getUser().getUserImgUrl();
-        this.feedImageUrl = feed.getFeedImgUrl();
+        this.userImgUrl = feed.getUser().getUserImgUrl();
+        this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();
         this.createdAt = feed.getCreatedAt();
         this.goodCnt = goodCnt;

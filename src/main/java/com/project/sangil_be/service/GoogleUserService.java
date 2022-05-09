@@ -135,8 +135,9 @@ public class GoogleUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
+            String userTitleImgUrl="없음";
 
-            googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle);
+            googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
         }
 
         return googleUser;

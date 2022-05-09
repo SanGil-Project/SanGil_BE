@@ -1,4 +1,4 @@
-package com.project.sangil_be.api.geocoder;
+package com.project.sangil_be.utils.geocoder;
 
 import java.io.BufferedReader;
 import java.io.IOException;

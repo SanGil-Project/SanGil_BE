@@ -1,6 +1,6 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.api.geocoder.ServiceImpl;
+import com.project.sangil_be.utils.geocoder.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -68,7 +68,7 @@ public class MountainService {
 
     // 검색 후 페이지
     public Page<SearchDto> searhMountain(String keyword, int pageNum) {
-        List<Mountain100> mountain100List = mountain100Repository.searchAllByByMountain(keyword);
+        List<Mountain100> mountain100List = mountain100Repository.searchAllByMountain(keyword);
         Pageable pageable = getPageable(pageNum);
         List<SearchDto> searchDtoList = new ArrayList<>();
         setSearchList(mountain100List, searchDtoList);

@@ -27,9 +27,9 @@ public class Feed extends Timestamped {
     @JoinColumn(name="userid")
     private User user;
 
-    public Feed(String feedContent, String feedImageUrl, User user) {
+    public Feed(String feedContent, String feedImgUrl, User user) {
         this.feedContent = feedContent;
-        this.feedImgUrl = feedImageUrl;
+        this.feedImgUrl = feedImgUrl;
         this.user = user;
     }
 
