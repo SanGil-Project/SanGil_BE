@@ -34,9 +34,9 @@ public class FeedService {
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
 
         User user = userDetails.getUser();
-        String feedImageUrl = s3Service.upload(multipartFile, "feedimage");
+        String feedImgUrl = s3Service.upload(multipartFile, "feedimage");
 
-        Feed feed = new Feed(feedContent, feedImageUrl, user);
+        Feed feed = new Feed(feedContent, feedImgUrl, user);
         feedRepository.save(feed);
 
 //        LocalDateTime createdAt = feed.getCreatedAt();

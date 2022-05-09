@@ -19,4 +19,5 @@ public class BookMarkController {
     public String myBookMark(@PathVariable Long mountainId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return bookMarkService.myBookMark(mountainId, userDetails);
     }
+
 }

@@ -3,6 +3,7 @@ package com.project.sangil_be.service;
 import com.project.sangil_be.dto.PartyDetailDto;
 import com.project.sangil_be.dto.PartyListDto;
 import com.project.sangil_be.dto.PartyRequestDto;
+import com.project.sangil_be.dto.PartymemberDto;
 import com.project.sangil_be.model.Attend;
 import com.project.sangil_be.model.Party;
 import com.project.sangil_be.model.User;
@@ -31,6 +32,7 @@ public class PartyService {
     private final AttendRepository attendRepository;
 //    private final PlanRepository planRepository;
     private final Validator validator;
+
 
     // 등산 모임 참가 작성
     @Transactional
@@ -111,11 +113,20 @@ public class PartyService {
     // 동호회 상세페이지
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
+        List<Attend> attend = attendRepository.findByPartyId(partyId);
+        List<PartymemberDto> partymemberDto = new ArrayList<>();
+
         Party party = partyRepository.findById(partyId).orElse(null);;
 
-        return new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+        for (Attend attends : attend){
+            User user = userRepository.findByuserId(attends.getUserId());
+            partymemberDto.add(new PartymemberDto(user));
+        }
+
+        return new PartyDetailDto(party.getPartyId(), party.getUser().getUsername(), party.getUser().getUserImgUrl(),
+                                  party.getUser().getUserTitle(), party.getTitle(), party.getMountain(),
                                   party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                  party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
+                                  party.getCurPeople(), party.getPartyContent(), party.getCreatedAt(),partymemberDto);
     }
 
     // api에 맞게 수정 필요
@@ -128,7 +139,8 @@ public class PartyService {
         party.update(partyRequestDto.getPartyDate(), partyRequestDto.getPartyTime(),
                      partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
 
-        return new PartyDetailDto(party.getPartyId(), party.getTitle(), party.getMountain(),
+        return new PartyDetailDto(party.getPartyId(), party.getUser().getUsername(), party.getUser().getUserImgUrl(),
+                                  party.getUser().getUserTitle(), party.getTitle(), party.getMountain(),
                                   party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
                                   party.getCurPeople(), party.getPartyContent(), party.getCreatedAt());
     }
