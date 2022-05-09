@@ -52,8 +52,9 @@ public class UserService {
         String nickname = "없음";
         String userImageUrl = "없음";
         String userTitle = "없음";
+        String userTitleImgUrl="없음";
 
-        User user = new User(username, password, nickname, userImageUrl, userTitle);
+        User user = new User(username, password, nickname, userImageUrl, userTitle,userTitleImgUrl);
         userRepository.save(user);
 
         ResponseDto responseDto = new ResponseDto(result);
@@ -93,13 +94,13 @@ public class UserService {
 
     //유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
-    public List<BookMarkResponseDto> getBookMarkMountain(UserDetailsImpl userDetails) {
+    public List<BookMarkResponseDto> getBookMarkMountain(double lat,double lng,UserDetailsImpl userDetails) {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
 
         //프런트에서 받아오기 전 테스트 위도, 경도
-        Double lat = 37.553877;
-        Double lng = 126.971188;
+//        Double lat = 37.553877;
+//        Double lng = 126.971188;
 
         for (BookMark bookMark : bookMarkList) {
             boolean bookMarkChk = bookMarkRepository.existsByMountain100IdAndUserId(bookMark.getMountain100Id(),

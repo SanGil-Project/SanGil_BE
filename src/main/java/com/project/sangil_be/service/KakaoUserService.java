@@ -133,8 +133,9 @@ public class KakaoUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
+            String userTitleImgUrl="없음";
 
-            kakaoUser = new User(kakaousername, encodedPassword,nickname,userImageUrl,userTitle);
+            kakaoUser = new User(kakaousername, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);
 
         }

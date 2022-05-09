@@ -139,8 +139,9 @@ public class NaverUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
+            String userTitleImgUrl="없음";
 
-            naverUser = new User(naverusername, encodedPassword,nickname,userImageUrl,userTitle);
+            naverUser = new User(naverusername, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(naverUser);
 
         }

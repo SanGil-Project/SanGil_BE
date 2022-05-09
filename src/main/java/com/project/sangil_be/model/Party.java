@@ -35,16 +35,16 @@ public class Party extends Timestamped {
     private LocalDate partyDate;
 
     @Column(nullable = false)
-    private int maxPeople;
+    private Integer maxPeople;
 
     @Column(nullable = false)
-    private int curPeople;
+    private Integer curPeople;
 
     @Column(nullable = false)
     private LocalTime partyTime;
 
     @Column(nullable = false)
-    private boolean completed;
+    private Boolean completed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")

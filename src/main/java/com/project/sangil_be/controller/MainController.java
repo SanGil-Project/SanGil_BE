@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class MainController {
 
     // 자기 주변 산
     @GetMapping("/api/main/nearby/{pageNum}")
-    public NearbyMountainDto nearby(@PathVariable("pageNum")int pageNum,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mainService.nearby(pageNum-1,userDetails);
+    public NearbyMountainDto nearby(@RequestParam double lat,@RequestParam double lng, @PathVariable("pageNum")int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mainService.nearby(lat,lng,pageNum-1,userDetails);
     }
 }

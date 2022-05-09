@@ -5,7 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TrackingRequestDto {
-    private Double lat;
-    private Double lng;
+public class DistanceResponseDto {
+    private Double distanceM;
+    private Double distanceK;
+
+
 }

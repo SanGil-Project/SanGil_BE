@@ -28,7 +28,7 @@ public class MountainComment extends Timestamped {
     private String mountainComment;
 
     @Column(nullable = false)
-    private int star;
+    private Integer star;
 
     public MountainComment(Long mountainId, UserDetailsImpl userDetails, MCommentRequestDto mCommentRequestDto) {
         this.mountain100Id = mountainId;
