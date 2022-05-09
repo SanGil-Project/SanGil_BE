@@ -49,7 +49,7 @@ public class MainService {
             String month = String.valueOf(now).split("-")[1];
             String day = String.valueOf(now).split("-")[2];
             String date = year+"-"+month+"-"+day;
-            int compare = date.compareTo(party.getPartyDate());
+            int compare = date.compareTo(String.valueOf(party.getPartyDate()));
             String msg;
             if (compare > 0) {
                 attendRepository.deleteByPartyIdAndUserId(party.getPartyId(),userDetails.getUser().getUserId());

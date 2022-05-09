@@ -10,4 +10,5 @@ import java.util.List;
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     List<Feed> findByUser(User user);
+
 }

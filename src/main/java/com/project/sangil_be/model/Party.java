@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -30,7 +32,7 @@ public class Party extends Timestamped {
     private String address;
 
     @Column(nullable = false)
-    private String partyDate;
+    private LocalDate partyDate;
 
     @Column(nullable = false)
     private int maxPeople;
@@ -39,7 +41,7 @@ public class Party extends Timestamped {
     private int curPeople;
 
     @Column(nullable = false)
-    private String partyTime;
+    private LocalTime partyTime;
 
     @Column(nullable = false)
     private boolean completed;
@@ -48,8 +50,8 @@ public class Party extends Timestamped {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Party(String title, String mountain, String address, String partyDate,
-                 String partyTime, int maxPeople, int curPeople, String partyContent,
+    public Party(String title, String mountain, String address, LocalDate partyDate,
+                 LocalTime partyTime, int maxPeople, int curPeople, String partyContent,
                  boolean completed, User user) {
         this.title = title;
         this.mountain = mountain;
@@ -63,7 +65,7 @@ public class Party extends Timestamped {
         this.user = user;
     }
 
-    public void update(String partyDate, String partyTime, int maxPeople, String partyContent) {
+    public void update(LocalDate partyDate, LocalTime partyTime, int maxPeople, String partyContent) {
         this.partyDate = partyDate;
         this.partyTime = partyTime;
         this.maxPeople = maxPeople;

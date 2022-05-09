@@ -3,6 +3,7 @@ package com.project.sangil_be.dto;
 import com.project.sangil_be.model.Party;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,7 +12,7 @@ public class PlanListDto {
     private LocalDateTime createdAt;
     private int maxPoeple;
     private int curPoeple;
-    private String partyDate;
+    private LocalDate partyDate;
     private String msg;
 
     public PlanListDto(Party party,String msg) {
