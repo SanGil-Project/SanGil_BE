@@ -26,7 +26,7 @@ public class TrackingController {
     // 맵 트래킹 5초 마다 저장
     @PostMapping("/api/mountain/tracking/{completedId}")
     public DistanceResponseDto saveMyLocation (@PathVariable Long completedId,@RequestBody TrackingRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return trackingService.saveMyLocation(completedId,requestDto, userDetails);
+        return trackingService.saveMyLocation(completedId, requestDto, userDetails);
     }
 
     // 트래킹 완료 후 저장

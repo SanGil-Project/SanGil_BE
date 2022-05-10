@@ -115,7 +115,7 @@ public class GoogleUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long socialId = jsonNode.get("sub").asLong();
-        String provider = "google";
+        String provider = "G";
         String username = provider + "_" + jsonNode.get("sub").asText();
         String nickname = jsonNode.get("name").asText();
 

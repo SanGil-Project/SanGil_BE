@@ -4,7 +4,6 @@ import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.Completed;
 import com.project.sangil_be.model.Mountain100;
 import com.project.sangil_be.model.Tracking;
-import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.CompletedRepository;
 import com.project.sangil_be.repository.Mountain100Repository;
 import com.project.sangil_be.repository.MountainCommentRepository;
@@ -53,8 +52,8 @@ public class TrackingService {
             saveTracking.setDistanceM(distanceM);
             saveTracking.setDistanceK(distanceK);
             trackingRepository.save(saveTracking);
-            distanceResponseDto.setDistanceK(distanceK);
-            distanceResponseDto.setDistanceM(distanceM);
+            distanceResponseDto.setDistanceK(String.format("%.2f",distanceK));
+            distanceResponseDto.setDistanceM(String.format("%.2f",distanceM));
         }else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
@@ -65,8 +64,8 @@ public class TrackingService {
                 saveTracking.setDistanceM(distanceM);
                 saveTracking.setDistanceK(distanceK);
                 trackingRepository.save(saveTracking);
-                distanceResponseDto.setDistanceK(distanceK);
-                distanceResponseDto.setDistanceM(distanceM);
+                distanceResponseDto.setDistanceK(String.format("%.2f",distanceK));
+                distanceResponseDto.setDistanceM(String.format("%.2f",distanceM));
             }
         }
         return distanceResponseDto;
@@ -92,12 +91,12 @@ public class TrackingService {
     // 맵트래킹 삭제 (10분 이하)
     @Transactional
     public String deleteTracking(Long completedId) {
-//        try {
+        try {
             completedRepository.deleteByCompleteId(completedId);
             return "true";
-//        } catch (Exception e) {
-//            return "false";
-//        }
+        } catch (Exception e) {
+            return "false";
+        }
     }
 
     // 맵 트래킹 상세페이지
