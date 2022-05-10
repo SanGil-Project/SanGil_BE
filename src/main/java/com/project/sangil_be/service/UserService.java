@@ -49,10 +49,10 @@ public class UserService {
         String nickname = "없음";
         String userImageUrl = "없음";
         String userTitle = "없음";
-        String userTitleImgUrl="없음";
+        String userTitleImgUrl = "없음";
         Long socialId = 0L;
 
-        User user = new User(username, socialId,password, nickname, userImageUrl, userTitle,userTitleImgUrl);
+        User user = new User(username, socialId, password, nickname, userImageUrl, userTitle, userTitleImgUrl);
         userRepository.save(user);
 
         ResponseDto responseDto = new ResponseDto(result);
@@ -65,7 +65,7 @@ public class UserService {
     public void editname(UsernameRequestDto usernameRequestDto, User user) {
         user.editusername(usernameRequestDto);
         userRepository.save(user);
-        }
+    }
 
 
 //    @Transactional
@@ -91,7 +91,7 @@ public class UserService {
 
     //유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
-    public List<BookMarkResponseDto> getBookMarkMountain(double lat,double lng,UserDetailsImpl userDetails) {
+    public List<BookMarkResponseDto> getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails) {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
 
@@ -108,7 +108,7 @@ public class UserService {
 
             //유저와 즐겨찾기한 산과의 거리 계산
             Double distance = DistanceToUser.distance(lat, lng, mountain100.getLat(),
-                                                      mountain100.getLng(), "kilometer");
+                    mountain100.getLng(), "kilometer");
 
             int star = 0;
             float starAvr = 0f;
@@ -131,9 +131,16 @@ public class UserService {
 
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
         System.out.println(user.getUsername());
-        if(user.getUsername().equals(usernameRequestDto.getUsername())){
+        String username = usernameRequestDto.getUsername();
+
+
+        if (user.getUsername().equals(usernameRequestDto.getUsername())) {
             return "false";
-        }else{
+        } else {
+            if (!username.matches("^[a-zA-Zㄱ-ㅎ0-9-_]{3,11}$")) {
+//                throw new IllegalArgumentException("아이디는 영어와 숫자로 3~10자리로 입력하셔야 합니다!");
+                return "아이디는 영어와 숫자로 3~10자리로 입력하셔야 합니다!";
+            }
             return "true";
         }
     }

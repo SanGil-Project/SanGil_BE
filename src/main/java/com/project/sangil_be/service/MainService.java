@@ -212,7 +212,25 @@ public class MainService {
         List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
         int star=0;
         double starAvr=0;
-        for (Mountain100 mountain100 : mountain100s) {
+
+        if (userDetails == null) {
+            for (Mountain100 mountain100 : mountain100s) {
+                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100.getMountain100Id());
+                if (mountainComments.size() == 0) {
+                    starAvr = 0;
+                } else {
+                    for (int i = 0; i < mountainComments.size(); i++) {
+                        star += mountainComments.get(i).getStar();
+                    }
+                    starAvr = (float) star / mountainComments.size();
+                }
+                Boolean bookmark = false;
+                double dis = DistanceToUser.distance(lat, lng, mountain100.getLat(), mountain100.getLng(), "kilometer");
+                NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain100, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
+                nearbyMountainListDtos.add(nearbyMountainListDto);
+            }
+        }else{
+            for (Mountain100 mountain100 : mountain100s) {
             List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountain100Id(mountain100.getMountain100Id());
             if (mountainComments.size() == 0) {
                 starAvr = 0;
@@ -222,10 +240,12 @@ public class MainService {
                 }
                 starAvr = (float) star / mountainComments.size();
             }
-            Boolean bookmark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100.getMountain100Id(),userDetails.getUser().getUserId());
-            double dis = DistanceToUser.distance(lat,lng,mountain100.getLat(),mountain100.getLng(),"kilometer");
-            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain100,String.format("%.1f",starAvr),bookmark,String.format("%.1f",dis));
+            Boolean bookmark = bookMarkRepository.existsByMountain100IdAndUserId(mountain100.getMountain100Id(), userDetails.getUser().getUserId());
+            double dis = DistanceToUser.distance(lat, lng, mountain100.getLat(), mountain100.getLng(), "kilometer");
+            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain100, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
             nearbyMountainListDtos.add(nearbyMountainListDto);
+        }
+
         }
         Pageable pageable = getPageable(pageNum);
         int start = pageNum * 7;
