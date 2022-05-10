@@ -108,7 +108,7 @@ public class KakaoUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long socialId = jsonNode.get("id").asLong();
-        String provider = "kakao";
+        String provider = "K";
         String username = provider + "_" + jsonNode.get("id").asText(); // 로그인 아이디
         String nickname = jsonNode.get("properties") // 마이페이지 닉네임
                 .get("nickname").asText();

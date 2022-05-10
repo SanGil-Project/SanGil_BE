@@ -115,7 +115,7 @@ public class NaverUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long socialId = jsonNode.get("response").asLong();
-        String provider = "naver";
+        String provider = "N";
         String username = provider + "_" + jsonNode.get("response").get("id").asText();
         String nickname = jsonNode.get("response").get("nickname").asText();
 

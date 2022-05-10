@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DistanceResponseDto {
-    private Double distanceM;
-    private Double distanceK;
+    private String distanceM;
+    private String distanceK;
 
 
 }
