@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class UserResponseDto {
     private Long userId;
-    private String username;
     private String nickname;
     private String userImageUrl;
     private String userTitle;
