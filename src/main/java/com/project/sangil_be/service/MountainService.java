@@ -2,14 +2,9 @@ package com.project.sangil_be.service;
 
 import com.project.sangil_be.api.WeatherService;
 import com.project.sangil_be.dto.*;
-import com.project.sangil_be.model.Course;
-import com.project.sangil_be.model.Mountain100;
-import com.project.sangil_be.model.MountainComment;
-import com.project.sangil_be.model.User;
-import com.project.sangil_be.repository.CourseRepository;
-import com.project.sangil_be.repository.Mountain100Repository;
-import com.project.sangil_be.repository.MountainCommentRepository;
-import com.project.sangil_be.repository.UserRepository;
+import com.project.sangil_be.model.*;
+import com.project.sangil_be.repository.*;
+import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -29,7 +24,7 @@ public class MountainService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final WeatherService weatherService;
-    private final Validator validator;
+    private final BookMarkRepository bookMarkRepository;
 
     // 검색 전 페이지
     public List<SearchDto> Show10() {
@@ -155,5 +150,17 @@ public class MountainService {
         return new MountainResponseDto(mountain100, weatherDto, String.format("%.1f",starAvr), courseLists, commentDto);
     }
 
+    //북마크 생성
+    public String myBookMark(Long mountainId, UserDetailsImpl userDetails) {
+        BookMark bookMark = bookMarkRepository.findByMountain100IdAndUserId(mountainId, userDetails.getUser().getUserId());
+        if(bookMark == null) {
+            BookMark saveBookMark = new BookMark(mountainId, userDetails.getUser().getUserId());
+            bookMarkRepository.save(saveBookMark);
+            return "true";
+        }else {
+            bookMarkRepository.deleteById(bookMark.getBookMarkId());
+            return "false";
+        }
+    }
 
 }

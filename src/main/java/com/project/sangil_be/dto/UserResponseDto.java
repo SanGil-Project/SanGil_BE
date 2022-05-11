@@ -4,12 +4,11 @@ import com.project.sangil_be.model.User;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.Getter;
 
-import java.util.Optional;
-
 @Getter
 public class UserResponseDto {
     private Long userId;
     private String username;
+    private String nickname;
     private String userImageUrl;
     private String userTitle;
 
@@ -20,4 +19,7 @@ public class UserResponseDto {
         this.userTitle = userDetails.getUser().getUserTitle();
     }
 
+    public UserResponseDto(User user) {
+        this.nickname=user.getNickname();
+    }
 }

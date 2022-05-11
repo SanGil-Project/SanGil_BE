@@ -123,10 +123,7 @@ public class PartyService {
             partymemberDto.add(new PartymemberDto(user));
         }
 
-        return new PartyDetailDto(party.getPartyId(), party.getUser().getUsername(), party.getUser().getUserImgUrl(),
-                                  party.getUser().getUserTitle(), party.getTitle(), party.getMountain(),
-                                  party.getAddress(), party.getPartyDate(), party.getMaxPeople(),
-                                  party.getCurPeople(), party.getPartyContent(), party.getCreatedAt(),partymemberDto);
+        return new PartyDetailDto(party,partymemberDto);
     }
 
     // api에 맞게 수정 필요

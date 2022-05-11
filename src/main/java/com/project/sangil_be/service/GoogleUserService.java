@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
@@ -32,14 +34,9 @@ import java.util.UUID;
 @Service
 public class GoogleUserService {
 
-//    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-//    String googleClientId;
-//
-//    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-//    String googleClientSecret;
-
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final GetTitleRepository getTitleRepository;
 
     // 구글 로그인
     public void googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
@@ -141,6 +138,8 @@ public class GoogleUserService {
 
             googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(googleUser);
+            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,googleUser);
+            getTitleRepository.save(getTitle);
         }
 
 

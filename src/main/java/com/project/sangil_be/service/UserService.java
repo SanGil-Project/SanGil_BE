@@ -62,27 +62,26 @@ public class UserService {
     }
 
     @Transactional
-    public void editname(UsernameRequestDto usernameRequestDto, User user) {
-        user.editusername(usernameRequestDto);
-        userRepository.save(user);
+    public UserResponseDto editname(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
+        user.editname(usernameRequestDto);
+        return new UserResponseDto(user);
         }
 
-
-//    @Transactional
-//    public void firstimage(MultipartFile multipartFile, User user) {
-//
-//        String profileImageUrl = s3Service.upload(multipartFile, "profileimage");
-//
-//        user.editimage(profileImageUrl);
-//        userRepository.save(user);
-//    }
+    public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
+        if(user.getUsername().equals(usernameRequestDto.getNickname())){
+            return "false";
+        }else{
+            return "true";
+        }
+    }
 
     @Transactional
     public void editimage(MultipartFile multipartFile, User user) {
 
         String[] key = user.getUserImgUrl().split(".com/");
         String imageKey = key[key.length - 1];
-        System.out.println(imageKey);
         String profileImageUrl = s3Service.reupload(multipartFile, "profileimage", imageKey);
 
         user.editimage(profileImageUrl);
@@ -127,14 +126,4 @@ public class UserService {
         return bookMarkResponseDtos;
     }
 
-    public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
-
-        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        System.out.println(user.getUsername());
-        if(user.getUsername().equals(usernameRequestDto.getUsername())){
-            return "false";
-        }else{
-            return "true";
-        }
-    }
 }

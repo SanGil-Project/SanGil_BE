@@ -36,6 +36,7 @@ public class TrackingService {
     // 맵 트래킹 5초 마다 저장
     @Transactional
     public DistanceResponseDto saveMyLocation(Long completedId, TrackingRequestDto trackingRequestDto, UserDetailsImpl userDetails) {
+        System.out.println(completedId);
         List<Tracking> trackinglist = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);
         Mountain100 mountain100 = mountain100Repository.findByMountain100Id(completed.getMountain100Id());
