@@ -14,7 +14,7 @@ public class UserResponseDto {
 
     public UserResponseDto(UserDetailsImpl userDetails) {
         this.userId = userDetails.getUser().getUserId();
-        this.username = userDetails.getUsername();
+        this.nickname = userDetails.getNickname();
         this.userImageUrl = userDetails.getUser().getUserImgUrl();
         this.userTitle = userDetails.getUser().getUserTitle();
     }

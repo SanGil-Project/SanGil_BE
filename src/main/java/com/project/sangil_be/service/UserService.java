@@ -70,7 +70,7 @@ public class UserService {
 
     public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        if(user.getUsername().equals(usernameRequestDto.getNickname())){
+        if(user.getNickname().equals(usernameRequestDto.getNickname())){
             return "false";
         }else{
             return "true";

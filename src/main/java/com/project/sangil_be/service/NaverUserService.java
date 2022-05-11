@@ -112,9 +112,8 @@ public class NaverUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long socialId = jsonNode.get("response").asLong();
-        String provider = "N";
-        String username = provider + "_" + jsonNode.get("response").get("id").asText();
-        String nickname = jsonNode.get("response").get("nickname").asText();
+        String username = jsonNode.get("response").get("nickname").asText()+ "_" + socialId;
+        String nickname = "N" + "_" + jsonNode.get("response").get("id").asText();
 
         return new SocialLoginDto(username, nickname, socialId);
     }
@@ -122,13 +121,13 @@ public class NaverUserService {
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto naverUserInfo) {
 
-        String naverusername =naverUserInfo.getUsername();
         Long socialId = naverUserInfo.getSocialId();
         User naverUser = userRepository.findBySocialId(socialId);
 
         if (naverUser == null) {
             // 회원가입
             // username: kakao nickname
+            String naverusername =naverUserInfo.getUsername();
             String nickname = naverUserInfo.getNickname();
 
             // password: random UUID

@@ -112,9 +112,8 @@ public class GoogleUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long socialId = jsonNode.get("sub").asLong();
-        String provider = "G";
-        String username = provider + "_" + jsonNode.get("sub").asText();
-        String nickname = jsonNode.get("name").asText();
+        String username = jsonNode.get("name").asText()+ "_" + socialId;
+        String nickname = "G" + "_" + jsonNode.get("sub").asText();
 
         return new SocialLoginDto(username, nickname,socialId);
 
@@ -123,11 +122,11 @@ public class GoogleUserService {
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto googleUserInfo) {
 
-        String googlename = googleUserInfo.getUsername();
         Long socialId = googleUserInfo.getSocialId();
         User googleUser = userRepository.findBySocialId(socialId);
 
         if (googleUser == null) {
+            String googlename = googleUserInfo.getUsername();
             String nickname = googleUserInfo.getNickname();
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
