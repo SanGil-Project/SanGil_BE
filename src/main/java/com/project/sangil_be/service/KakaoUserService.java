@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
@@ -24,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -31,9 +34,10 @@ import java.util.UUID;
 public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
+    private final GetTitleRepository getTitleRepository;
 
     public SocialLoginDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
@@ -106,25 +110,24 @@ public class KakaoUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        String provider = "kakao";
-        String username = provider + "_" + jsonNode.get("id").asText(); // 로그인 아이디
-        String nickname = jsonNode.get("properties") // 마이페이지 닉네임
-                .get("nickname").asText();
+        Long socialId = jsonNode.get("id").asLong();
+        String username = jsonNode.get("properties").get("nickname").asText() + "_" + socialId;
+        String nickname = "K" + "_" + jsonNode.get("id").asText();
 
-        return new SocialLoginDto(username, nickname);
+        return new SocialLoginDto(username, nickname, socialId);
 
     }
 
     // 3. 카카오ID로 회원가입 처리
     private User registerKakaoUserIfNeed (SocialLoginDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        String kakaousername =kakaoUserInfo.getUsername();
-        User kakaoUser = userRepository.findByUsername(kakaousername)
-                .orElse(null);
+        Long socialId = kakaoUserInfo.getSocialId();
+        User kakaoUser = userRepository.findBySocialId(socialId);
 
         if (kakaoUser == null) {
             // 회원가입
             // username: kakao nickname
+            String kakaousername =kakaoUserInfo.getUsername();
             String nickname = kakaoUserInfo.getNickname();
 
             // password: random UUID
@@ -135,8 +138,11 @@ public class KakaoUserService {
             String userTitle="등린이";
             String userTitleImgUrl="없음";
 
-            kakaoUser = new User(kakaousername, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
+            kakaoUser = new User(kakaousername,socialId,encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);
+
+            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,kakaoUser);
+            getTitleRepository.save(getTitle);
 
         }
         return kakaoUser;

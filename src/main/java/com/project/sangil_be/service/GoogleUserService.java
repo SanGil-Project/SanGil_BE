@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
@@ -32,14 +34,9 @@ import java.util.UUID;
 @Service
 public class GoogleUserService {
 
-//    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-//    String googleClientId;
-//
-//    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-//    String googleClientSecret;
-
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final GetTitleRepository getTitleRepository;
 
     // 구글 로그인
     public void googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
@@ -114,21 +111,22 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        String provider = "google";
-        String username = provider + "_" + jsonNode.get("sub").asText();
-        String nickname = jsonNode.get("name").asText();
+        Long socialId = jsonNode.get("sub").asLong();
+        String username = jsonNode.get("name").asText()+ "_" + socialId;
+        String nickname = "G" + "_" + jsonNode.get("sub").asText();
 
-        return new SocialLoginDto(username, nickname);
+        return new SocialLoginDto(username, nickname,socialId);
 
     }
 
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto googleUserInfo) {
 
-        String googlename = googleUserInfo.getUsername();
-        User googleUser = userRepository.findByUsername(googlename).orElse(null);
+        Long socialId = googleUserInfo.getSocialId();
+        User googleUser = userRepository.findBySocialId(socialId);
 
         if (googleUser == null) {
+            String googlename = googleUserInfo.getUsername();
             String nickname = googleUserInfo.getNickname();
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
@@ -137,9 +135,12 @@ public class GoogleUserService {
             String userTitle="등린이";
             String userTitleImgUrl="없음";
 
-            googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
+            googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(googleUser);
+            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,googleUser);
+            getTitleRepository.save(getTitle);
         }
+
 
         return googleUser;
     }
