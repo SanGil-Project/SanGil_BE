@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Mountain100 {
+public class Mountain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long mountain100Id;
+    private Long mountainId;
 
     @Column(nullable = false)
     private String mountain;
