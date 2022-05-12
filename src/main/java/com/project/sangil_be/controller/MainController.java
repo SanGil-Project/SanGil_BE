@@ -31,7 +31,7 @@ public class MainController {
 
     // 메인페이지 북마크 순으로 탑10
     @GetMapping("/api/main/mountains")
-    public List<Top10MountainDto> get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<Top10MountainDto>  get10Mountains(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mainService.get10Mountains(userDetails);
     }
 

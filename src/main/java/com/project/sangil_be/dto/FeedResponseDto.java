@@ -16,7 +16,11 @@ public class FeedResponseDto {
 
     private Long userId;
 
+    private Long feedId;
+
     private String nickname;
+
+    private String userTitle;
 
     private String userImgUrl;
 
@@ -30,21 +34,25 @@ public class FeedResponseDto {
 
     boolean goodStatus;
 
-    public FeedResponseDto(User user, Feed feed, int l, boolean goodStatus) {
+    public FeedResponseDto(User user, Feed feed, int goodCnt, boolean goodStatus) {
         this.userId = user.getUserId();
+        this.feedId = feed.getFeedId();
         this.nickname = user.getNickname();
+        this.userTitle = user.getUserTitle();
         this.userImgUrl = user.getUserImgUrl();
         this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();
         this.createdAt = feed.getCreatedAt();
-        this.goodCnt = l;
+        this.goodCnt = goodCnt;
         this. goodStatus = goodStatus;
     }
 
     public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus) {
 
         this.userId = feed.getUser().getUserId();
+        this.feedId = feed.getFeedId();
         this.nickname = feed.getUser().getNickname();
+        this.userTitle = feed.getUser().getUserTitle();
         this.userImgUrl = feed.getUser().getUserImgUrl();
         this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();

@@ -74,7 +74,6 @@ public class ServiceImpl {
         AddressTransfer addressTransfer = new AddressTransfer();
         for (int i = 0; i < 100; i++) {
             Mountain mountain = mountainRepository.findAll().get(i);
-            System.out.println(mountain.getMountainAddress());
             XYTransferDto mountainDto = new XYTransferDto(
 
                     getXYMapfromJson(addressTransfer.getKakaoApiFromAddress(mountain.getMountainAddress())).getLat(),

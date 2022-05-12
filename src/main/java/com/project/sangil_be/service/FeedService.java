@@ -28,7 +28,6 @@ public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
-    private final Validator validator;
 
 
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
@@ -38,8 +37,6 @@ public class FeedService {
 
         Feed feed = new Feed(feedContent, feedImgUrl, user);
         feedRepository.save(feed);
-
-//        LocalDateTime createdAt = feed.getCreatedAt();
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
 
@@ -66,9 +63,8 @@ public class FeedService {
         } else {
             goodRepository.deleteById(good.get().getGoodId());
 
-
         }
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
 
         GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodStatus);
 
@@ -83,7 +79,6 @@ public class FeedService {
 
         String [] key =feed.get().getFeedImgUrl().split(".com/");
         String imageKey = key[key.length-1];
-        System.out.println(imageKey);
 
         s3Service.deletefeed(imageKey);
 

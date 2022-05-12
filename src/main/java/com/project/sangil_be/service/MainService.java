@@ -36,9 +36,6 @@ public class MainService {
 
         for (int i = 0; i < attend.size(); i++) {
             partyList.add(partyRepository.findByPartyIdOrderByPartyDateAsc(attend.get(i).getPartyId()));
-            System.out.println(partyList.get(i).getPartyDate());
-            System.out.println(partyList.get(i).getPartyDate().getClass());
-            System.out.println(attend.size());
         }
         Collections.sort(partyList, new PartyDateComparator());
 
@@ -77,107 +74,104 @@ public class MainService {
 
     // 시간 절약 필요
     public List<Top10MountainDto> get10Mountains(UserDetailsImpl userDetails) {
-
-        List<Mountain> mountainList = mountainRepository.findAll();
-
-        List<Mountain10ResponseDto> mountain10ResponseDtos = new ArrayList<>();
-        int star = 0;
-        float starAvr;
-
-        if (userDetails == null) {
-            for (int i = 0; i < mountainList.size(); i++) {
-                int bookMarkCnt = bookMarkRepository.countAllByMountainId(mountainList.get(i).getMountainId());
-                Boolean bookMark = false;
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountainList.get(i).getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0;
-                } else {
-                    star += mountainComments.get(i).getStar();
-                    starAvr = (float) star / mountainComments.size();
-                }
-                Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountainList.get(i), String.format("%.1f", starAvr), bookMark, bookMarkCnt);
-                mountain10ResponseDtos.add(mountain10ResponseDto);
-            }
-        } else {
-            for (int i = 0; i < mountainList.size(); i++) {
-                int bookMarkCnt = bookMarkRepository.countAllByMountainId(mountainList.get(i).getMountainId());
-                Boolean bookMark = bookMarkRepository.existsByMountainIdAndUserId(mountainList.get(i).getMountainId(), userDetails.getUser().getUserId());
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountainList.get(i).getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0;
-                } else {
-                    star += mountainComments.get(i).getStar();
-                    starAvr = (float) star / mountainComments.size();
-                }
-                Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountainList.get(i), String.format("%.1f", starAvr), bookMark, bookMarkCnt);
-                mountain10ResponseDtos.add(mountain10ResponseDto);
-            }
+        List<Map<String, Object>> top10Mountains = mountainRepository.methodlist();
+        List<Top10MountainDto> testDtos = new ArrayList<>();
+        for (int i = 0; i < top10Mountains.size(); i++) {
+            Boolean bookMark = bookMarkRepository.existsByMountainIdAndUserId(Long.valueOf(String.valueOf(top10Mountains.get(i).get("mountain_id"))), userDetails.getUser().getUserId());
+            Top10MountainDto top10MountainDto = new Top10MountainDto(top10Mountains.get(i), bookMark);
+            testDtos.add(top10MountainDto);
         }
-        Collections.sort(mountain10ResponseDtos, new CntComparator().reversed());
-
-        List<Top10MountainDto> Top10MountainDtos = new ArrayList<>();
-
-        int star2 = 0;
-        float starAvr2 = 0;
-        if (userDetails == null) {
-            for (int i = 0; i < 10; i++) {
-                boolean bookMark2 = false;
-                List<MountainComment> mountainComments2 = mountainCommentRepository.findAllByMountainId(mountain10ResponseDtos.get(i).getMountainId());
-                if (mountainComments2.size() == 0) {
-                    starAvr2 = 0;
-                } else {
-                    star2 += mountainComments2.get(i).getStar();
-                    starAvr2 = (float) star2 / mountainComments2.size();
-                }
-
-                Top10MountainDto mountain10ResponseDto = new Top10MountainDto(mountain10ResponseDtos.get(i), String.format("%.1f", starAvr2), bookMark2);
-                Top10MountainDtos.add(mountain10ResponseDto);
-            }
-        } else {
-            for (int i = 0; i < 10; i++) {
-                boolean bookMark2 = bookMarkRepository.existsByMountainIdAndUserId(mountain10ResponseDtos.get(i).getMountainId(), userDetails.getUser().getUserId());
-                List<MountainComment> mountainComments2 = mountainCommentRepository.findAllByMountainId(mountain10ResponseDtos.get(i).getMountainId());
-                if (mountainComments2.size() == 0) {
-                    starAvr2 = 0;
-                } else {
-                    star2 += mountainComments2.get(i).getStar();
-                    starAvr2 = (float) star2 / mountainComments2.size();
-                }
-
-                Top10MountainDto mountain10ResponseDto = new Top10MountainDto(mountain10ResponseDtos.get(i), String.format("%.1f", starAvr2), bookMark2);
-                Top10MountainDtos.add(mountain10ResponseDto);
-
-            }
-        }
-        return Top10MountainDtos;
+        return testDtos;
+//
+//        List<Mountain> mountainList = mountainRepository.findAll();
+//
+//        List<Mountain10ResponseDto> mountain10ResponseDtos = new ArrayList<>();
+//        int star = 0;
+//        float starAvr;
+//
+//        if (userDetails == null) {
+//            for (int i = 0; i < mountainList.size(); i++) {
+//                int bookMarkCnt = bookMarkRepository.countAllByMountainId(mountainList.get(i).getMountainId());
+//                Boolean bookMark = false;
+//                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountainList.get(i).getMountainId());
+//                if (mountainComments.size() == 0) {
+//                    starAvr = 0;
+//                } else {
+//                    star += mountainComments.get(i).getStar();
+//                    starAvr = (float) star / mountainComments.size();
+//                }
+//                Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountainList.get(i), String.format("%.1f", starAvr), bookMark, bookMarkCnt);
+//                mountain10ResponseDtos.add(mountain10ResponseDto);
+//            }
+//        } else {
+//            for (int i = 0; i < mountainList.size(); i++) {
+//                int bookMarkCnt = bookMarkRepository.countAllByMountainId(mountainList.get(i).getMountainId());
+//                Boolean bookMark = bookMarkRepository.existsByMountainIdAndUserId(mountainList.get(i).getMountainId(), userDetails.getUser().getUserId());
+//                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountainList.get(i).getMountainId());
+//                if (mountainComments.size() == 0) {
+//                    starAvr = 0;
+//                } else {
+//                    star += mountainComments.get(i).getStar();
+//                    starAvr = (float) star / mountainComments.size();
+//                }
+//                Mountain10ResponseDto mountain10ResponseDto = new Mountain10ResponseDto(mountainList.get(i), String.format("%.1f", starAvr), bookMark, bookMarkCnt);
+//                mountain10ResponseDtos.add(mountain10ResponseDto);
+//            }
+//        }
+//        Collections.sort(mountain10ResponseDtos, new CntComparator().reversed());
+//
+//        List<Top10MountainDto> Top10MountainDtos = new ArrayList<>();
+//
+//        int star2 = 0;
+//        float starAvr2 = 0;
+//        if (userDetails == null) {
+//            for (int i = 0; i < 10; i++) {
+//                boolean bookMark2 = false;
+//                List<MountainComment> mountainComments2 = mountainCommentRepository.findAllByMountainId(mountain10ResponseDtos.get(i).getMountainId());
+//                if (mountainComments2.size() == 0) {
+//                    starAvr2 = 0;
+//                } else {
+//                    star2 += mountainComments2.get(i).getStar();
+//                    starAvr2 = (float) star2 / mountainComments2.size();
+//                }
+//
+//                Top10MountainDto mountain10ResponseDto = new Top10MountainDto(mountain10ResponseDtos.get(i), String.format("%.1f", starAvr2), bookMark2);
+//                Top10MountainDtos.add(mountain10ResponseDto);
+//            }
+//        } else {
+//            for (int i = 0; i < 10; i++) {
+//                boolean bookMark2 = bookMarkRepository.existsByMountainIdAndUserId(mountain10ResponseDtos.get(i).getMountainId(), userDetails.getUser().getUserId());
+//                List<MountainComment> mountainComments2 = mountainCommentRepository.findAllByMountainId(mountain10ResponseDtos.get(i).getMountainId());
+//                if (mountainComments2.size() == 0) {
+//                    starAvr2 = 0;
+//                } else {
+//                    star2 += mountainComments2.get(i).getStar();
+//                    starAvr2 = (float) star2 / mountainComments2.size();
+//                }
+//
+//                Top10MountainDto mountain10ResponseDto = new Top10MountainDto(mountain10ResponseDtos.get(i), String.format("%.1f", starAvr2), bookMark2);
+//                Top10MountainDtos.add(mountain10ResponseDto);
+//
+//            }
+//        }
+//        return Top10MountainDtos;
     }
 
 
     public FeedListResponseDto mainfeeds(int pageNum, UserDetailsImpl userDetails) {
 
-        List<Feed> feed = feedRepository.findAll();
-
+        List<Feed> feed = feedRepository.findAllByOrderByCreatedAtDesc();
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
-        if (userDetails == null) {
-            for (Feed feeds : feed) {
-
-                int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
-                boolean goodStatus = false;
-
-                feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
-
+        for (Feed feeds : feed) {
+            boolean goodStatus;
+            int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
+            try {
+                goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), userDetails.getUser().getUserId());
+            } catch (Exception e) {
+                goodStatus = false;
             }
-        } else {
-            for (Feed feeds : feed) {
-
-                int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
-                boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), userDetails.getUser().getUserId());
-                feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
-
-            }
-
+            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
         }
-
         Pageable pageable = getPageable(pageNum);
 
         int start = pageNum * 15;
@@ -196,8 +190,7 @@ public class MainService {
 
     // 자기 주변 산
     public NearbyMountainDto nearby(double lat, double lng, int pageNum, UserDetailsImpl userDetails) {
-//        double lat = 37.45988; // 내 위치 y
-//        double lng = 126.9519; // 내 위치 x
+
         double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
 
         Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());
@@ -212,39 +205,20 @@ public class MainService {
         List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
         int star = 0;
         double starAvr = 0;
-
-        if (userDetails == null) {
-            for (Mountain mountain : mountains) {
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0;
-                } else {
-                    for (int i = 0; i < mountainComments.size(); i++) {
-                        star += mountainComments.get(i).getStar();
-                    }
-                    starAvr = (float) star / mountainComments.size();
+        for (Mountain mountain : mountains) {
+            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
+            if (mountainComments.size() == 0) {
+                starAvr = 0;
+            } else {
+                for (int i = 0; i < mountainComments.size(); i++) {
+                    star += mountainComments.get(i).getStar();
                 }
-                Boolean bookmark = false;
-                double dis = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
-                NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
-                nearbyMountainListDtos.add(nearbyMountainListDto);
+                starAvr = (float) star / mountainComments.size();
             }
-        } else {
-            for (Mountain mountain : mountains) {
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0;
-                } else {
-                    for (int i = 0; i < mountainComments.size(); i++) {
-                        star += mountainComments.get(i).getStar();
-                    }
-                    starAvr = (float) star / mountainComments.size();
-                }
-                Boolean bookmark = bookMarkRepository.existsByMountainIdAndUserId(mountain.getMountainId(), userDetails.getUser().getUserId());
-                double dis = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
-                NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
-                nearbyMountainListDtos.add(nearbyMountainListDto);
-            }
+            Boolean bookmark = bookMarkRepository.existsByMountainIdAndUserId(mountain.getMountainId(), userDetails.getUser().getUserId());
+            double dis = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
+            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
+            nearbyMountainListDtos.add(nearbyMountainListDto);
         }
         Pageable pageable = getPageable(pageNum);
         int start = pageNum * 7;
@@ -260,17 +234,17 @@ public class MainService {
             return d1.getPartyDate().compareTo(d2.getPartyDate());
         }
     }
-
-    private class CntComparator implements Comparator<Mountain10ResponseDto> {
-        @Override
-        public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
-            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
-                return 1;
-            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
-                return -1;
-            }
-            return 0;
-        }
-    }
+//
+//    private class CntComparator implements Comparator<Mountain10ResponseDto> {
+//        @Override
+//        public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
+//            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
+//                return 1;
+//            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
+//                return -1;
+//            }
+//            return 0;
+//        }
+//    }
 
 }
