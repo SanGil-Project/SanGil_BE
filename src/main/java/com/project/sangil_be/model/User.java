@@ -40,7 +40,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "userTitleId")
-    private List<UserTitle> userTitles;
+    private List<GetTitle> userTitles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //  @JoinColumn(name = "feedId") //있으면 안된다

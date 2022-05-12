@@ -7,6 +7,7 @@ import com.project.sangil_be.securtiy.provider.FormLoginAuthProvider;
 import com.project.sangil_be.securtiy.provider.JWTAuthProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -133,6 +134,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("PUT,/api/test"); // test
         skipPathList.add("GET,/api/main/parties");
         skipPathList.add("POST,/user/signup");
+
+        // webSocket 허용
+        skipPathList.add("GET,/ws/**");
+        skipPathList.add("GET,/ws/chat");
+        skipPathList.add("GET,/ws/chat/**");
+        skipPathList.add("GET,/ws/chat/**/**");
+        skipPathList.add("GET,/chat/**");
+        skipPathList.add("GET,/chat/**/**");
+        skipPathList.add("GET,/webjars/**");
+        skipPathList.add("GET,/webjars/**/**");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");

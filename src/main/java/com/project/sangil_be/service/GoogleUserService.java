@@ -138,6 +138,7 @@ public class GoogleUserService {
             String userTitleImgUrl="없음";
 
             googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
+            userRepository.save(googleUser);
         }
 
         return googleUser;
