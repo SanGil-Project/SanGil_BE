@@ -45,7 +45,6 @@ public class FeedController {
     @GetMapping("api/myfeeds/{pageNum}")
     public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-
         return feedService.myfeeds(user, pageNum-1);
     }
 
