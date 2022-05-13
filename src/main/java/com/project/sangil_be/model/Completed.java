@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class Completed {
 
     @Column(nullable = false)
     private Integer send;
+
+    @Column(nullable = false)
+    private LocalDate createDate;
 
     @Column(nullable = true)
     private Double totalDistance;

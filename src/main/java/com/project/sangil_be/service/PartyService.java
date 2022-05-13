@@ -30,9 +30,7 @@ public class PartyService {
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
     private final AttendRepository attendRepository;
-//    private final PlanRepository planRepository;
     private final Validator validator;
-
 
     // 등산 모임 참가 작성
     @Transactional

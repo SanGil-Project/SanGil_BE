@@ -1,6 +1,5 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.api.WeatherService;
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
@@ -10,6 +9,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public class MountainService {
     private final MountainCommentRepository mountainCommentRepository;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final WeatherService weatherService;
+//    private final WeatherService weatherService;
     private final BookMarkRepository bookMarkRepository;
 
     // 검색 전 페이지
@@ -112,7 +112,7 @@ public class MountainService {
         Mountain mountain = mountainRepository.findById(mountainId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-        WeatherDto weatherDto = weatherService.weather(mountain.getLat(),mountain.getLng());
+//        WeatherDto weatherDto = weatherService.weather(mountain.getLat(),mountain.getLng());
 
         List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainIdOrderByCreatedAtDesc(mountainId);
         Pageable pageable = getPageable(pageNum);
@@ -145,7 +145,7 @@ public class MountainService {
             CourseListDto courseListDto = new CourseListDto(courses.get(i));
             courseLists.add(courseListDto);
         }
-        return new MountainResponseDto(mountain, weatherDto,String.format("%.1f",starAvr), courseLists, commentDto);
+        return new MountainResponseDto(mountain,String.format("%.1f",starAvr), courseLists, commentDto);
     }
 
     //북마크 생성

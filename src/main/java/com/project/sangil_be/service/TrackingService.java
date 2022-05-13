@@ -36,7 +36,6 @@ public class TrackingService {
     // 맵 트래킹 5초 마다 저장
     @Transactional
     public DistanceResponseDto saveMyLocation(Long completedId, TrackingRequestDto trackingRequestDto, UserDetailsImpl userDetails) {
-        System.out.println(completedId);
         List<Tracking> trackinglist = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);
         Mountain mountain = mountainRepository.findByMountainId(completed.getMountainId());
@@ -114,15 +113,4 @@ public class TrackingService {
         return new TrackingListDto(userDetails,completedId,mountain,completed,trackingResponseDtoList);
     }
 
-    // 맵트래킹 마이페이지
-    public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
-        List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
-        List<CompletedListDto> completedListDtos = new ArrayList<>();
-        for (Completed complete : completed) {
-            Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
-            CompletedListDto completedListDto = new CompletedListDto(complete,mountain);
-            completedListDtos.add(completedListDto);
-        }
-        return completedListDtos;
-    }
 }

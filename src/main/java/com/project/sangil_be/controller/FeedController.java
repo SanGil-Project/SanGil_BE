@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 public class FeedController {
-
     private final FeedService feedService;
     private final FeedRepository feedRepository;
 
