@@ -32,6 +32,7 @@ public class MCommentResponseDto {
     public MCommentResponseDto(MountainComment mountainComment, UserDetailsImpl userDetails) {
         this.mountainCommentId = mountainComment.getMountainCommentId();
         this.mountainComment = mountainComment.getMountainComment();
+        this.userId = userDetails.getUser().getUserId();
         this.userTitle = userDetails.getUser().getUserTitle();
         this.nickname = userDetails.getUser().getNickname();
         this.star = mountainComment.getStar();

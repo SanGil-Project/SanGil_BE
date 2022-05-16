@@ -26,7 +26,7 @@ public class MCommentService {
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
         List<MountainComment> comment = mountainCommentRepository.findAllByUserId(userDetails.getUser().getUserId());
         String msg;
-        if (comment.size()>1) {
+        if (comment.size()>=1) {
             msg = "중복";
         } else {
             msg = "작성 가능";

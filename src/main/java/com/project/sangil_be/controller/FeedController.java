@@ -34,14 +34,14 @@ public class FeedController {
     }
 
     //피드 상세
-    @GetMapping("api/feeds/detail/{feedId}")
+    @GetMapping("/api/feeds/detail/{feedId}")
     public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         return feedService.detail(feedId, user);
     }
 
     //나의 피드
-    @GetMapping("api/myfeeds/{pageNum}")
+    @GetMapping("/api/myfeeds/{pageNum}")
     public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         return feedService.myfeeds(user, pageNum-1);

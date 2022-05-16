@@ -8,10 +8,13 @@ import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -71,6 +74,7 @@ public class MainService {
         }
         return new TwoPartyListResponseDto(partyListDtos);
     }
+
 
     // 시간 절약 필요
     public List<Top10MountainDto> get10Mountains(UserDetailsImpl userDetails) {
@@ -210,16 +214,16 @@ public class MainService {
         }
     }
 
-    private class CntComparator implements Comparator<Mountain10ResponseDto> {
-        @Override
-        public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
-            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
-                return 1;
-            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
-                return -1;
-            }
-            return 0;
-        }
-    }
+//    private class CntComparator implements Comparator<Mountain10ResponseDto> {
+//        @Override
+//        public int compare(Mountain10ResponseDto t1, Mountain10ResponseDto t2) {
+//            if (t1.getBookMarkCnt() > t2.getBookMarkCnt()) {
+//                return 1;
+//            } else if (t1.getBookMarkCnt() < t2.getBookMarkCnt()) {
+//                return -1;
+//            }
+//            return 0;
+//        }
+//    }
 
 }

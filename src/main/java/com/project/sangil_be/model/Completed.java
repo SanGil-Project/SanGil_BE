@@ -1,6 +1,7 @@
 package com.project.sangil_be.model;
 
 import com.project.sangil_be.dto.CompleteRequestDto;
+import com.project.sangil_be.utils.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Completed {
+public class Completed extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long completeId;
@@ -25,9 +26,6 @@ public class Completed {
 
     @Column(nullable = false)
     private Integer send;
-
-    @Column(nullable = false)
-    private LocalDate createDate;
 
     @Column(nullable = true)
     private Double totalDistance;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class CompletedListDto {
     private Double lng;
     private Double totalDistance;
     private String totalTime;
-    private LocalDate createDate;
+    private LocalDateTime createAt;
 
     public CompletedListDto(Completed complete, Mountain mountain) {
         this.completedId = complete.getCompleteId();
@@ -27,6 +28,6 @@ public class CompletedListDto {
         this.lng = mountain.getLng();
         this.totalDistance = complete.getTotalDistance();
         this.totalTime = complete.getTotalTime();
-        this.createDate = complete.getCreateDate();
+        this.createAt = complete.getCreatedAt();
     }
 }

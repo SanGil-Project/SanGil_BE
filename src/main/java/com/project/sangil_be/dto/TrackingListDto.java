@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,7 @@ public class TrackingListDto {
     private String mountain;
     private Double totalDistance;
     private String totalTime;
-    private LocalDate createDate;
+    private LocalDateTime createAt;
     private List<TrackingResponseDto> trackingList;
 
     public TrackingListDto(UserDetailsImpl userDetails, Long completedId, Mountain mountain, Completed completed, List<TrackingResponseDto> trackingResponseDtoList) {
@@ -32,7 +33,7 @@ public class TrackingListDto {
         this.mountain = mountain.getMountain();
         this.totalDistance=completed.getTotalDistance();
         this.totalTime=completed.getTotalTime();
-        this.createDate = completed.getCreateDate();
+        this.createAt = completed.getCreatedAt();
         this.trackingList = trackingResponseDtoList;
     }
 }
