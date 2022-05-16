@@ -9,8 +9,8 @@ import java.util.List;
 public class MountainResponseDto {
     private Long mountainId;
     private String mountain;
-    private int weather;
-    private String weatherImgUrl;
+//    private int weather;
+//    private String weatherImgUrl;
     private String mountainImgUrl;
     private String mountainAddress;
     private String mountainInfo;
@@ -19,11 +19,11 @@ public class MountainResponseDto {
     private List<CourseListDto> courseLists;
     private CommentDto commentDto;
 
-    public MountainResponseDto(Mountain mountain, WeatherDto weatherDto, String starAvr, List<CourseListDto> courseLists, CommentDto commentDto) {
+    public MountainResponseDto(Mountain mountain, String starAvr, List<CourseListDto> courseLists, CommentDto commentDto) {
         this.mountainId = mountain.getMountainId();
         this.mountain = mountain.getMountain();
-        this.weather = weatherDto.getWeather();
-        this.weatherImgUrl = weatherDto.getWeatherImageUrl();
+//        this.weather = weatherDto.getWeather();
+//        this.weatherImgUrl = weatherDto.getWeatherImageUrl();
         this.mountainImgUrl = mountain.getMountainImgUrl();
         this.mountainAddress = mountain.getMountainAddress();
         this.mountainInfo = mountain.getMountainInfo();
