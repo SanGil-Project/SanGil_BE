@@ -48,7 +48,6 @@ public class FeedResponseDto {
     }
 
     public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus) {
-
         this.userId = feed.getUser().getUserId();
         this.feedId = feed.getFeedId();
         this.nickname = feed.getUser().getNickname();
@@ -60,4 +59,6 @@ public class FeedResponseDto {
         this.goodCnt = goodCnt;
         this. goodStatus = goodStatus;
     }
+
+
 }
