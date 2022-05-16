@@ -12,4 +12,6 @@ public interface CompletedRepository extends JpaRepository<Completed,Long> {
     void deleteByCompleteId(Long completedId);
 
     List<Completed> findAllByUserId(Long userId);
+
+    List<Completed> findAllByMountainIdAndUserId(Long mountainId, Long userId);
 }
