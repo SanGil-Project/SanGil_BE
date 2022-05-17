@@ -24,7 +24,7 @@ public class MCommentService {
 
     // 댓글 작성
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
-        List<MountainComment> comment = mountainCommentRepository.findAllByUserId(userDetails.getUser().getUserId());
+        List<MountainComment> comment = mountainCommentRepository.findAllByMountainIdAndUserId(mountainId,userDetails.getUser().getUserId());
         String msg;
         if (comment.size()>=1) {
             msg = "중복";
@@ -49,10 +49,11 @@ public class MCommentService {
     // 댓글 수정
     @Transactional
     public MCommentResponseDto updateComment(Long mountainCommentId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
+
         MountainComment mountainComment = mountainCommentRepository.findById(mountainCommentId).orElseThrow(
                 () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );
-        mountainComment.update(mCommentRequestDto);
+        mountainComment.update(mountainComment,mCommentRequestDto,userDetails);
         return new MCommentResponseDto(mountainComment, userDetails);
     }
 
