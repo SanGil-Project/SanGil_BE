@@ -1,11 +1,11 @@
 package com.project.sangil_be.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class SearchDto {
 
@@ -13,16 +13,21 @@ public class SearchDto {
     private String mountain;
     private String mountainAddress;
     private String mountainImgUrl;
-    private String starAvr;
+    private Double starAvr;
     private Double lat;
     private Double lng;
 
-    public SearchDto(Long mountainId, String mountain, String mountainAddress, String mountainImgUrl, String starAvr, Double lat, Double lng) {
+    // querydsl constructor
+    public SearchDto(Long mountainId, String mountain, String mountainAddress, String mountainImgUrl, Double starAvr, Double lat, Double lng) {
         this.mountainId = mountainId;
         this.mountain = mountain;
         this.mountainAddress = mountainAddress;
         this.mountainImgUrl = mountainImgUrl;
-        this.starAvr = starAvr;
+        if (starAvr == null) {
+            this.starAvr = 0D;
+        } else {
+            this.starAvr = Math.round(starAvr*100)/100.0;
+        }
         this.lat = lat;
         this.lng = lng;
     }
@@ -42,9 +47,10 @@ public class SearchDto {
         this.mountain = String.valueOf(stringObjectMap.get("mountain"));
         this.mountainAddress = String.valueOf(stringObjectMap.get("mountain_address"));
         this.mountainImgUrl = String.valueOf(stringObjectMap.get("mountain_img_url"));
-        this.starAvr = String.format("%.1f", stringObjectMap.get("avrStar"));
+        this.starAvr = Double.valueOf(String.valueOf(stringObjectMap.get("avrStar")));
         this.lat = Double.valueOf(String.valueOf(stringObjectMap.get("lat")));
         this.lng = Double.valueOf(String.valueOf(stringObjectMap.get("lng")));
     }
+
 }
 
