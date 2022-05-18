@@ -36,7 +36,7 @@ public class PartyController {
 
     //동호회 모임 참가하기
     @PostMapping("/api/party/attend/{partyId}")
-    public String attendParty (@PathVariable Long partyId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public TitleResponseDto attendParty (@PathVariable Long partyId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return partyService.attendParty(partyId, userDetails);
     }
 

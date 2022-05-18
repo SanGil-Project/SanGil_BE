@@ -25,10 +25,10 @@ public class GetTitle {
     @JoinColumn(name = "userId")
     private User user;
 
-    public GetTitle(String userTitle, String userTitleImgUrl, User kakaoUser) {
+    public GetTitle(String userTitle, String userTitleImgUrl, User user) {
         this.userTitle=userTitle;
         this.userTitleImgUrl=userTitleImgUrl;
-        this.user=kakaoUser;
+        this.user=user;
 
     }
 }

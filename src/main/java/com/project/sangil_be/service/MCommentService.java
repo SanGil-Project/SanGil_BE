@@ -41,7 +41,8 @@ public class MCommentService {
         MCommentResponseDto mCommentResponseDto = new MCommentResponseDto(
                 mountainComment,
                 userDetails,
-                msg
+                msg,
+                titleDtoList
         );
         return mCommentResponseDto;
     }

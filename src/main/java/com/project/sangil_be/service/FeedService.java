@@ -4,9 +4,9 @@ import com.project.sangil_be.S3.S3Service;
 import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
-import com.project.sangil_be.model.Feed;
-import com.project.sangil_be.model.Good;
-import com.project.sangil_be.model.User;
+import com.project.sangil_be.dto.TitleDto;
+import com.project.sangil_be.model.*;
+import com.project.sangil_be.repository.CompletedRepository;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
@@ -30,7 +30,7 @@ public class FeedService {
     private final GoodRepository goodRepository;
 
     // 피드 작성
-    public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
+    public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
 
         User user = userDetails.getUser();
         String feedImgUrl = s3Service.upload(multipartFile, "feedimage");
@@ -65,19 +65,19 @@ public class FeedService {
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
 
         Long goodCnt = goodRepository.countAllByFeedId(feedId);
-        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodCnt,goodStatus);
+        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodCnt, goodStatus);
 
         return goodCheckResponseDto;
     }
-    
+
     @Transactional
     public void deletefeed(Long feedId, Optional<Feed> feed) {
 
         feedRepository.deleteById(feedId);
         goodRepository.deleteByFeedId(feedId);
 
-        String [] key =feed.get().getFeedImgUrl().split(".com/");
-        String imageKey = key[key.length-1];
+        String[] key = feed.get().getFeedImgUrl().split(".com/");
+        String imageKey = key[key.length - 1];
 
         s3Service.deletefeed(imageKey);
 
@@ -91,10 +91,9 @@ public class FeedService {
 
         int goodCnt = goodRepository.findByFeedId(feedId).size();
 
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(),user.getUserId());
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
 
         FeedResponseDto feedResponseDto = new FeedResponseDto(feed, goodCnt, goodStatus);
-
         return feedResponseDto;
     }
 
@@ -104,12 +103,12 @@ public class FeedService {
 
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
 
-        for(Feed feeds : feed){
+        for (Feed feeds : feed) {
 
             int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
-            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(),user.getUserId());
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), user.getUserId());
 
-            feedResponseDtos.add(new FeedResponseDto(feeds,goodCnt,goodStatus));
+            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
 
         }
         Pageable pageable = getPageable(pageNum);

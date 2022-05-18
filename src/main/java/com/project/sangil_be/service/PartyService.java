@@ -1,15 +1,8 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.dto.PartyDetailDto;
-import com.project.sangil_be.dto.PartyListDto;
-import com.project.sangil_be.dto.PartyRequestDto;
-import com.project.sangil_be.dto.PartymemberDto;
-import com.project.sangil_be.model.Attend;
-import com.project.sangil_be.model.Party;
-import com.project.sangil_be.model.User;
-import com.project.sangil_be.repository.AttendRepository;
-import com.project.sangil_be.repository.PartyRepository;
-import com.project.sangil_be.repository.UserRepository;
+import com.project.sangil_be.dto.*;
+import com.project.sangil_be.model.*;
+import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +51,37 @@ public class PartyService {
 
         attendRepository.save(attend);
 
-        return new PartyListDto(party, completed);
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = attendRepository.countAllByUserId(userDetails.getUser().getUserId());
+        if (cnt == 1) {
+            userTitle = "아싸중에인싸";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 10) {
+            userTitle = "인싸....?";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 50) {
+            userTitle = "인싸중에인싸";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 100) {
+            userTitle = "산길인맥왕?";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
+        return new PartyListDto(party, completed, titleDtoList);
     }
 
     // complete 수정 필요
@@ -139,27 +162,56 @@ public class PartyService {
 
     //동호회 참여하기 기능 구현
     @Transactional
-    public String attendParty(Long partyId, UserDetailsImpl userDetails) {
+    public TitleResponseDto attendParty(Long partyId, UserDetailsImpl userDetails) {
         Attend attend = attendRepository.findByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
         Party party = partyRepository.findById(partyId).orElseThrow(
                 ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
         );
 
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = attendRepository.countAllByUserId(userDetails.getUser().getUserId());
+        if (cnt == 1) {
+            userTitle = "아싸중에인싸";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 10) {
+            userTitle = "인싸....?";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 50) {
+            userTitle = "인싸중에인싸";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        } else if (cnt == 100) {
+            userTitle = "산길인맥왕?";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
 
         //중복 참여 제한
+        String msg;
         if(attend==null) {
             Attend saveAttend = new Attend(userDetails.getUser().getUserId(), partyId);
-//            Plan plan = new Plan(userDetails.getUser().getUserId(), party.getPartyId());
             int result = party.getCurPeople() + 1;
             party.updateCurpeople(result);
             attendRepository.save(saveAttend);
-//            planRepository.save(plan);
-            return "true";
+            msg= "true";
         }else{
             attendRepository.deleteByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
             int result = party.getCurPeople() - 1;
             party.updateCurpeople(result);
-            return "false";
+            msg= "false";
         }
+        return new TitleResponseDto(titleDtoList, msg);
     }
 }

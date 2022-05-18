@@ -8,33 +8,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class FeedResponseDto {
-
     private Long userId;
-
     private Long feedId;
-
     private String nickname;
-
     private String userTitle;
-
     private String userImgUrl;
-
     private String feedImgUrl;
-
     private String feedContent;
-
     private LocalDateTime createdAt;
-
     private int goodCnt;
+    private boolean goodStatus;
+    private List<TitleDto> titleDtoList;
 
-    boolean goodStatus;
-
-    public FeedResponseDto(User user, Feed feed, int goodCnt, boolean goodStatus) {
+    public FeedResponseDto(User user, Feed feed, int goodCnt, boolean goodStatus,List<TitleDto> titleDtoList ) {
         this.userId = user.getUserId();
         this.feedId = feed.getFeedId();
         this.nickname = user.getNickname();
@@ -45,6 +37,7 @@ public class FeedResponseDto {
         this.createdAt = feed.getCreatedAt();
         this.goodCnt = goodCnt;
         this. goodStatus = goodStatus;
+        this.titleDtoList=titleDtoList;
     }
 
     public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus) {
@@ -61,4 +54,17 @@ public class FeedResponseDto {
     }
 
 
+    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, List<TitleDto> titleDtoList) {
+        this.userId = feed.getUser().getUserId();
+        this.feedId = feed.getFeedId();
+        this.nickname = feed.getUser().getNickname();
+        this.userTitle = feed.getUser().getUserTitle();
+        this.userImgUrl = feed.getUser().getUserImgUrl();
+        this.feedImgUrl = feed.getFeedImgUrl();
+        this.feedContent = feed.getFeedContent();
+        this.createdAt = feed.getCreatedAt();
+        this.goodCnt = goodCnt;
+        this. goodStatus = goodStatus;
+        this.titleDtoList = titleDtoList;
+    }
 }

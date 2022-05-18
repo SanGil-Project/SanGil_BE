@@ -6,7 +6,6 @@ import com.project.sangil_be.dto.GoodCheckResponseDto;
 import com.project.sangil_be.model.Feed;
 import com.project.sangil_be.model.User;
 import com.project.sangil_be.repository.FeedRepository;
-import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.FeedService;
 import lombok.RequiredArgsConstructor;

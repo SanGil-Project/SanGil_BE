@@ -162,7 +162,31 @@ public class MainService {
         int end = Math.min((start + 15), feed.size());
 
         Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
-        return new FeedListResponseDto(page);
+
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = goodRepository.countAllByUserId(userDetails.getUser().getUserId());
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연습생").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt >= 1) {
+            userTitle = "이구역의연습생";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연예인").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt >= 100) {
+            userTitle = "이구역의연예인";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
+        return new FeedListResponseDto(page,titleDtoList);
     }
 
     private Pageable getPageable(int pageNum) {
