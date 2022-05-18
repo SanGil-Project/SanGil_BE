@@ -19,8 +19,8 @@ public class PartyDetailDto {
     private String title;
     private String mountain;
     private String address;
-    private LocalDate partyDate;
-    private LocalTime partyTime;
+    private String partyDate;
+    private String partyTime;
     private String partyContent;
     private int maxPeople;
     private int curPeople;

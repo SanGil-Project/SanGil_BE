@@ -12,7 +12,7 @@ public class PlanListDto {
     private LocalDateTime createdAt;
     private int maxPeople;
     private int curPeople;
-    private LocalDate partyDate;
+    private String partyDate;
     private String msg;
 
     public PlanListDto(Party party,String msg) {

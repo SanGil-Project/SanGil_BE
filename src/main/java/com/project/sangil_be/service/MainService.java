@@ -31,6 +31,7 @@ public class MainService {
     private final AttendRepository attendRepository;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final GetTitleRepository getTitleRepository;
 
     @Transactional
     public PlanResponseDto getPlan(UserDetailsImpl userDetails) {
@@ -63,14 +64,19 @@ public class MainService {
         return new PlanResponseDto(planListDtos);
     }
 
-    @Transactional
     public TwoPartyListResponseDto getTwoParty() {
 
         List<Party> partyList = partyRepository.findAllByOrderByCreatedAtDesc();
         List<TwoPartyListDto> partyListDtos = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
-            partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+        if (partyList.size() < 3) {
+            for (int i = 0; i < partyList.size(); i++) {
+                partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+            }
         }
         return new TwoPartyListResponseDto(partyListDtos);
     }
@@ -157,7 +163,31 @@ public class MainService {
         int end = Math.min((start + 15), feed.size());
 
         Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
-        return new FeedListResponseDto(page);
+
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = goodRepository.countAllByUserId(userDetails.getUser().getUserId());
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연습생").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt >= 1) {
+            userTitle = "이구역의연습생";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연예인").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt >= 100) {
+            userTitle = "이구역의연예인";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
+        return new FeedListResponseDto(page,titleDtoList);
     }
 
     private Pageable getPageable(int pageNum) {

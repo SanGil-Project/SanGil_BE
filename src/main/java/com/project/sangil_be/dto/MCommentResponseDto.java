@@ -5,6 +5,7 @@ import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class MCommentResponseDto {
@@ -17,8 +18,9 @@ public class MCommentResponseDto {
     private int star;
     private String msg;
     private LocalDateTime createdAt;
+    private List<TitleDto> titleDtoList;
 
-    public MCommentResponseDto( MountainComment mountainComment, UserDetailsImpl userDetails, String msg) {
+    public MCommentResponseDto( MountainComment mountainComment, UserDetailsImpl userDetails, String msg, List<TitleDto> titleDtoList) {
         this.mountainCommentId = mountainComment.getMountainCommentId();
         this.mountainComment = mountainComment.getMountainComment();
         this.userTitle = userDetails.getUser().getUserTitle();
@@ -27,6 +29,7 @@ public class MCommentResponseDto {
         this.star = mountainComment.getStar();
         this.msg = msg;
         this.createdAt = mountainComment.getCreatedAt();
+        this.titleDtoList = titleDtoList;
     }
 
     public MCommentResponseDto(MountainComment mountainComment, UserDetailsImpl userDetails) {

@@ -15,4 +15,6 @@ public interface AttendRepository extends JpaRepository<Attend, Long> {
     List<Attend> findAllByUserId(Long userId);
 
     List<Attend> findByPartyId(Long partyId);
+
+    Long countAllByUserId(Long userId);
 }

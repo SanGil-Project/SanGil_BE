@@ -1,11 +1,11 @@
 package com.project.sangil_be.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Getter
+@Data
 public class CommentDto {
     private List<CommentListDto> commentLists;
     private int totalPage;

@@ -2,8 +2,11 @@ package com.project.sangil_be.service;
 
 import com.project.sangil_be.dto.MCommentRequestDto;
 import com.project.sangil_be.dto.MCommentResponseDto;
+import com.project.sangil_be.dto.TitleDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.Mountain;
 import com.project.sangil_be.model.MountainComment;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.MountainRepository;
 import com.project.sangil_be.repository.MountainCommentRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class MCommentService {
     private final MountainRepository mountainRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final Validator validator;
+    private final GetTitleRepository getTitleRepository;
 
     // 댓글 작성
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
@@ -38,10 +43,24 @@ public class MCommentService {
 
         MountainComment mountainComment = new MountainComment(mountainId, userDetails, mCommentRequestDto);
         mountainCommentRepository.save(mountainComment);
+
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = mountainCommentRepository.countAllByUserId(userDetails.getUser().getUserId());
+        if (cnt == 10) {
+            userTitle = "세르파";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
         MCommentResponseDto mCommentResponseDto = new MCommentResponseDto(
                 mountainComment,
                 userDetails,
-                msg
+                msg,
+                titleDtoList
         );
         return mCommentResponseDto;
     }

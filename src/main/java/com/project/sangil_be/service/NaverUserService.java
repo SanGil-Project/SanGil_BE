@@ -27,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -110,10 +111,17 @@ public class NaverUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        System.out.println(jsonNode);
 
-        Long socialId = jsonNode.get("response").asLong();
+
+        String socialId = String.valueOf(jsonNode.get("response").get("id").asText());
         String username = jsonNode.get("response").get("nickname").asText()+ "_" + socialId;
-        String nickname = "N" + "_" + jsonNode.get("response").get("id").asText();
+        Random rnd = new Random();
+        String s="";
+        for (int i = 0; i < 8; i++) {
+            s += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "N" + "_" + s;
 
         return new SocialLoginDto(username, nickname, socialId);
     }
@@ -121,7 +129,7 @@ public class NaverUserService {
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto naverUserInfo) {
 
-        Long socialId = naverUserInfo.getSocialId();
+        String socialId = naverUserInfo.getSocialId();
         User naverUser = userRepository.findBySocialId(socialId);
 
         if (naverUser == null) {
