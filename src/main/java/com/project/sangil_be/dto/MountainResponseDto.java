@@ -1,11 +1,11 @@
 package com.project.sangil_be.dto;
 
 import com.project.sangil_be.model.Mountain;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
+@Data
 public class MountainResponseDto {
     private Long mountainId;
     private String mountain;
@@ -32,4 +32,6 @@ public class MountainResponseDto {
         this.courseLists = courseLists;
         this.commentDto = commentDto;
     }
+
+
 }

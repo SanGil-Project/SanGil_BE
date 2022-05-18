@@ -72,9 +72,10 @@ public class MountainService {
     // 검색 후 페이지
     public Page<SearchDto> searchMountain(String keyword, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 5);
-        return mountainRepository.searchPageSimple(keyword,pageRequest);
+        return mountainRepository.searchPage(keyword,pageRequest);
     }
 
+    // 검색 후 페이지
 //    public Page<SearchDto> searchMountain(String keyword, int pageNum) {
 //        List<Mountain> mountainList = mountainRepository.searchAllByMountain(keyword);
 //        List<SearchDto> searchDtoList = new ArrayList<>();
@@ -90,16 +91,16 @@ public class MountainService {
 //
 //    private void setSearchList(List<Mountain> mountainList, List<SearchDto> searchDtoList) {
 //        int star = 0;
-//        float starAvr;
+//        Double starAvr;
 //        for (Mountain mountain : mountainList) {
 //            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
 //            if (mountainComments.size() == 0) {
-//                starAvr = 0;
+//                starAvr = 0D;
 //            } else {
 //                for (int i = 0; i < mountainComments.size(); i++) {
 //                    star += mountainComments.get(i).getStar();
 //                }
-//                starAvr = (float) star / mountainComments.size();
+//                starAvr = (double) star / mountainComments.size();
 //            }
 //
 //            SearchDto searchDto = new SearchDto(
@@ -107,7 +108,7 @@ public class MountainService {
 //                    mountain.getMountain(),
 //                    mountain.getMountainAddress(),
 //                    mountain.getMountainImgUrl(),
-//                    String.format("%.1f", starAvr),
+//                    starAvr,
 //                    mountain.getLat(),
 //                    mountain.getLng()
 //            );
@@ -115,7 +116,6 @@ public class MountainService {
 //        }
 //    }
 
-    // 페이징 처리 수정
     // 산 상세 페이지
     public MountainResponseDto detailMountain(Long mountainId, int pageNum) throws IOException, ParseException {
         Mountain mountain = mountainRepository.findById(mountainId).orElseThrow(

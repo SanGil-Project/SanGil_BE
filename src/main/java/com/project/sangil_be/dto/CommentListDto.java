@@ -25,4 +25,5 @@ public class CommentListDto {
         this.star = mountainComment.getStar();
         this.createdAt = mountainComment.getCreatedAt();
     }
+
 }

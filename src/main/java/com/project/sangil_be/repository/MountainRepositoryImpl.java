@@ -20,7 +20,7 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<SearchDto> searchPageSimple(String keyword, Pageable pageable) {
+    public Page<SearchDto> searchPage(String keyword, Pageable pageable) {
         QueryResults<SearchDto> results = queryFactory
                 .select(Projections.constructor(SearchDto.class,
                         m.mountainId,
