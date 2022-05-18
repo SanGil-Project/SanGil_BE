@@ -17,8 +17,8 @@ public class PartyListDto {
     private String partyContent;
     private String mountain;
     private String address;
-    private LocalDate partyDate;
-    private LocalTime partyTime;
+    private String partyDate;
+    private String partyTime;
     private int maxPeople;
     private int curPeople;
     private boolean completed;

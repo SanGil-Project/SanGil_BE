@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static com.project.sangil_be.model.QMountain.m;
-import static com.project.sangil_be.model.QMountainComment.c;
+import static com.project.sangil_be.model.QMountain.mountain1;
+import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 
 
 @RequiredArgsConstructor
@@ -23,17 +23,17 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     public Page<SearchDto> searchPage(String keyword, Pageable pageable) {
         QueryResults<SearchDto> results = queryFactory
                 .select(Projections.constructor(SearchDto.class,
-                        m.mountainId,
-                        m.mountain,
-                        m.mountainAddress,
-                        m.mountainImgUrl,
-                        c.star.avg().as("starAvr"),
-                        m.lat,
-                        m.lng))
-                .from(m)
-                .leftJoin(c).on(c.mountainId.eq(m.mountainId))
-                .where(m.mountain.contains(keyword).or(m.mountainAddress.contains(keyword)))
-                .groupBy(m.mountainId)
+                        mountain1.mountainId,
+                        mountain1.mountain,
+                        mountain1.mountainAddress,
+                        mountain1.mountainImgUrl,
+                        mountainComment1.star.avg().as("starAvr"),
+                        mountain1.lat,
+                        mountain1.lng))
+                .from(mountain1)
+                .leftJoin(mountainComment1).on(mountainComment1.mountainId.eq(mountain1.mountainId))
+                .where(mountain1.mountain.contains(keyword).or(mountain1.mountainAddress.contains(keyword)))
+                .groupBy(mountain1.mountainId)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

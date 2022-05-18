@@ -117,7 +117,7 @@ public class MountainService {
 //    }
 
     // 산 상세 페이지
-    public MountainResponseDto detailMountain(Long mountainId, int pageNum) throws IOException, ParseException {
+    public MountainResponseDto detailMountain(Long mountainId, int pageNum, UserDetailsImpl userDetails) throws IOException, ParseException {
         Mountain mountain = mountainRepository.findById(mountainId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
@@ -147,14 +147,14 @@ public class MountainService {
         int end = Math.min((start + 6), mountainComments.size());
         Page<CommentListDto> page = new PageImpl<>(commentLists.subList(start, end), pageable, commentLists.size());
         CommentDto commentDto = new CommentDto(page);
-
+        Boolean bookmark = bookMarkRepository.existsByMountainIdAndUserId(mountain.getMountainId(), userDetails.getUser().getUserId());
         List<Course> courses = courseRepository.findAllByMountainId(mountainId);
         List<CourseListDto> courseLists = new ArrayList<>();
         for (int i = 0; i < courses.size(); i++) {
             CourseListDto courseListDto = new CourseListDto(courses.get(i));
             courseLists.add(courseListDto);
         }
-        return new MountainResponseDto(mountain, String.format("%.1f", starAvr), courseLists, commentDto);
+        return new MountainResponseDto(mountain,bookmark, String.format("%.1f", starAvr), courseLists, commentDto);
     }
 
     //북마크 생성

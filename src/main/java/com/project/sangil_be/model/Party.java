@@ -33,7 +33,7 @@ public class Party extends Timestamped {
     private String address;
 
     @Column(nullable = false)
-    private LocalDate partyDate;
+    private String partyDate;
 
     @Column(nullable = false)
     private Integer maxPeople;
@@ -42,7 +42,7 @@ public class Party extends Timestamped {
     private Integer curPeople;
 
     @Column(nullable = false)
-    private LocalTime partyTime;
+    private String partyTime;
 
     @Column(nullable = false)
     private Boolean completed;
@@ -64,7 +64,7 @@ public class Party extends Timestamped {
         this.user = user;
     }
 
-    public void update(LocalDate partyDate, LocalTime partyTime, int maxPeople, String partyContent) {
+    public void update(String partyDate, String partyTime, int maxPeople, String partyContent) {
         this.partyDate = partyDate;
         this.partyTime = partyTime;
         this.maxPeople = maxPeople;

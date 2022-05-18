@@ -1,37 +1,28 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.dto.*;
-import com.project.sangil_be.model.QCourse;
-import com.project.sangil_be.model.QUser;
-import com.project.sangil_be.repository.MountainRepository;
+import com.project.sangil_be.dto.CommentListDto;
+import com.project.sangil_be.dto.SearchDto;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.project.sangil_be.model.QCourse.*;
-import static com.project.sangil_be.model.QMountain.m;
-import static com.project.sangil_be.model.QMountainComment.c;
+import static com.project.sangil_be.model.QMountain.mountain1;
+import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 import static com.project.sangil_be.model.QUser.user;
 
 @SpringBootTest
-@Transactional
 class MountainServiceTest {
 
     @Autowired
     EntityManager em;
     JPAQueryFactory queryFactory;
-    MountainRepository mountainRepository;
 
     @BeforeEach
     public void before() {
@@ -54,17 +45,17 @@ class MountainServiceTest {
         String keyword = "악";
         QueryResults<SearchDto> results = queryFactory
                 .select(Projections.constructor(SearchDto.class,
-                        m.mountainId,
-                        m.mountain,
-                        m.mountainAddress,
-                        m.mountainImgUrl,
-                        c.star.avg().as("starAvr"),
-                        m.lat,
-                        m.lng))
-                .from(m)
-                .leftJoin(c).on(c.mountainId.eq(m.mountainId))
-                .where(m.mountain.contains(keyword).or(m.mountainAddress.contains(keyword)))
-                .groupBy(m.mountainId)
+                        mountain1.mountainId,
+                        mountain1.mountain,
+                        mountain1.mountainAddress,
+                        mountain1.mountainImgUrl,
+                        mountainComment1.star.avg().as("starAvr"),
+                        mountain1.lat,
+                        mountain1.lng))
+                .from(mountain1)
+                .leftJoin(mountainComment1).on(mountainComment1.mountainId.eq(mountain1.mountainId))
+                .where(mountain1.mountain.contains(keyword).or(mountain1.mountainAddress.contains(keyword)))
+                .groupBy(mountain1.mountainId)
                 .offset(0)
                 .limit(5)
                 .fetchResults();
@@ -81,16 +72,16 @@ class MountainServiceTest {
         Long mountainId = 1L;
         QueryResults<CommentListDto> results = queryFactory
                 .select(Projections.constructor(CommentListDto.class,
-                        c.mountainCommentId,
-                        c.mountainComment,
+                        mountainComment1.mountainCommentId,
+                        mountainComment1.mountainComment,
                         user.userId,
                         user.nickname,
                         user.userTitle,
-                        c.star,
-                        c.createdAt))
-                .from(c)
-                .join(user).on(c.userId.eq(user.userId))
-                .where(c.mountainId.eq(mountainId))
+                        mountainComment1.star,
+                        mountainComment1.createdAt))
+                .from(mountainComment1)
+                .join(user).on(mountainComment1.userId.eq(user.userId))
+                .where(mountainComment1.mountainId.eq(mountainId))
                 .offset(0)
                 .limit(5)
                 .fetchResults();
@@ -126,4 +117,5 @@ class MountainServiceTest {
 //            System.out.println("mountainResponseDto = " + mountainResponseDto);
 //        }
 //    }
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class TwoPartyListDto {
     private Long partyId;
     private String title;
-    private LocalDate partyDate;
+    private String partyDate;
     private int maxPeople;
     private int curPeople;
     private LocalDateTime createdAt;

@@ -37,7 +37,7 @@ public class User {
     private String userTitleImgUrl;
 
     @Column
-    private Long socialId;
+    private String socialId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Party> parties;
@@ -46,7 +46,7 @@ public class User {
 //  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
-    public User(String username, Long socialId, String encodedPassword, String nickname, String userImageUrl, String userTitle, String userTitleImgUrl) {
+    public User(String username, String socialId, String encodedPassword, String nickname, String userImageUrl, String userTitle, String userTitleImgUrl) {
         this.username = username;
         this.socialId = socialId;
         this.password = encodedPassword;

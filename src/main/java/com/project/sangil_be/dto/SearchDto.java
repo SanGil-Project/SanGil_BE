@@ -47,7 +47,11 @@ public class SearchDto {
         this.mountain = String.valueOf(stringObjectMap.get("mountain"));
         this.mountainAddress = String.valueOf(stringObjectMap.get("mountain_address"));
         this.mountainImgUrl = String.valueOf(stringObjectMap.get("mountain_img_url"));
-        this.starAvr = Double.valueOf(String.valueOf(stringObjectMap.get("avrStar")));
+        if (stringObjectMap.get("avrStar")==null) {
+            this.starAvr = 0d;
+        } else {
+            this.starAvr = Math.round(Double.valueOf(String.valueOf(stringObjectMap.get("avrStar")))*100)/100.0;
+        }
         this.lat = Double.valueOf(String.valueOf(stringObjectMap.get("lat")));
         this.lng = Double.valueOf(String.valueOf(stringObjectMap.get("lng")));
     }

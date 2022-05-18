@@ -12,18 +12,18 @@ public class BookMarkResponseDto {
     private String mountainAddress;
     private String mountainImageUrl;
     private boolean bookMarkChk;
-    private float starAvr;
+    private Double starAvr;
     private Double distance;
 
 
-    public BookMarkResponseDto(Mountain mountain, boolean bookMarkChk, float starAvr, Double distance) {
+    public BookMarkResponseDto(Mountain mountain, boolean bookMarkChk, Double starAvr, Double distance) {
         this.mountainId = mountain.getMountainId();
         this.mountainName = mountain.getMountain();
         this.mountainAddress = mountain.getMountainAddress();
         this.mountainImageUrl = mountain.getMountainImgUrl();
         this.bookMarkChk = bookMarkChk;
-        this.starAvr = starAvr;
-        this.distance = distance;
+        this.starAvr = Math.round(starAvr*10)/10.0;
+        this.distance = Math.round(distance*100)/100.0;
     }
 
 }
