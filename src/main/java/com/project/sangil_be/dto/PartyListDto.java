@@ -4,9 +4,8 @@ import com.project.sangil_be.model.Party;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +22,7 @@ public class PartyListDto {
     private int curPeople;
     private boolean completed;
     private LocalDateTime createdAt;
+    private List<TitleDto> titleDtoList;
 
     public PartyListDto(Party party, boolean completed) {
         this.partyId = party.getPartyId();
@@ -37,5 +37,21 @@ public class PartyListDto {
         this.curPeople = party.getCurPeople();
         this.completed = completed;
         this.createdAt = party.getCreatedAt();
+    }
+
+    public PartyListDto(Party party, boolean completed, List<TitleDto> titleDtoList) {
+        this.partyId = party.getPartyId();
+        this.nickname = party.getUser().getNickname();
+        this.title = party.getTitle();
+        this.partyContent = party.getPartyContent();
+        this.mountain = party.getMountain();
+        this.address = party.getAddress();
+        this.partyDate = party.getPartyDate();
+        this.partyTime = party.getPartyTime();
+        this.maxPeople = party.getMaxPeople();
+        this.curPeople = party.getCurPeople();
+        this.completed = completed;
+        this.createdAt = party.getCreatedAt();
+        this.titleDtoList = titleDtoList;
     }
 }

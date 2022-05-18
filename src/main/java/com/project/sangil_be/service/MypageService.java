@@ -33,7 +33,7 @@ public class MypageService {
         List<CompletedListDto> completedListDtos = new ArrayList<>();
         for (Completed complete : completed) {
             Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
-            CompletedListDto completedListDto = new CompletedListDto(complete,mountain);
+            CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
             completedListDtos.add(completedListDto);
         }
         return completedListDtos;
@@ -45,7 +45,7 @@ public class MypageService {
         Mountain mountain = mountainRepository.findByMountainId(mountainId);
         List<CompletedMountainDto> completedMountainDtos = new ArrayList<>();
         for (Completed completed : completedList) {
-            CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed,mountain);
+            CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed, mountain);
             completedMountainDtos.add(completedMountainDto);
         }
         return completedMountainDtos;
@@ -54,9 +54,9 @@ public class MypageService {
     // 닉네임 중복체크
     public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        if(user.getNickname().equals(usernameRequestDto.getNickname())){
+        if (user.getNickname().equals(usernameRequestDto.getNickname())) {
             return "false";
-        }else{
+        } else {
             return "true";
         }
     }
@@ -83,7 +83,7 @@ public class MypageService {
 
     //유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
-    public List<BookMarkResponseDto> getBookMarkMountain(double lat,double lng,UserDetailsImpl userDetails) {
+    public List<BookMarkResponseDto> getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails) {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
 
@@ -117,24 +117,39 @@ public class MypageService {
     }
 
     // 칭호 리스트
-    public List<UserTitleDto> getUserTitle(UserDetailsImpl userDetails) {
+    public UserTitleResponseDto getUserTitle(UserDetailsImpl userDetails) {
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        int cnt = getTitleRepository.countAllByUser(userDetails.getUser());
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가~~!! 등!!신!!!").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt == 19) {
+            userTitle = "내가~~!! 등!!신!!!";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
         List<UserTitle> userTitles = userTitleRepository.findAll();
         List<GetTitle> getTitles = getTitleRepository.findAllByUser(userDetails.getUser());
-        HashMap<String,Boolean> title = new HashMap<>();
+        HashMap<String, Boolean> title = new HashMap<>();
         for (int i = 0; i < userTitles.size(); i++) {
             title.put(userTitles.get(i).getUserTitle(), false);
             for (int j = 0; j < getTitles.size(); j++) {
                 if (userTitles.get(i).getUserTitle().equals(getTitles.get(j).getUserTitle())) {
-                    title.replace(userTitles.get(i).getUserTitle(), false,true);
+                    title.replace(userTitles.get(i).getUserTitle(), false, true);
                 }
             }
         }
+
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
         for (int i = 0; i < userTitles.size(); i++) {
-            UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i),title.get(userTitles.get(i).getUserTitle()));
+            UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), title.get(userTitles.get(i).getUserTitle()));
             userTitleDtos.add(userTitleDto);
         }
-        return userTitleDtos;
+        return new UserTitleResponseDto(userTitleDtos, titleDtoList);
     }
 
     // 칭호 변경
@@ -142,7 +157,7 @@ public class MypageService {
     public ChangeTitleDto putUserTitle(ChangeTitleRequestDto requestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
         user.update(requestDto);
-        return new ChangeTitleDto(userDetails,requestDto);
+        return new ChangeTitleDto(userDetails, requestDto);
     }
 
 }

@@ -55,7 +55,7 @@ public class MypageController {
 
     // 칭호 리스트
     @GetMapping("/api/mypages/userTitle")
-    public List<UserTitleDto> getUserTitle(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public UserTitleResponseDto getUserTitle(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getUserTitle(userDetails);
     }
 

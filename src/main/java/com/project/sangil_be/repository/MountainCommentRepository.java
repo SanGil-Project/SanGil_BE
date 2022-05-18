@@ -10,9 +10,11 @@ public interface MountainCommentRepository extends JpaRepository<MountainComment
 
     List<MountainComment> findAllByMountainId(Long mountainId);
 
-    List<MountainComment> findAllByMountainIdOrderByCreatedAtDesc(Long mountainId);
-
     boolean existsByUserIdAndMountainId(Long userId, Long mountainId);
 
     List<MountainComment> findAllByMountainIdAndUserId(Long mountainId, Long userId);
+
+    Long countAllByUserId(Long userId);
+
+    List<MountainComment> findAllByMountainIdOrderByCreatedAtAsc(Long mountainId);
 }

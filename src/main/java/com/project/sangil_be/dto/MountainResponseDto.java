@@ -14,7 +14,7 @@ public class MountainResponseDto {
     private String mountainImgUrl;
     private String mountainAddress;
     private String mountainInfo;
-    private Float height;
+    private Double height;
     private String starAvr;
     private Boolean bookmark;
     private List<CourseListDto> courseLists;
