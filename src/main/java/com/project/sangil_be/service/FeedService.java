@@ -8,6 +8,7 @@ import com.project.sangil_be.dto.TitleDto;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.CompletedRepository;
 import com.project.sangil_be.repository.FeedRepository;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Validator;
@@ -28,6 +29,7 @@ public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final GetTitleRepository getTitleRepository;
 
     // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
@@ -40,7 +42,21 @@ public class FeedService {
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
 
-        FeedResponseDto feedResponseDto = new FeedResponseDto(user,feed, 0 , goodStatus);
+        List<TitleDto> titleDtoList = new ArrayList<>();
+        String userTitle;
+        String userTitleImgUrl;
+        Long cnt = feedRepository.countAllByUser(user);
+        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "예비 찰칵러").isPresent()) {
+            System.out.println("패스");
+        } else if (cnt == 1) {
+            userTitle = "예비 찰칵러";
+            userTitleImgUrl = "";
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, user);
+            getTitleRepository.save(getTitle);
+            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
+        }
+
+        FeedResponseDto feedResponseDto = new FeedResponseDto(user, feed, 0, goodStatus, titleDtoList);
         return feedResponseDto;
 
     }

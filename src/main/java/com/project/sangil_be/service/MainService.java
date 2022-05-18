@@ -31,6 +31,7 @@ public class MainService {
     private final AttendRepository attendRepository;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final GetTitleRepository getTitleRepository;
 
     @Transactional
     public PlanResponseDto getPlan(UserDetailsImpl userDetails) {

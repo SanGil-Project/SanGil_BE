@@ -123,7 +123,7 @@ public class MountainService {
         );
 //        WeatherDto weatherDto = weatherService.weather(mountain.getLat(),mountain.getLng());
 
-        List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainIdOrderByCreatedAtDesc(mountainId);
+        List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainIdOrderByCreatedAtAsc(mountainId);
         Pageable pageable = getPageable(pageNum);
         List<CommentListDto> commentLists = new ArrayList<>();
         int star = 0;

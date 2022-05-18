@@ -24,6 +24,7 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final AttendRepository attendRepository;
     private final Validator validator;
+    private final GetTitleRepository getTitleRepository;
 
     // 등산 모임 참가 작성
     @Transactional
