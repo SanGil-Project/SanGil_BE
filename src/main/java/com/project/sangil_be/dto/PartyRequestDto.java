@@ -12,8 +12,8 @@ public class PartyRequestDto {
     private String title;
     private String mountain;
     private String address;
-    private LocalDate partyDate;
-    private LocalTime partyTime;
+    private String partyDate;
+    private String partyTime;
     private int maxPeople;
     private String partyContent;
 }

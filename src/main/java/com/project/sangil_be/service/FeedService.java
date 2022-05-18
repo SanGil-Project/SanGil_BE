@@ -56,7 +56,6 @@ public class FeedService {
 
         if (!good.isPresent()) {
             Good savegood = new Good(feed, user);
-
             goodRepository.save(savegood);
 
         } else {
@@ -65,7 +64,8 @@ public class FeedService {
         }
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
 
-        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodStatus);
+        Long goodCnt = goodRepository.countAllByFeedId(feedId);
+        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodCnt,goodStatus);
 
         return goodCheckResponseDto;
     }

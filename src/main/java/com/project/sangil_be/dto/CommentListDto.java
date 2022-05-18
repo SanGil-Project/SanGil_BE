@@ -25,4 +25,14 @@ public class CommentListDto {
         this.star = mountainComment.getStar();
         this.createdAt = mountainComment.getCreatedAt();
     }
+
+    public CommentListDto(Long mountainCommentId, String mountainComment, Long userId, String nickname, String userTitle, int star, LocalDateTime createdAt) {
+        this.mountainCommentId = mountainCommentId;
+        this.mountainComment = mountainComment;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.userTitle = userTitle;
+        this.star = star;
+        this.createdAt = createdAt;
+    }
 }

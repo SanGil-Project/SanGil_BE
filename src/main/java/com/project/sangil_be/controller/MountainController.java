@@ -30,13 +30,16 @@ public class MountainController {
     public SearchAfterDto searchMountain(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam("pageNum") int pageNum){
-        return new SearchAfterDto(mountainService.searhMountain(keyword,pageNum-1));
+        return new SearchAfterDto(mountainService.searchMountain(keyword,pageNum-1));
     }
 
     // 산 상세 페이지
     @GetMapping("/api/mountain/{mountainId}/{pageNum}")
-    public MountainResponseDto detailMountain(@PathVariable Long mountainId, @PathVariable int pageNum) throws IOException, ParseException {
-        return mountainService.detailMountain(mountainId,pageNum-1);
+    public MountainResponseDto detailMountain(
+            @PathVariable Long mountainId,
+            @PathVariable int pageNum,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException, ParseException {
+        return mountainService.detailMountain(mountainId,pageNum-1,userDetails);
     }
 
     // 산 즐겨찾기

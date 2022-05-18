@@ -33,7 +33,7 @@ public class UserService {
         String userImageUrl = "없음";
         String userTitle = "없음";
         String userTitleImgUrl="없음";
-        Long socialId = 0L;
+        String socialId = "0";
 
         User user = new User(username, socialId,password, nickname, userImageUrl, userTitle,userTitleImgUrl);
         userRepository.save(user);

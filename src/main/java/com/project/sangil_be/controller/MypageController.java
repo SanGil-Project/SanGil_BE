@@ -34,7 +34,7 @@ public class MypageController {
         return mypageService.usernameCheck(usernameRequestDto,userDetails);
     }
 
-    //username 수정
+    // nickname 수정
     @PutMapping("/api/mypages/profilename")
     public UserResponseDto editname(@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.editname(usernameRequestDto, userDetails);

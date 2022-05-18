@@ -63,14 +63,19 @@ public class MainService {
         return new PlanResponseDto(planListDtos);
     }
 
-    @Transactional
     public TwoPartyListResponseDto getTwoParty() {
 
         List<Party> partyList = partyRepository.findAllByOrderByCreatedAtDesc();
         List<TwoPartyListDto> partyListDtos = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
-            partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+        if (partyList.size() < 3) {
+            for (int i = 0; i < partyList.size(); i++) {
+                partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
+            }
         }
         return new TwoPartyListResponseDto(partyListDtos);
     }

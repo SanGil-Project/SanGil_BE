@@ -100,15 +100,15 @@ public class MypageService {
                     mountain.getLng(), "kilometer");
 
             int star = 0;
-            float starAvr = 0f;
+            Double starAvr = 0d;
 
             for (int i = 0; i < 10; i++) {
                 List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
                 if (mountainComments.size() == 0) {
-                    starAvr = 0;
+                    starAvr = 0d;
                 } else {
                     star += mountainComments.get(i).getStar();
-                    starAvr = (float) star / mountainComments.size();
+                    starAvr = (double) star / mountainComments.size();
                 }
             }
             bookMarkResponseDtos.add(new BookMarkResponseDto(mountain, bookMarkChk, starAvr, distance));
