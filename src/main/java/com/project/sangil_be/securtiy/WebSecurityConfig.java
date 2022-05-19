@@ -133,14 +133,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/user/signup");
 
         // webSocket 허용
-        skipPathList.add("GET,/ws/**");
-        skipPathList.add("GET,/ws/chat");
-        skipPathList.add("GET,/ws/chat/**");
-        skipPathList.add("GET,/ws/chat/**/**");
         skipPathList.add("GET,/chat/**");
         skipPathList.add("GET,/chat/**/**");
-        skipPathList.add("GET,/webjars/**");
-        skipPathList.add("GET,/webjars/**/**");
+        skipPathList.add("POST,/chat/**");
+        skipPathList.add("POST,/chat/**/**");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
