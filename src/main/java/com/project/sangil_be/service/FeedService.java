@@ -29,7 +29,7 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
 
-
+    // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails){
 
         User user = userDetails.getUser();
@@ -39,7 +39,6 @@ public class FeedService {
         feedRepository.save(feed);
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-
 
         FeedResponseDto feedResponseDto = new FeedResponseDto(user,feed, 0 , goodStatus);
         return feedResponseDto;

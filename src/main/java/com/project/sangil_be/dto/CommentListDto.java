@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 public class CommentListDto {
     private Long mountainCommentId;
     private String mountainComment;
-    private String username;
+    private Long userId;
+    private String nickname;
     private String userTitle;
     private int star;
     private LocalDateTime createdAt;
@@ -18,7 +19,8 @@ public class CommentListDto {
     public CommentListDto(MountainComment mountainComment, User user ) {
         this.mountainCommentId = mountainComment.getMountainCommentId();
         this.mountainComment = mountainComment.getMountainComment();
-        this.username = user.getUsername();
+        this.userId = user.getUserId();
+        this.nickname = user.getNickname();
         this.userTitle = user.getUserTitle();
         this.star = mountainComment.getStar();
         this.createdAt = mountainComment.getCreatedAt();
