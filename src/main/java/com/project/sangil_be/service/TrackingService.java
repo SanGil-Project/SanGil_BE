@@ -8,7 +8,6 @@ import com.project.sangil_be.model.Tracking;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.DistanceToUser;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +70,7 @@ public class TrackingService {
         return distanceResponseDto;
     }
 
+    // distance null 값 수정 필요
     // 트래킹 완료 후 저장
     @Transactional
     public TitleResponseDto saveTracking(Long completedId, CompleteRequestDto completeRequestDto, UserDetailsImpl userDetails) {
