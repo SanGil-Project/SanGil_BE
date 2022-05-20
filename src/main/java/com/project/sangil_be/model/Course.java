@@ -1,20 +1,27 @@
-package com.project.sangil_be.model;//package com.project.mountainroad_be.model;
-//
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//
-//@Getter
-//@Setter
-//@Entity
-//@NoArgsConstructor
-//public class Course {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long courseId;
-//}
+package com.project.sangil_be.model;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long courseId;
+
+    @Column(nullable = false)
+    private String course;
+
+    @Column(nullable = false)
+    private Long mountainId;
+
+    @Column(nullable = false)
+    private String courseTime;
+
+}

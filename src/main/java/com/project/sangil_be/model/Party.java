@@ -1,20 +1,27 @@
 package com.project.sangil_be.model;
 
+import com.project.sangil_be.dto.PartyRequestDto;
+import com.project.sangil_be.utils.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-public class Party {
+public class Party extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partyId;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private String partyContent;
@@ -29,15 +36,44 @@ public class Party {
     private String partyDate;
 
     @Column(nullable = false)
-    private int maxPeople;
+    private Integer maxPeople;
 
     @Column(nullable = false)
-    private int curPeople;
+    private Integer curPeople;
+
+    @Column(nullable = false)
+    private String partyTime;
+
+    @Column(nullable = false)
+    private Boolean completed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PartyComment> PartyCommens;
+    public Party(PartyRequestDto partyRequestDto, int curPeople, boolean completed, User user) {
+        this.title = partyRequestDto.getTitle();
+        this.mountain = partyRequestDto.getMountain();
+        this.address = partyRequestDto.getAddress();
+        this.partyDate = partyRequestDto.getPartyDate();
+        this.partyTime = partyRequestDto.getPartyTime();
+        this.maxPeople = partyRequestDto.getMaxPeople();
+        this.curPeople = curPeople;
+        this.partyContent = partyRequestDto.getPartyContent();
+        this.completed = completed;
+        this.user = user;
+    }
+
+    public void update(String partyDate, String partyTime, int maxPeople, String partyContent) {
+        this.partyDate = partyDate;
+        this.partyTime = partyTime;
+        this.maxPeople = maxPeople;
+        this.partyContent = partyContent;
+    }
+
+    public void updateCurpeople(int result) {
+
+        this.curPeople = result;
+    }
+
 }

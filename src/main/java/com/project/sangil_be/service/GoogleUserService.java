@@ -3,8 +3,10 @@ package com.project.sangil_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.sangil_be.dto.GoogleUserInfoDto;
+import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
@@ -25,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -32,14 +35,9 @@ import java.util.UUID;
 @Service
 public class GoogleUserService {
 
-//    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-//    String googleClientId;
-//
-//    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-//    String googleClientSecret;
-
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final GetTitleRepository getTitleRepository;
 
     // 구글 로그인
     public void googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
@@ -48,7 +46,7 @@ public class GoogleUserService {
         String accessToken = getAccessToken(code);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        GoogleUserInfoDto googleUserInfo = getGoogleUserInfo(accessToken);
+        SocialLoginDto googleUserInfo = getGoogleUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
         User foundUser = getUser(googleUserInfo);
@@ -72,7 +70,7 @@ public class GoogleUserService {
         body.add("client_id" , "77683946484-86n78jead6i4agakkjdf3482c3609des.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "http://localhost:3000/user/google/callback");
+        body.add("redirect_uri", "https://kopite.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
@@ -93,7 +91,7 @@ public class GoogleUserService {
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private GoogleUserInfoDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialLoginDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
@@ -114,30 +112,40 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        String provider = "google";
-        String username = provider + "_" + jsonNode.get("sub").asText();
-        String nickname = jsonNode.get("name").asText();
+        String socialId = jsonNode.get("sub").asText();
+        String username = jsonNode.get("name").asText()+ "_" + socialId;
+        Random rnd = new Random();
+        String s="";
+        for (int i = 0; i < 8; i++) {
+            s += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "G" + "_" + s;
 
-        return new GoogleUserInfoDto(username, nickname);
-
+        return new SocialLoginDto(username, nickname,socialId);
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(GoogleUserInfoDto googleUserInfo) {
+    private User getUser(SocialLoginDto googleUserInfo) {
 
-        String googlename = googleUserInfo.getUsername();
-        User googleUser = userRepository.findByUsername(googlename).orElse(null);
+        String socialId = googleUserInfo.getSocialId();
+        User googleUser = userRepository.findBySocialId(socialId);
 
         if (googleUser == null) {
+            String googlename = googleUserInfo.getUsername();
             String nickname = googleUserInfo.getNickname();
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="초보자";
+            String userTitle="등린이";
+            String userTitleImgUrl="없음";
 
-            googleUser = new User(googlename,encodedPassword, nickname,userImageUrl,userTitle);
+            googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
+            userRepository.save(googleUser);
+            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,googleUser);
+            getTitleRepository.save(getTitle);
         }
+
 
         return googleUser;
     }

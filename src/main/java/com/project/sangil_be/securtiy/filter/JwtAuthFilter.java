@@ -42,6 +42,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
         String tokenPayload = request.getHeader("Authorization");
         if (tokenPayload == null) {
             response.sendRedirect("/user/loginView");
+//            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return null;
         }
 

@@ -3,8 +3,10 @@ package com.project.sangil_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.sangil_be.dto.NaverUserInfoDto;
+import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.User;
+import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.UserRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
@@ -25,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -32,14 +35,9 @@ import java.util.UUID;
 @Service
 public class NaverUserService {
 
-//    @Value("${naver.client-id}")
-//    String naverClientId;
-//
-//    @Value("${naver.client-secret}")
-//    String naverClientSecret;
-
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final GetTitleRepository getTitleRepository;
 
     // 네이버 로그인
     public void naverLogin(String code, String state, HttpServletResponse response) throws JsonProcessingException {
@@ -48,7 +46,7 @@ public class NaverUserService {
         String accessToken = getAccessToken(code, state);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        NaverUserInfoDto naverUserInfo = getNaverUserInfo(accessToken);
+        SocialLoginDto naverUserInfo = getNaverUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
         User naverUser = getUser(naverUserInfo);
@@ -93,7 +91,7 @@ public class NaverUserService {
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private NaverUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialLoginDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
@@ -113,24 +111,31 @@ public class NaverUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        System.out.println(jsonNode);
 
-        String provider = "naver";
-        String username = provider + "_" + jsonNode.get("response").get("id").asText();
-        String nickname = jsonNode.get("response").get("nickname").asText();
 
-        return new NaverUserInfoDto(username, nickname);
+        String socialId = String.valueOf(jsonNode.get("response").get("id").asText());
+        String username = jsonNode.get("response").get("nickname").asText()+ "_" + socialId;
+        Random rnd = new Random();
+        String s="";
+        for (int i = 0; i < 8; i++) {
+            s += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "N" + "_" + s;
+
+        return new SocialLoginDto(username, nickname, socialId);
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(NaverUserInfoDto naverUserInfo) {
+    private User getUser(SocialLoginDto naverUserInfo) {
 
-        String naverusername =naverUserInfo.getUsername();
-        User naverUser = userRepository.findByUsername(naverusername)
-                .orElse(null);
+        String socialId = naverUserInfo.getSocialId();
+        User naverUser = userRepository.findBySocialId(socialId);
 
         if (naverUser == null) {
             // 회원가입
             // username: kakao nickname
+            String naverusername =naverUserInfo.getUsername();
             String nickname = naverUserInfo.getNickname();
 
             // password: random UUID
@@ -138,10 +143,13 @@ public class NaverUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="초보자";
+            String userTitle="등린이";
+            String userTitleImgUrl="없음";
 
-            naverUser = new User(naverusername, encodedPassword,nickname,userImageUrl,userTitle);
+            naverUser = new User(naverusername,socialId, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(naverUser);
+            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,naverUser);
+            getTitleRepository.save(getTitle);
 
         }
         return naverUser;
