@@ -92,31 +92,6 @@
 //        }
 //    }
 //
-////    @Test
-////    void searchMountain4() {
-////        Long mountainId = 1L;
-////        List<MountainResponseDto> fetch = queryFactory
-////                .select(Projections.constructor(MountainResponseDto.class,
-////                        m.mountainId,
-////                        m.mountain,
-////                        m.mountainImgUrl,
-////                        m.mountainAddress,
-////                        m.mountainInfo,
-////                        m.height,
-////                        c.star.avg().as("starAvr"),
-////                        Projections.constructor(CourseListDto.class,
-////                                course1.courseId,
-////                                course1.course,
-////                                course1.courseTime).as("courseDto")))
-////                .from(m)
-////                .innerJoin(c).on(c.mountainId.eq(c.mountainId))
-////                .innerJoin(course1).on(c.mountainId.eq(course1.mountainId))
-////                .where(m.mountainId.eq(mountainId))
-////                .fetch();
-////        for (MountainResponseDto mountainResponseDto : fetch) {
-////            System.out.println("mountainResponseDto = " + mountainResponseDto);
-////        }
-////    }
 //
 //
 //}
