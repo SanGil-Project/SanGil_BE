@@ -1,25 +1,22 @@
-package com.project.sangil_be.CICD;
+package com.project.sangil_be.service;
 
-import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@Configuration
-public class JasyptConifg {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Value("${jasypt.encryptor.password}")
-    private String encryptKey;
+@SpringBootTest
+public class JasyptTest {
 
-    @Bean("jasyptStringEncryptor")
-    public StringEncryptor stringEncryptor() {
+    @Test
+    public void jasyt_test() {
+        String plaintText = "1sdfgfdff";
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-//        System.out.println("encryptKey : " + encryptKey);
-        config.setPassword(encryptKey);
-//        config.setPassword(System.getenv("JASYPT_PASSWORD")); // 환경 변수
+        config.setPassword("1234");
+//        config.setPassword(System.getenv("JASYPT_PASSWORD"));
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setKeyObtentionIterations("1000");
         config.setPoolSize("1");
@@ -28,6 +25,13 @@ public class JasyptConifg {
         config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
-        return encryptor;
+
+        String encryptText = encryptor.encrypt(plaintText);
+        System.out.println(encryptText);
+        String decryptText = encryptor.decrypt(encryptText);
+        System.out.println(decryptText);
+        assertThat(plaintText).isEqualTo(decryptText);
+
     }
+
 }
