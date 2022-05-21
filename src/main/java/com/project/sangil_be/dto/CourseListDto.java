@@ -1,9 +1,10 @@
 package com.project.sangil_be.dto;
 
 import com.project.sangil_be.model.Course;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class CourseListDto {
     private Long courseId;
     private String course;
@@ -14,4 +15,6 @@ public class CourseListDto {
         this.course = course.getCourse();
         this.courseTime = course.getCourseTime();
     }
+
+
 }

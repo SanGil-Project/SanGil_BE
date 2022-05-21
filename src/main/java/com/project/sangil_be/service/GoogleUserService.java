@@ -27,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -69,7 +70,7 @@ public class GoogleUserService {
         body.add("client_id" , "77683946484-86n78jead6i4agakkjdf3482c3609des.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "http://localhost:3000/user/google/callback");
+        body.add("redirect_uri", "https://kopite.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
@@ -111,18 +112,22 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        Long socialId = jsonNode.get("sub").asLong();
+        String socialId = jsonNode.get("sub").asText();
         String username = jsonNode.get("name").asText()+ "_" + socialId;
-        String nickname = "G" + "_" + jsonNode.get("sub").asText();
+        Random rnd = new Random();
+        String s="";
+        for (int i = 0; i < 8; i++) {
+            s += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "G" + "_" + s;
 
         return new SocialLoginDto(username, nickname,socialId);
-
     }
 
     // 3. 유저확인 & 회원가입
     private User getUser(SocialLoginDto googleUserInfo) {
 
-        Long socialId = googleUserInfo.getSocialId();
+        String socialId = googleUserInfo.getSocialId();
         User googleUser = userRepository.findBySocialId(socialId);
 
         if (googleUser == null) {

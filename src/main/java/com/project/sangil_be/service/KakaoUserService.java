@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class KakaoUserService {
 
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
-
+        System.out.println(accessToken);
         // 2. 토큰으로 카카오 API 호출
         SocialLoginDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
@@ -63,15 +64,15 @@ public class KakaoUserService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         //        headers.add("code", code);
-
+        System.out.println("토큰 오나요? : " + code);
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "7e0e932177f25c237ca90728893d9a21"); // 리액트
-//        body.add("redirect_uri", "https://kopite.shop/user/kakao/callback"); // 리액트
+//        body.add("redirect_uri", "https://yesleee.shop/user/kakao/callback"); // 리액트
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
         body.add("code", code);
-
+        System.out.println("2번째 부분 : " + code);
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
@@ -111,9 +112,14 @@ public class KakaoUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        Long socialId = jsonNode.get("id").asLong();
+        String socialId = jsonNode.get("id").asText();
         String username = jsonNode.get("properties").get("nickname").asText() + "_" + socialId;
-        String nickname = "K" + "_" + jsonNode.get("id").asText();
+        Random rnd = new Random();
+        String s="";
+        for (int i = 0; i < 8; i++) {
+            s += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "K" + "_" + s;
 
         return new SocialLoginDto(username, nickname, socialId);
 
@@ -122,7 +128,7 @@ public class KakaoUserService {
     // 3. 카카오ID로 회원가입 처리
     private User registerKakaoUserIfNeed (SocialLoginDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long socialId = kakaoUserInfo.getSocialId();
+        String socialId = kakaoUserInfo.getSocialId();
         User kakaoUser = userRepository.findBySocialId(socialId);
 
         if (kakaoUser == null) {

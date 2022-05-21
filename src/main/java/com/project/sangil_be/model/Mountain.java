@@ -28,7 +28,7 @@ public class Mountain {
     private String mountainAddress;
 
     @Column(nullable = false)
-    private Float height;
+    private Double height;
 
     @Column
     private Double lat;

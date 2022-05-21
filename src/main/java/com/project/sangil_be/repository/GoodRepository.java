@@ -15,4 +15,8 @@ public interface GoodRepository extends JpaRepository<Good, Long> {
     void deleteByFeedId(Long feedId);
 
     List<Good> findByFeedId(Long feed);
+
+    Long countAllByFeedId(Long feedId);
+
+    Long countAllByUserId(Long userId);
 }

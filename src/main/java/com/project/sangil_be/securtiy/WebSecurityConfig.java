@@ -132,17 +132,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("PUT,/api/test"); // test
         skipPathList.add("POST,/user/signup");
 
-        // webSocket 허용
-        skipPathList.add("GET,/chat/**");
-        skipPathList.add("GET,/chat/**/**");
-        skipPathList.add("POST,/chat/**");
-        skipPathList.add("POST,/chat/**/**");
+//        // webSocket 허용
+//        skipPathList.add("GET,/chat/**");
+//        skipPathList.add("GET,/chat/**/**");
+//        skipPathList.add("POST,/chat/**");
+//        skipPathList.add("POST,/chat/**/**");
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
 
         skipPathList.add("GET,/favicon.ico");
-
 
         skipPathList.add("GET,/ws/**");
 
@@ -171,9 +170,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://kopite.shop");
+        configuration.addAllowedOrigin("https://yesleee.shop");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.validateAllowCredentials();
         configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

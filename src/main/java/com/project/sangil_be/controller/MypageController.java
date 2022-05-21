@@ -34,7 +34,7 @@ public class MypageController {
         return mypageService.usernameCheck(usernameRequestDto,userDetails);
     }
 
-    //username 수정
+    // nickname 수정
     @PutMapping("/api/mypages/profilename")
     public UserResponseDto editname(@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.editname(usernameRequestDto, userDetails);
@@ -55,7 +55,7 @@ public class MypageController {
 
     // 칭호 리스트
     @GetMapping("/api/mypages/userTitle")
-    public List<UserTitleDto> getUserTitle(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public UserTitleResponseDto getUserTitle(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getUserTitle(userDetails);
     }
 

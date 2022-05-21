@@ -29,7 +29,7 @@ public class TrackingController {
 
     // 트래킹 완료 후 저장
     @PutMapping("/api/tracking/{completedId}")
-    public String saveTracking(@PathVariable Long completedId, @RequestBody CompleteRequestDto completeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public TitleResponseDto saveTracking(@PathVariable Long completedId, @RequestBody CompleteRequestDto completeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return trackingService.saveTracking(completedId,completeRequestDto,userDetails);
     }
 

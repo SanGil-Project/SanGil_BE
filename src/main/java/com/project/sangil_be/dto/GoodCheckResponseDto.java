@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GoodCheckResponseDto {
-
     boolean goodStatus;
+    Long goodCnt;
 
-    public GoodCheckResponseDto(boolean goodStatus) {
-
+    public GoodCheckResponseDto(Long goodCnt, boolean goodStatus) {
+        this.goodCnt=goodCnt;
         this.goodStatus = goodStatus;
     }
 }
