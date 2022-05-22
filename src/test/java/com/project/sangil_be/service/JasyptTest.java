@@ -12,10 +12,10 @@
 //
 //    @Test
 //    public void jasyt_test() {
-//        String plaintText = "1PTyRryDo0uHeh0qF/gOYG2/e689wCRoFH1ybxJa";
+//        String plaintText = "";
 //        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
 //        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-//        config.setPassword("avraskio");
+//        config.setPassword("");
 ////        config.setPassword(System.getenv("JASYPT_PASSWORD"));
 //        config.setAlgorithm("PBEWithMD5AndDES");
 //        config.setKeyObtentionIterations("1000");
