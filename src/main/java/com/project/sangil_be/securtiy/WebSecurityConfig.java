@@ -160,19 +160,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//     @Bean
-//     public CorsConfigurationSource corsConfigurationSource(){
-//         CorsConfiguration configuration = new CorsConfiguration();
-//         configuration.addAllowedOrigin("http://localhost:3000");
-//         configuration.addAllowedOrigin("https://kopite.shop");
-//         configuration.addAllowedOrigin("https://yesleee.shop");
-//         configuration.addAllowedMethod("*");
-//         configuration.addAllowedHeader("*");
-//         configuration.setAllowCredentials(true); 
-//         configuration.validateAllowCredentials();
-//         configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
-//         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//         source.registerCorsConfiguration("/**", configuration);
-//         return source;
-//     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://kopite.shop");
+        configuration.addAllowedOrigin("https://yesleee.shop");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true); 
+        configuration.validateAllowCredentials();
+        configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
