@@ -70,7 +70,7 @@ public class GoogleUserService {
         body.add("client_id" , "77683946484-86n78jead6i4agakkjdf3482c3609des.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "https://kopite.shop/user/google/callback");
+        body.add("redirect_uri", "https://yesleee.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
