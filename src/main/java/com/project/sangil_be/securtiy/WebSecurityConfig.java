@@ -165,6 +165,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://kopite.shop");
+        configuration.addAllowedOrigin("https://yesleee.shop");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
