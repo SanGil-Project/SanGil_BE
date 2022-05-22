@@ -67,8 +67,8 @@ public class GoogleUserService {
 
         // 바디에 필요한 정보 담기
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id" , "77683946484-86n78jead6i4agakkjdf3482c3609des.apps.googleusercontent.com");
-        body.add("client_secret", "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");
+        body.add("client_id" , "418085046130-194eqk6jjjmn32gnfiv6g331ooh985de.apps.googleusercontent.com");
+        body.add("client_secret", "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");
         body.add("code", code);
         body.add("redirect_uri", "https://yesleee.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
