@@ -68,6 +68,7 @@ dependencies {
     //embedded-redis
 //    compileOnly group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }
 
 tasks.named('test') {

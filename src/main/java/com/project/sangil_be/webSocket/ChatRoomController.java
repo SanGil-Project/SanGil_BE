@@ -24,14 +24,14 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/rooms")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam("name") String name) {
-        return chatRoomRepository.createChatRoom(name);
+    public ChatRoom createRoom(@RequestParam("name") String name,@RequestParam Long partyId) {
+        return chatRoomRepository.createChatRoom(name,partyId);
     }
 
-    // 특정 채팅방 조회
+    // 특정 채팅방
     @GetMapping("/rooms/{roomId}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
+    public ChatRoom roomInfo(@PathVariable Long roomId) {
         return chatRoomRepository.findRoomById(roomId);
     }
 }

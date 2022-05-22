@@ -30,7 +30,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         // cors 설정 과 sockJS설정을 할 수있다.
         // handler를 설정안해도 됨
         registry.addEndpoint("/ws-stomp")
-                .setAllowedOrigins("*")
+                .setAllowedOrigins("http://localhost:3000")
                 .withSockJS();
     }
 }

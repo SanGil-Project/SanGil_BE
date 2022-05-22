@@ -153,7 +153,6 @@ public class GoogleUserService {
 
     // 4. 시큐리티 강제 로그인
     private Authentication securityLogin(User findUser) {
-
         UserDetails userDetails = new UserDetailsImpl(findUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

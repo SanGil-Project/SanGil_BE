@@ -40,7 +40,6 @@ public class MountainComment extends Timestamped {
     public void update(MountainComment mountainComment, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
         this.mountainId=mountainComment.getMountainId();
         this.mountainComment = mCommentRequestDto.getMountainComment();
-        this.star = mCommentRequestDto.getStar();
         this.userId=userDetails.getUser().getUserId();
     }
 }

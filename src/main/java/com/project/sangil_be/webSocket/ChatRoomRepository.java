@@ -22,7 +22,7 @@ public class ChatRoomRepository {
     // Redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private final RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, ChatRoom> opsHashChatRoom;
+    private HashOperations<String, Long, ChatRoom> opsHashChatRoom;
     // 채팅방의 대화 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
     private Map<String, ChannelTopic> topics;
 
@@ -36,15 +36,16 @@ public class ChatRoomRepository {
         return opsHashChatRoom.values(CHAT_ROOMS);
     }
 
-    public ChatRoom findRoomById(String id) {
+    public ChatRoom findRoomById(Long id) {
+        System.out.println(opsHashChatRoom.get(CHAT_ROOMS, id));
         return opsHashChatRoom.get(CHAT_ROOMS, id);
     }
 
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
+    public ChatRoom createChatRoom(String name,Long partyId) {
+        ChatRoom chatRoom = ChatRoom.create(name,partyId);
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }

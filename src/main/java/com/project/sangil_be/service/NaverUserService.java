@@ -165,7 +165,6 @@ public class NaverUserService {
 
     // jwt 토큰 발급
     private void jwtToken(Authentication authentication,HttpServletResponse response) {
-
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
         response.addHeader("Authorization", "BEARER" + " " + token);
