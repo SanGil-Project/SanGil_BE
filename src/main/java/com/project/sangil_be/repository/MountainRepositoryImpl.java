@@ -39,9 +39,7 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
                 .fetchResults();
 
         List<SearchDto> content = results.getResults();
-
         long total = results.getTotal();
-
         return new PageImpl<>(content, pageable, total);
     }
 

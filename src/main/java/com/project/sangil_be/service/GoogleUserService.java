@@ -67,10 +67,11 @@ public class GoogleUserService {
 
         // 바디에 필요한 정보 담기
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id" , "77683946484-86n78jead6i4agakkjdf3482c3609des.apps.googleusercontent.com");
-        body.add("client_secret", "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");
+        body.add("client_id" , "418085046130-194eqk6jjjmn32gnfiv6g331ooh985de.apps.googleusercontent.com");
+        body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "https://kopite.shop/user/google/callback");
+//        body.add("redirect_uri", "https://kopite.shop/user/google/callback");
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
@@ -152,7 +153,6 @@ public class GoogleUserService {
 
     // 4. 시큐리티 강제 로그인
     private Authentication securityLogin(User findUser) {
-
         UserDetails userDetails = new UserDetailsImpl(findUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
