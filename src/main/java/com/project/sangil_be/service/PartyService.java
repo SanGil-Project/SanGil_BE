@@ -24,64 +24,20 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final AttendRepository attendRepository;
     private final Validator validator;
-    private final GetTitleRepository getTitleRepository;
+    private final TitleService titleService;
 
     // 등산 모임 참가 작성
     @Transactional
     public PartyListDto writeParty(UserDetailsImpl userDetails, PartyRequestDto partyRequestDto) throws IOException {
-        //내용이 입력되어 있는지 확인
-        validator.blankContent(partyRequestDto);
-
-        //만든사람 ID값 추가시 필요한 메소드
-        User user = userRepository.findById(userDetails.getUser().getUserId()).orElse(null);
-
-        //만들어지면 처음 모임 인원 수는 1
-        int curPeople = 1;
-
-        //컴플리트 기본은 true
-        boolean completed = true;
-
-        //Party에 작성한 내용 및 현재 모집인원 수 추가
-        Party party = new Party(partyRequestDto, curPeople, completed, user);
-
-        //레파지토리에 저장
-        partyRepository.save(party);
-
-        //참여하기에 생성한 유저의 내용 저장
-        Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId());
-
+        validator.blankContent(partyRequestDto); //내용이 입력되어 있는지 확인
+        User user = userRepository.findById(userDetails.getUser().getUserId()).orElse(null); //만든사람 ID값 추가시 필요한 메소드
+        int curPeople = 1; //만들어지면 처음 모임 인원 수는 1
+        boolean completed = true; //컴플리트 기본은 true
+        Party party = new Party(partyRequestDto, curPeople, completed, user); //Party에 작성한 내용 및 현재 모집인원 수 추가
+        partyRepository.save(party); //레파지토리에 저장
+        Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId()); //참여하기에 생성한 유저의 내용 저장
         attendRepository.save(attend);
-
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        String userTitle;
-        String userTitleImgUrl;
-        Long cnt = attendRepository.countAllByUserId(userDetails.getUser().getUserId());
-        if (cnt == 1) {
-            userTitle = "아싸중에인싸";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 10) {
-            userTitle = "인싸....?";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 50) {
-            userTitle = "인싸중에인싸";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 100) {
-            userTitle = "산길인맥왕?";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        }
-
+        List<TitleDto> titleDtoList = titleService.getAttendTitle(userDetails);
         return new PartyListDto(party, completed, titleDtoList);
     }
 
@@ -100,16 +56,13 @@ public class PartyService {
         return validator.overPagesParty(partyListDto, start, end, pageable, pageNum);
     }
 
-
     private void setPartyList(List<Party> partyList, List<PartyListDto> partyListDto) {
         for (Party party : partyList) {
             boolean completed = true;
             if(party.getMaxPeople() <= party.getCurPeople()) {
                 completed = false;
             }
-
             PartyListDto partyDto = new PartyListDto(party,completed);
-
             partyListDto.add(partyDto);
         }
     }
@@ -169,35 +122,7 @@ public class PartyService {
                 ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
         );
 
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        String userTitle;
-        String userTitleImgUrl;
-        Long cnt = attendRepository.countAllByUserId(userDetails.getUser().getUserId());
-        if (cnt == 1) {
-            userTitle = "아싸중에인싸";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 10) {
-            userTitle = "인싸....?";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 50) {
-            userTitle = "인싸중에인싸";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        } else if (cnt == 100) {
-            userTitle = "산길인맥왕?";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        }
+        List<TitleDto> titleDtoList = titleService.getAttendTitle(userDetails);
 
         //중복 참여 제한
         String msg;
@@ -215,4 +140,5 @@ public class PartyService {
         }
         return new TitleResponseDto(titleDtoList, msg);
     }
+
 }

@@ -27,16 +27,18 @@ public class Completed extends Timestamped {
     @Column(nullable = false)
     private Integer send;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Double totalDistance;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String totalTime;
 
     public Completed(Long mountainId, Integer send, Long userId) {
         this.mountainId =mountainId;
         this.send=send;
         this.userId=userId;
+        this.totalTime = "0";
+        this.totalDistance = 0d;
     }
 
     public void update(CompleteRequestDto completeRequestDto) {

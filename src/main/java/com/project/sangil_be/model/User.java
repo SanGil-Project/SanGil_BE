@@ -27,16 +27,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String userImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String userTitle;
 
-    @Column
+    @Column(nullable = false)
     private String userTitleImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String socialId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

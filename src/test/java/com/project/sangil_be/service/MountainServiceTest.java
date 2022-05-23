@@ -2,6 +2,7 @@
 //
 //import com.project.sangil_be.dto.CommentListDto;
 //import com.project.sangil_be.dto.SearchDto;
+//import com.project.sangil_be.repository.MountainRepository;
 //import com.querydsl.core.QueryResults;
 //import com.querydsl.core.types.Projections;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,16 +10,27 @@
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.PageRequest;
 //
 //import javax.persistence.EntityManager;
+//import java.util.ArrayList;
 //import java.util.List;
 //
 //import static com.project.sangil_be.model.QMountain.mountain1;
 //import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 //import static com.project.sangil_be.model.QUser.user;
+//import static org.assertj.core.api.Assertions.assertThat;
 //
 //@SpringBootTest
 //class MountainServiceTest {
+//
+//    private final MountainRepository mountainRepository;
+//
+//    @Autowired
+//    MountainServiceTest(MountainRepository mountainRepository) {
+//        this.mountainRepository = mountainRepository;
+//    }
 //
 //    @Autowired
 //    EntityManager em;
@@ -29,16 +41,23 @@
 //        queryFactory = new JPAQueryFactory(em);
 //    }
 //
-////    @Test
-////    void searchMountain() {
-////        String keyword = "악";
-////        PageRequest pageable = PageRequest.of(1, 5);
-////
-////        Page<SearchDto> searchDtos = mountainRepository.searchPage(keyword, pageable);
-////        for (SearchDto searchDto : searchDtos) {
-////            System.out.println("searchDto = " + searchDto);
-////        }
-////    }
+//    @Test
+//    void searchMountain() {
+//        String keyword = "악";
+//        PageRequest pageable = PageRequest.of(0, 5);
+//
+//        Page<SearchDto> searchDtos = mountainRepository.searchPage(keyword, pageable);
+//        List<String> mountains = new ArrayList<>();
+//        mountains.add("감악산");
+//        mountains.add("관악산");
+//        mountains.add("모악산");
+//        mountains.add("삼악산");
+//        mountains.add("설악산");
+//
+//        for (int i = 0; i < searchDtos.getSize(); i++) {
+//            assertThat(searchDtos.getContent().get(i).getMountain()).isEqualTo(mountains.get(i));
+//        }
+//    }
 //
 //    @Test
 //    void searchMountain2() {
@@ -61,8 +80,16 @@
 //                .fetchResults();
 //
 //        List<SearchDto> content = results.getResults();
-//        for (SearchDto searchDto : content) {
-//            System.out.println("searchDto = " + searchDto);
+//        long limit = results.getLimit();
+//        List<String> mountains = new ArrayList<>();
+//        mountains.add("감악산");
+//        mountains.add("관악산");
+//        mountains.add("모악산");
+//        mountains.add("삼악산");
+//        mountains.add("설악산");
+//
+//        for (int i = 0; i < limit; i++) {
+//            assertThat(content.get(i).getMountain()).isEqualTo(mountains.get(i));
 //        }
 //
 //    }
@@ -87,36 +114,9 @@
 //                .fetchResults();
 //
 //        List<CommentListDto> content = results.getResults();
-//        for (int i = 0; i < content.size(); i++) {
-//            System.out.println(content.get(i).getUserId());
+//        for (CommentListDto commentListDto : content) {
+//            System.out.println("commentListDto = " + commentListDto);
 //        }
 //    }
-//
-////    @Test
-////    void searchMountain4() {
-////        Long mountainId = 1L;
-////        List<MountainResponseDto> fetch = queryFactory
-////                .select(Projections.constructor(MountainResponseDto.class,
-////                        m.mountainId,
-////                        m.mountain,
-////                        m.mountainImgUrl,
-////                        m.mountainAddress,
-////                        m.mountainInfo,
-////                        m.height,
-////                        c.star.avg().as("starAvr"),
-////                        Projections.constructor(CourseListDto.class,
-////                                course1.courseId,
-////                                course1.course,
-////                                course1.courseTime).as("courseDto")))
-////                .from(m)
-////                .innerJoin(c).on(c.mountainId.eq(c.mountainId))
-////                .innerJoin(course1).on(c.mountainId.eq(course1.mountainId))
-////                .where(m.mountainId.eq(mountainId))
-////                .fetch();
-////        for (MountainResponseDto mountainResponseDto : fetch) {
-////            System.out.println("mountainResponseDto = " + mountainResponseDto);
-////        }
-////    }
-//
 //
 //}

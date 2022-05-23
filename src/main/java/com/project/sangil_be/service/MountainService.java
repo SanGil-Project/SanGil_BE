@@ -35,87 +35,13 @@ public class MountainService {
         return searchDtoList;
     }
 
-    // 검색 전 페이지
-//    public List<SearchDto> Show10() {
-//        List<Mountain> mountainList = mountainRepository.findAll();
-//
-//        List<Mountain100Dto> mountain100DtoList = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            Mountain100Dto mountain100Dto = new Mountain100Dto(mountainList.get(i));
-//            mountain100DtoList.add(mountain100Dto);
-//        }
-//        Collections.shuffle(mountain100DtoList);
-//
-//        List<SearchDto> searchDto = new ArrayList<>();
-//
-//        int star = 0;
-//        float starAvr;
-//        for (int i = 0; i < 10; i++) {
-//            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain100DtoList.get(i).getMountainId());
-//            if (mountainComments.size() == 0) {
-//                starAvr = 0;
-//            } else {
-//                for (MountainComment mountainComment : mountainComments) {
-//                    star += mountainComment.getStar();
-//                }
-//                starAvr = (float) star / mountainComments.size();
-//            }
-//            SearchDto mountainInfo = new SearchDto(String.format("%.1f",starAvr),mountain100DtoList.get(i));
-//
-//            searchDto.add(mountainInfo);
-//        }
-//
-//        return searchDto;
-//
-//    }
-
     // 검색 후 페이지
     public Page<SearchDto> searchMountain(String keyword, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 5);
         return mountainRepository.searchPage(keyword,pageRequest);
     }
 
-    // 검색 후 페이지
-//    public Page<SearchDto> searchMountain(String keyword, int pageNum) {
-//        List<Mountain> mountainList = mountainRepository.searchAllByMountain(keyword);
-//        List<SearchDto> searchDtoList = new ArrayList<>();
-//        Pageable pageable = getPageable(pageNum);
-//        setSearchList(mountainList, searchDtoList);
-//
-//        int start = pageNum * 5;
-//        int end = Math.min((start + 5), mountainList.size());
-//
-//        Page<SearchDto> page = new PageImpl<>(searchDtoList.subList(start, end), pageable, searchDtoList.size());
-//        return page;
-//    }
-//
-//    private void setSearchList(List<Mountain> mountainList, List<SearchDto> searchDtoList) {
-//        int star = 0;
-//        Double starAvr;
-//        for (Mountain mountain : mountainList) {
-//            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
-//            if (mountainComments.size() == 0) {
-//                starAvr = 0D;
-//            } else {
-//                for (int i = 0; i < mountainComments.size(); i++) {
-//                    star += mountainComments.get(i).getStar();
-//                }
-//                starAvr = (double) star / mountainComments.size();
-//            }
-//
-//            SearchDto searchDto = new SearchDto(
-//                    mountain.getMountainId(),
-//                    mountain.getMountain(),
-//                    mountain.getMountainAddress(),
-//                    mountain.getMountainImgUrl(),
-//                    starAvr,
-//                    mountain.getLat(),
-//                    mountain.getLng()
-//            );
-//            searchDtoList.add(searchDto);
-//        }
-//    }
-
+    // 쿼리
     // 산 상세 페이지
     public MountainResponseDto detailMountain(Long mountainId, int pageNum, UserDetailsImpl userDetails) throws IOException, ParseException {
         Mountain mountain = mountainRepository.findById(mountainId).orElseThrow(
@@ -177,3 +103,77 @@ public class MountainService {
     }
 
 }
+    // 검색 전 페이지
+//    public List<SearchDto> Show10() {
+//        List<Mountain> mountainList = mountainRepository.findAll();
+//
+//        List<Mountain100Dto> mountain100DtoList = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            Mountain100Dto mountain100Dto = new Mountain100Dto(mountainList.get(i));
+//            mountain100DtoList.add(mountain100Dto);
+//        }
+//        Collections.shuffle(mountain100DtoList);
+//
+//        List<SearchDto> searchDto = new ArrayList<>();
+//
+//        int star = 0;
+//        float starAvr;
+//        for (int i = 0; i < 10; i++) {
+//            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain100DtoList.get(i).getMountainId());
+//            if (mountainComments.size() == 0) {
+//                starAvr = 0;
+//            } else {
+//                for (MountainComment mountainComment : mountainComments) {
+//                    star += mountainComment.getStar();
+//                }
+//                starAvr = (float) star / mountainComments.size();
+//            }
+//            SearchDto mountainInfo = new SearchDto(String.format("%.1f",starAvr),mountain100DtoList.get(i));
+//
+//            searchDto.add(mountainInfo);
+//        }
+//
+//        return searchDto;
+//
+//    }
+
+    // 검색 후 페이지
+//    public Page<SearchDto> searchMountain(String keyword, int pageNum) {
+//        List<Mountain> mountainList = mountainRepository.searchAllByMountain(keyword);
+//        List<SearchDto> searchDtoList = new ArrayList<>();
+//        Pageable pageable = getPageable(pageNum);
+//        setSearchList(mountainList, searchDtoList);
+//
+//        int start = pageNum * 5;
+//        int end = Math.min((start + 5), mountainList.size());
+//
+//        Page<SearchDto> page = new PageImpl<>(searchDtoList.subList(start, end), pageable, searchDtoList.size());
+//        return page;
+//    }
+//
+//    private void setSearchList(List<Mountain> mountainList, List<SearchDto> searchDtoList) {
+//        int star = 0;
+//        Double starAvr;
+//        for (Mountain mountain : mountainList) {
+//            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
+//            if (mountainComments.size() == 0) {
+//                starAvr = 0D;
+//            } else {
+//                for (int i = 0; i < mountainComments.size(); i++) {
+//                    star += mountainComments.get(i).getStar();
+//                }
+//                starAvr = (double) star / mountainComments.size();
+//            }
+//
+//            SearchDto searchDto = new SearchDto(
+//                    mountain.getMountainId(),
+//                    mountain.getMountain(),
+//                    mountain.getMountainAddress(),
+//                    mountain.getMountainImgUrl(),
+//                    starAvr,
+//                    mountain.getLat(),
+//                    mountain.getLng()
+//            );
+//            searchDtoList.add(searchDto);
+//        }
+//    }

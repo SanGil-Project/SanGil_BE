@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 //테스트
@@ -25,7 +24,7 @@ public class MCommentService {
     private final MountainRepository mountainRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final Validator validator;
-    private final GetTitleRepository getTitleRepository;
+    private final TitleService titleService;
 
     // 댓글 작성
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
@@ -36,26 +35,11 @@ public class MCommentService {
         } else {
             msg = "작성 가능";
         }
-        Mountain mountain = mountainRepository.findById(mountainId).orElseThrow(
-                () -> new IllegalArgumentException("산 정보가 존재하지 않습니다.")
-        );
-        validator.emptyMComment(mCommentRequestDto);
-
+        validator.emptyMComment(mCommentRequestDto); // 아무것도 안쓸때
         MountainComment mountainComment = new MountainComment(mountainId, userDetails, mCommentRequestDto);
         mountainCommentRepository.save(mountainComment);
 
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        String userTitle;
-        String userTitleImgUrl;
-        Long cnt = mountainCommentRepository.countAllByUserId(userDetails.getUser().getUserId());
-        if (cnt == 10) {
-            userTitle = "세르파";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        }
-
+        List<TitleDto> titleDtoList = titleService.getCommentTitle(userDetails);
         MCommentResponseDto mCommentResponseDto = new MCommentResponseDto(
                 mountainComment,
                 userDetails,
@@ -68,7 +52,6 @@ public class MCommentService {
     // 댓글 수정
     @Transactional
     public MCommentResponseDto updateComment(Long mountainCommentId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
-
         MountainComment mountainComment = mountainCommentRepository.findById(mountainCommentId).orElseThrow(
                 () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );

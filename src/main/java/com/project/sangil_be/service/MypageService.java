@@ -26,6 +26,7 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final S3Service s3Service;
+    private final TitleService titleService;
 
     // 맵트래킹 마이페이지
     public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
@@ -81,12 +82,12 @@ public class MypageService {
         userRepository.save(user);
     }
 
-    //유저가 즐겨찾기한 산 가져오는 즐겨찾기
+    // 쿼리
+    // 유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
     public List<BookMarkResponseDto> getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails) {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
-
 
         for (BookMark bookMark : bookMarkList) {
             boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMark.getMountainId(),
@@ -101,7 +102,6 @@ public class MypageService {
 
             int star = 0;
             Double starAvr = 0d;
-
             for (int i = 0; i < 10; i++) {
                 List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
                 if (mountainComments.size() == 0) {
@@ -118,20 +118,7 @@ public class MypageService {
 
     // 칭호 리스트
     public UserTitleResponseDto getUserTitle(UserDetailsImpl userDetails) {
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        String userTitle;
-        String userTitleImgUrl;
-        int cnt = getTitleRepository.countAllByUser(userDetails.getUser());
-        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가~~!! 등!!신!!!").isPresent()) {
-            System.out.println("패스");
-        } else if (cnt == 19) {
-            userTitle = "내가~~!! 등!!신!!!";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        }
-
+        List<TitleDto> titleDtoList = titleService.getAllTitle(userDetails);
         List<UserTitle> userTitles = userTitleRepository.findAll();
         List<GetTitle> getTitles = getTitleRepository.findAllByUser(userDetails.getUser());
         HashMap<String, Boolean> title = new HashMap<>();
@@ -143,7 +130,6 @@ public class MypageService {
                 }
             }
         }
-
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
         for (int i = 0; i < userTitles.size(); i++) {
             UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), title.get(userTitles.get(i).getUserTitle()));
