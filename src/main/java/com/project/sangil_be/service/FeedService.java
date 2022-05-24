@@ -100,8 +100,8 @@ public class FeedService {
         }
         Pageable pageable = getPageable(pageNum);
 
-        int start = pageNum * 24;
-        int end = Math.min((start + 24), feed.size());
+        int start = pageNum * 15;
+        int end = Math.min((start + 15), feed.size());
 
         Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
         return new FeedListResponseDto(page);
@@ -110,6 +110,6 @@ public class FeedService {
     private Pageable getPageable(int pageNum) {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
-        return PageRequest.of(pageNum, 24, sort);
+        return PageRequest.of(pageNum, 15, sort);
     }
 }

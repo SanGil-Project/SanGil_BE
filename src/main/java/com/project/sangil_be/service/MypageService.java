@@ -88,7 +88,6 @@ public class MypageService {
 
     // 쿼리 페이지처리
     // 유저가 즐겨찾기한 산 가져오는 즐겨찾기
-    @Transactional
     public BookMarkDto getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<BookMarkResponseDto> bookMarkResponseDtos = bookMarkRepository.bookMarkMountain(userDetails.getUser().getUserId(), pageRequest);
