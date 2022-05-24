@@ -24,12 +24,14 @@ public class TitleService {
     private final MountainRepository mountainRepository;
     private final CompletedRepository completedRepository;
 
-    public List<TitleDto> getFeedTitle(UserDetailsImpl userDetails, User user) {
+    public List<TitleDto> getFeedTitle(User user) {
         List<TitleDto> titleDtoList = new ArrayList<>();
         String userTitle;
         String userTitleImgUrl;
         Long cnt = feedRepository.countAllByUser(user);
-        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "예비 찰칵러").isPresent()) {
+
+        if (getTitleRepository.findByUserAndUserTitle(user, "예비 찰칵러").isPresent()) {
+
             System.out.println("예비 찰칵러 보유중");
         } else if (cnt == 1) {
             userTitle = "예비 찰칵러";

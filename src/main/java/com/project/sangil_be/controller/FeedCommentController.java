@@ -1,9 +1,6 @@
 package com.project.sangil_be.controller;
 
-import com.project.sangil_be.dto.FeedCommentReqDto;
-import com.project.sangil_be.dto.FeedCommentResDto;
-import com.project.sangil_be.dto.MCommentRequestDto;
-import com.project.sangil_be.dto.MCommentResponseDto;
+import com.project.sangil_be.dto.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.FeedCommentService;
 import com.project.sangil_be.service.FeedService;
@@ -36,7 +33,16 @@ public class FeedCommentController {
 
     // 댓글 삭제
     @DeleteMapping("feeds/comment/{feedCommentId}")
-    public void deleteComment(@PathVariable Long feedCommentId){
+    public void deleteComment(@PathVariable Long feedCommentId) {
         feedCommentService.deleteComment(feedCommentId);
     }
+
+    // 댓글 상세 페이지
+    @GetMapping("/feeds/comment/{feedId}/{pageNum}")
+    public FeedCommentListDto detailComment(@PathVariable Long feedId,
+                                            @PathVariable("pageNum") int pageNum,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return feedCommentService.detailComment(feedId,userDetails,pageNum-1);
+    }
+
 }

@@ -14,16 +14,28 @@ public class FeedListResponseDto {
     private int totalPage;
     private int currentPage;
 
-    public FeedListResponseDto(Page<FeedResponseDto> page, List<TitleDto> titleDtoList) {
-        this.feedList=page.getContent();
+    public FeedListResponseDto(List<FeedResponseDto> feedResponseDtos, List<TitleDto> titleDtoList) {
+        this.feedList=feedResponseDtos;
         this.titleDtoList = titleDtoList;
-        this.totalPage=page.getTotalPages();
-        this.currentPage=page.getNumber();
     }
 
     public FeedListResponseDto(Page<FeedResponseDto> page) {
         this.feedList=page.getContent();
         this.totalPage=page.getTotalPages();
         this.currentPage=page.getNumber();
+    }
+
+//    public FeedListResponseDto(Page<FeedResponseDto> page, List<TitleDto> titleDtoList) {
+//        this.feedList = page.getContent();
+//        this.titleDtoList = titleDtoList;
+//        this.totalPage= page.getTotalPages();
+//        this.currentPage = page.getNumber();
+//    }
+
+    public FeedListResponseDto(Page<FeedResponseDto> page, List<TitleDto> titleDtoList) {
+        this.feedList = page.getContent();
+        this.titleDtoList = titleDtoList;
+        this.totalPage = page.getTotalPages();
+        this.currentPage = page.getNumber();
     }
 }

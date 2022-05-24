@@ -19,7 +19,7 @@ public class FeedComment extends Timestamped {
     private Long feedCommentId;
 
     @Column(nullable = false)
-    private String mountainComment;
+    private String feedComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedid")
@@ -30,13 +30,13 @@ public class FeedComment extends Timestamped {
     private User user;
 
     public FeedComment(FeedCommentReqDto feedCommentReqDto, Feed feed, User user) {
-        this.mountainComment=feedCommentReqDto.getFeedComment();
+        this.feedComment=feedCommentReqDto.getFeedComment();
         this.feed = feed;
         this.user = user;
     }
 
     public void update(FeedCommentReqDto feedCommentReqDto, UserDetailsImpl userDetails) {
-        this.mountainComment = feedCommentReqDto.getFeedComment();
+        this.feedComment = feedCommentReqDto.getFeedComment();
         this.user = userDetails.getUser();
     }
 }

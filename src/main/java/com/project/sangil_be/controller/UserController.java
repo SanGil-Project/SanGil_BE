@@ -1,17 +1,18 @@
 package com.project.sangil_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.sangil_be.dto.ResponseDto;
+import com.project.sangil_be.dto.SignUpRequestDto;
 import com.project.sangil_be.dto.SocialLoginDto;
 import com.project.sangil_be.dto.UserResponseDto;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.GoogleUserService;
 import com.project.sangil_be.service.KakaoUserService;
 import com.project.sangil_be.service.NaverUserService;
+import com.project.sangil_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +23,7 @@ public class UserController {
     private final KakaoUserService kakaoUserService;
     private final GoogleUserService googleUserService;
     private final NaverUserService naverUserService;
-//    private final UserService userService;
+    private final UserService userService;
 
     // 카카오 로그인
     @GetMapping("/user/kakao/callback")
@@ -52,11 +53,11 @@ public class UserController {
         naverUserService.naverLogin(code, state, response);
     }
 
-//    // 회원가입
-//    @PostMapping("/user/signup")
-//    public ResponseDto signup(@RequestBody SignUpRequestDto requestDto) {
-//        return userService.registerUser(requestDto);
-//    }
+    // 회원가입
+    @PostMapping("/user/signup")
+    public ResponseDto signup(@RequestBody SignUpRequestDto requestDto) {
+        return userService.registerUser(requestDto);
+    }
 
     // 로그인 체크
     @GetMapping("/api/user/loginCheck")

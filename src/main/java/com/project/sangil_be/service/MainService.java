@@ -23,12 +23,12 @@ public class MainService {
 
     private final PartyRepository partyRepository;
     private final MountainRepository mountainRepository;
-    private final MountainCommentRepository mountainCommentRepository;
     private final BookMarkRepository bookMarkRepository;
     private final AttendRepository attendRepository;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
     private final TitleService titleService;
+    private final MountainCommentRepository mountainCommentRepository;
 
     // 메인/마이페이지 예정된 등산 모임 임박한 순
     @Transactional
@@ -92,29 +92,37 @@ public class MainService {
         return testDtos;
     }
 
-    // 메인 페이지 피드 15개
-    public FeedListResponseDto mainfeeds(int pageNum, UserDetailsImpl userDetails) {
+    // 쿼리로 고칠것
+    // 메인 페이지 피드 7개
+    public FeedListResponseDto mainfeeds(UserDetailsImpl userDetails) {
         List<Feed> feed = feedRepository.findAllByOrderByCreatedAtDesc();
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
-        for (Feed feeds : feed) {
-            boolean goodStatus;
-            int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
-            try {
-                goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), userDetails.getUser().getUserId());
-            } catch (Exception e) {
-                goodStatus = false;
+        if (feed.size() < 8) {
+            for (int i = 0; i < feed.size(); i++) {
+                boolean goodStatus;
+                int goodCnt = goodRepository.findByFeedId(feed.get(i).getFeedId()).size();
+                try {
+                    goodStatus = goodRepository.existsByFeedIdAndUserId(feed.get(i).getFeedId(), userDetails.getUser().getUserId());
+                } catch (Exception e) {
+                    goodStatus = false;
+                }
+                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus));
             }
-            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
+        } else {
+            for (int i = 0; i < 7; i++) {
+                boolean goodStatus;
+                int goodCnt = goodRepository.findByFeedId(feed.get(i).getFeedId()).size();
+                try {
+                    goodStatus = goodRepository.existsByFeedIdAndUserId(feed.get(i).getFeedId(), userDetails.getUser().getUserId());
+                } catch (Exception e) {
+                    goodStatus = false;
+                }
+                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus));
+            }
         }
-        Pageable pageable = getPageable(pageNum);
-
-        int start = pageNum * 15;
-        int end = Math.min((start + 15), feed.size());
-
-        Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
 
         List<TitleDto> titleDtoList = titleService.getGoodTitle(userDetails);
-        return new FeedListResponseDto(page,titleDtoList);
+        return new FeedListResponseDto(feedResponseDtos, titleDtoList);
     }
 
     private Pageable getPageable(int pageNum) {
@@ -123,8 +131,46 @@ public class MainService {
         return PageRequest.of(pageNum, 15, sort);
     }
 
-    // 쿼리
-    // 자기 주변 산
+//    // 자기 주변 산
+//    public NearbyMountainDto nearby(double lat, double lng, int pageNum, UserDetailsImpl userDetails) {
+//
+//        double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
+//
+//        Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());
+//        Location southWest = GeometryUtil.calculate(lat, lng, distance, Direction.SOUTHWEST.getBearing());
+//
+//        double x1 = northEast.getLat();
+//        double y1 = northEast.getLng();
+//        double x2 = southWest.getLat();
+//        double y2 = southWest.getLng();
+//
+//        List<Mountain> mountains = mountainRepository.findAll(x2, x1, y2, y1);
+//        List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
+//        int star = 0;
+//        double starAvr = 0;
+//        for (Mountain mountain : mountains) {
+//            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
+//            if (mountainComments.size() == 0) {
+//                starAvr = 0;
+//            } else {
+//                for (int i = 0; i < mountainComments.size(); i++) {
+//                    star += mountainComments.get(i).getStar();
+//                }
+//                starAvr = (float) star / mountainComments.size();
+//            }
+//            Boolean bookmark = bookMarkRepository.existsByMountainIdAndUserId(mountain.getMountainId(), userDetails.getUser().getUserId());
+//            double dis = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
+//            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain, starAvr, bookmark, dis);
+//            nearbyMountainListDtos.add(nearbyMountainListDto);
+//        }
+//        Pageable pageable = getPageable(pageNum);
+//        int start = pageNum * 7;
+//        int end = Math.min((start + 7), mountains.size());
+//        Page<NearbyMountainListDto> page = new PageImpl<>(nearbyMountainListDtos.subList(start, end), pageable, nearbyMountainListDtos.size());
+//        return new NearbyMountainDto(page);
+//    }
+
+    // 동적쿼리 // 시간 비슷함함    // 자기 주변 산
     public NearbyMountainDto nearby(double lat, double lng, int pageNum, UserDetailsImpl userDetails) {
 
         double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
@@ -137,30 +183,17 @@ public class MainService {
         double x2 = southWest.getLat();
         double y2 = southWest.getLng();
 
-        List<Mountain> mountains = mountainRepository.findAll(x2, x1, y2, y1);
-        List<NearbyMountainListDto> nearbyMountainListDtos = new ArrayList<>();
-        int star = 0;
-        double starAvr = 0;
-        for (Mountain mountain : mountains) {
-            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
-            if (mountainComments.size() == 0) {
-                starAvr = 0;
-            } else {
-                for (int i = 0; i < mountainComments.size(); i++) {
-                    star += mountainComments.get(i).getStar();
-                }
-                starAvr = (float) star / mountainComments.size();
-            }
+        PageRequest pageRequest = PageRequest.of(pageNum, 7);
+        Page<NearbyMountainListDto> nearbyMountainListDtos = mountainRepository.nearByMountain(x1, x2, y1, y2, pageRequest);
+        for (NearbyMountainListDto nearbyMountainListDto : nearbyMountainListDtos) {
+            Mountain mountain = mountainRepository.findByMountainId(nearbyMountainListDto.getMountainId());
             Boolean bookmark = bookMarkRepository.existsByMountainIdAndUserId(mountain.getMountainId(), userDetails.getUser().getUserId());
             double dis = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
-            NearbyMountainListDto nearbyMountainListDto = new NearbyMountainListDto(mountain, String.format("%.1f", starAvr), bookmark, String.format("%.1f", dis));
-            nearbyMountainListDtos.add(nearbyMountainListDto);
+            nearbyMountainListDto.setBookmark(bookmark);
+            nearbyMountainListDto.setDistance(dis);
         }
-        Pageable pageable = getPageable(pageNum);
-        int start = pageNum * 7;
-        int end = Math.min((start + 7), mountains.size());
-        Page<NearbyMountainListDto> page = new PageImpl<>(nearbyMountainListDtos.subList(start, end), pageable, nearbyMountainListDtos.size());
-        return new NearbyMountainDto(page);
+
+        return new NearbyMountainDto(nearbyMountainListDtos);
     }
 
     private class PartyDateComparator implements Comparator<Party> {
@@ -230,3 +263,11 @@ public class MainService {
 //            return 0;
 //        }
 //    }
+
+//
+//private class PartyDateComparator implements Comparator<Party> {
+//    @Override
+//    public int compare(Party d1, Party d2) {
+//        return d1.getPartyDate().compareTo(d2.getPartyDate());
+//    }
+//}

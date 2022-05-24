@@ -16,7 +16,7 @@ public class CommentListDto {
     private int star;
     private LocalDateTime createdAt;
 
-    public CommentListDto(MountainComment mountainComment, User user ) {
+    public CommentListDto(MountainComment mountainComment, User user) {
         this.mountainCommentId = mountainComment.getMountainCommentId();
         this.mountainComment = mountainComment.getMountainComment();
         this.userId = user.getUserId();
