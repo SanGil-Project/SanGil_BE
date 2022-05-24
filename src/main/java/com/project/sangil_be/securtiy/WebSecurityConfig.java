@@ -95,7 +95,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 // "접근 불가" 페이지 URL 설정
                 .accessDeniedPage("/forbidden.html");
-
     }
 
     @Bean
@@ -138,7 +137,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/favicon.ico");
 
         skipPathList.add("GET,/chat/**");
+        skipPathList.add("GET,/ws");
         skipPathList.add("GET,/ws/**");
+        skipPathList.add("GET,/ws-stomp");
         skipPathList.add("GET,/ws-stomp/**");
 
 

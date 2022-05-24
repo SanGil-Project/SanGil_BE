@@ -148,7 +148,9 @@ public class MypageService {
 
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
         for (int i = 0; i < userTitles.size(); i++) {
-            if(title.get(userTitles.get(i).getUserTitle())==true){
+
+            if(title.get(userTitles.get(i).getUserTitle()) == true){
+
                 if(getTitles.get(i).getUserTitle().equals(userTitles.get(i).getUserTitle())){
                     UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getCTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
                     userTitleDtos.add(userTitleDto);
