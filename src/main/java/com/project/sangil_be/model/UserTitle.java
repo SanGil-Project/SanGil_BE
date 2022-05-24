@@ -27,5 +27,4 @@ public class UserTitle {
     @Column(nullable = false)
     private String qTitleImgUrl;
 
-
 }

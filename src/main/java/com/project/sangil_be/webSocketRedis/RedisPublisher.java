@@ -1,4 +1,4 @@
-package com.project.sangil_be.webSocket;
+package com.project.sangil_be.webSocketRedis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

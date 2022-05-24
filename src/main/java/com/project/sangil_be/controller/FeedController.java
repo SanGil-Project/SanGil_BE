@@ -39,6 +39,12 @@ public class FeedController {
         return feedService.detail(feedId, user);
     }
 
+    // 피드 리스트
+    @GetMapping("/feeds/{pageNum}")
+    public FeedListResponseDto mainFeed(@PathVariable("pageNum") int pageNum,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return feedService.mainFeed(userDetails,pageNum-1);
+    }
+
     //나의 피드
     @GetMapping("/api/myfeeds/{pageNum}")
     public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){

@@ -1,13 +1,10 @@
 package com.project.sangil_be.service;
 
 import com.project.sangil_be.S3.S3Service;
-import com.project.sangil_be.dto.FeedListResponseDto;
-import com.project.sangil_be.dto.FeedResponseDto;
-import com.project.sangil_be.dto.GoodCheckResponseDto;
-import com.project.sangil_be.dto.TitleDto;
+import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
+import com.project.sangil_be.repository.FeedCommentRepository;
 import com.project.sangil_be.repository.FeedRepository;
-import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +19,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
     private final TitleService titleService;
+    private final FeedCommentRepository feedCommentRepository;
 
     // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
@@ -37,7 +34,7 @@ public class FeedService {
         feedRepository.save(feed);
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        List<TitleDto> titleDtoList = titleService.getFeedTitle(userDetails, user);
+        List<TitleDto> titleDtoList = titleService.getFeedTitle(user);
         FeedResponseDto feedResponseDto = new FeedResponseDto(user, feed, 0, goodStatus, titleDtoList);
         return feedResponseDto;
 
@@ -100,8 +97,8 @@ public class FeedService {
         }
         Pageable pageable = getPageable(pageNum);
 
-        int start = pageNum * 24;
-        int end = Math.min((start + 24), feed.size());
+        int start = pageNum * 15;
+        int end = Math.min((start + 15), feed.size());
 
         Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
         return new FeedListResponseDto(page);
@@ -110,6 +107,44 @@ public class FeedService {
     private Pageable getPageable(int pageNum) {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
-        return PageRequest.of(pageNum, 24, sort);
+        return PageRequest.of(pageNum, 15, sort);
     }
+
+    // 쿼리 수정 필요
+    // 피드 리스트
+    public FeedListResponseDto mainFeed(UserDetailsImpl userDetails, int pageNum) {
+        List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+        for (Feed feed : feeds) {
+            int goodCnt = goodRepository.findByFeedId(feed.getFeedId()).size();
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), userDetails.getUser().getUserId());
+
+            List<FeedComment> feedComments = feedCommentRepository.findAllByFeedOrderByCreatedAtDesc(feed);
+            List<FeedCommentResDto> feedCommentResDtos = new ArrayList<>();
+            if (feedComments.size() < 3) {
+                for (int i = 0; i < feedComments.size(); i++) {
+                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i));
+                    feedCommentResDtos.add(feedCommentResDto);
+                }
+            } else {
+                for (int i = 0; i < 2; i++) {
+                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i));
+                    feedCommentResDtos.add(feedCommentResDto);
+                }
+            }
+            Long commentCnt = feedCommentRepository.countAllByFeed(feed);
+
+            FeedResponseDto feedResponseDto = new FeedResponseDto(feed,goodCnt,goodStatus,commentCnt,feedCommentResDtos);
+            feedResponseDtos.add(feedResponseDto);
+        }
+
+        Pageable pageable = getPageable(pageNum);
+        int start = pageNum * 15;
+        int end = Math.min((start + 15), feeds.size());
+
+        Page<FeedResponseDto> page = new PageImpl<>(feedResponseDtos.subList(start, end), pageable, feedResponseDtos.size());
+        List<TitleDto> titleDtoList = titleService.getFeedTitle(userDetails.getUser());
+        return new FeedListResponseDto(page,titleDtoList);
+    }
+
 }

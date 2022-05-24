@@ -88,7 +88,6 @@ public class MypageService {
 
     // 쿼리 페이지처리
     // 유저가 즐겨찾기한 산 가져오는 즐겨찾기
-    @Transactional
     public BookMarkDto getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<BookMarkResponseDto> bookMarkResponseDtos = bookMarkRepository.bookMarkMountain(userDetails.getUser().getUserId(), pageRequest);
@@ -149,7 +148,7 @@ public class MypageService {
 
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
         for (int i = 0; i < userTitles.size(); i++) {
-            if(title.get(userTitles.get(i).getUserTitle().equals("true"))){
+            if(title.get(userTitles.get(i).getUserTitle())==true){
                 if(getTitles.get(i).getUserTitle().equals(userTitles.get(i).getUserTitle())){
                     UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getCTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
                     userTitleDtos.add(userTitleDto);

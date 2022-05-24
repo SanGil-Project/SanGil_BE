@@ -24,13 +24,13 @@ public class TitleService {
     private final MountainRepository mountainRepository;
     private final CompletedRepository completedRepository;
 
-    public List<TitleDto> getFeedTitle(UserDetailsImpl userDetails, User user) {
+    public List<TitleDto> getFeedTitle(User user) {
         List<TitleDto> titleDtoList = new ArrayList<>();
         String userTitle;
         String userTitleImgUrl;
         Long cnt = feedRepository.countAllByUser(user);
-        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "예비 찰칵러").isPresent()) {
-            System.out.println("패스");
+        if (getTitleRepository.findByUserAndUserTitle(user, "예비 찰칵러").isPresent()) {
+            System.out.println("예비 찰칵러 보유중");
         } else if (cnt == 1) {
             userTitle = "예비 찰칵러";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/dQ1lIudFdm.png";
@@ -47,7 +47,7 @@ public class TitleService {
         String userTitleImgUrl;
         Long cnt = goodRepository.countAllByUserId(userDetails.getUser().getUserId());
         if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연습생").isPresent()) {
-            System.out.println("패스");
+            System.out.println("이구역의연습생 보유중");
         } else if (cnt >= 1) {
             userTitle = "이구역의연습생";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ZFoUkXDMAD.png";
@@ -56,7 +56,7 @@ public class TitleService {
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         }
         if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "이구역의연예인").isPresent()) {
-            System.out.println("패스");
+            System.out.println("이구역의연예인 보유중");
         } else if (cnt >= 100) {
             userTitle = "이구역의연예인";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/woHzXbI6mo.png";
@@ -88,7 +88,7 @@ public class TitleService {
         String userTitleImgUrl;
         int cnt = getTitleRepository.countAllByUser(userDetails.getUser());
         if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가~~!! 등!!신!!!").isPresent()) {
-            System.out.println("패스");
+            System.out.println("내가~~!! 등!!신!!! 보유중");
         } else if (cnt == 19) {
             userTitle = "내가~~!! 등!!신!!!";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/Xgj8xW63TZ.png";
@@ -173,7 +173,7 @@ public class TitleService {
 
         if (distance >= 1 && distance < 100) {
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "아직 여기라고?").isPresent()) {
-                System.out.println("패스");
+                System.out.println("아직 여기라고? 보유중");
             } else {
                 userTitle = "아직 여기라고?";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/1rgDaH9rqW.png";
@@ -184,7 +184,7 @@ public class TitleService {
         } else if (distance >= 100 && distance < 1000) {
 
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "백만불짜리다리").isPresent()) {
-                System.out.println("패스");
+                System.out.println("백만불짜리다리 보유중");
             } else {
                 userTitle = "백만불짜리다리?";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/5V6CWBTeni.png";
@@ -194,7 +194,7 @@ public class TitleService {
             }
         } else if (distance > 1000) {
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "산타고 전국일주").isPresent()) {
-                System.out.println("패스");
+                System.out.println("산타고 전국일주 보유중");
             } else {
                 userTitle = "산타고 전국일주";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/TuRSygz4S6.png";
@@ -206,7 +206,7 @@ public class TitleService {
 
         if (height >= 10 && height < 30) {
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가 탄 산 높이 히말라야").isPresent()) {
-                System.out.println("패스");
+                System.out.println("내가 탄 산 높이 히말라야 보유중");
             } else {
                 userTitle = "내가 탄 산 높이 히말라야";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ayb4NtqfgO.png";
@@ -218,7 +218,7 @@ public class TitleService {
         } else if (height >= 30 && height < 1000) {
 
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "구름위를걷는자").isPresent()) {
-                System.out.println("패스");
+                System.out.println("구름위를걷는자 보유중");
             } else {
                 userTitle = "구름위를걷는자";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/zd3QVGvdn3.png";
@@ -229,7 +229,7 @@ public class TitleService {
             }
         } else if (height > 1000) {
             if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "대기권 돌파~").isPresent()) {
-                System.out.println("패스");
+                System.out.println("대기권 돌파~ 보유중");
             } else {
                 userTitle = "대기권 돌파~";
                 userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/H4ri7zAS3b.png";

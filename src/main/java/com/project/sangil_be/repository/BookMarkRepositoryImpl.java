@@ -27,9 +27,9 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                         mountain1.mountainAddress,
                         mountain1.mountainImgUrl,
                         mountainComment1.star.avg().as("starAvr")))
-                .from(mountain1)
+                .from(bookMark)
+                .leftJoin(mountain1).on(mountain1.mountainId.eq(bookMark.mountainId))
                 .leftJoin(mountainComment1).on(mountainComment1.mountainId.eq(mountain1.mountainId))
-                .leftJoin(bookMark).on(bookMark.mountainId.eq(mountainComment1.mountainId))
                 .where(bookMark.userId.eq(userId))
                 .groupBy(mountain1.mountainId)
                 .offset(pageable.getOffset())

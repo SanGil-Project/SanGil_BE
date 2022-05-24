@@ -168,6 +168,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://kopite.shop");
         configuration.addAllowedOrigin("https://yesleee.shop");
+        configuration.addAllowedOrigin("https://xn--wk0b636a.com");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
