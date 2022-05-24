@@ -11,11 +11,9 @@ public class UserTitleDto {
     private String userTitleImgUrl;
     private Boolean have;
 
-    public UserTitleDto(UserTitle userTitle, Boolean aBoolean) {
+    public UserTitleDto(UserTitle userTitle, String TitleImgUrl, Boolean aBoolean) {
         this.userTitle=userTitle.getUserTitle();
-        this.userTitleImgUrl=userTitle.getUserTitleImgUrl();
+        this.userTitleImgUrl=TitleImgUrl;
         this.have=aBoolean;
-
     }
-
 }

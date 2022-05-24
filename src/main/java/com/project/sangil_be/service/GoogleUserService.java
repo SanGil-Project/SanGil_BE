@@ -139,7 +139,7 @@ public class GoogleUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
-            String userTitleImgUrl="없음";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
 
             googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(googleUser);
