@@ -10,12 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MessageResponseDto {
     private Long messageId;
-    private String username;
+    private String nickname;
     private Long roomId;
     private String message;
     private String createdAt;
-    private String imageUrl;
-    private String titleUrl;
+    private String userImageUrl;
+    private String userTitle;
     private ChatMessage.MessageType type;
 
     public MessageResponseDto(
@@ -23,15 +23,17 @@ public class MessageResponseDto {
             String message,
             String createdAt ,
             String imageUrl,
-            String username,
+            String nickname,
+            String userTitle,
             Long roomId,
             ChatMessage.MessageType messageType
     ) {
         this.messageId=messageId;
         this.message = message;
         this.createdAt = createdAt;
-        this.imageUrl = imageUrl;
-        this.username = username;
+        this.userImageUrl = imageUrl;
+        this.nickname = nickname;
+        this.userTitle = userTitle;
         this.roomId= roomId;
         this.type =messageType;
     }
@@ -39,10 +41,11 @@ public class MessageResponseDto {
     public MessageResponseDto(ChatMessage chatMessage) {
         this.messageId = chatMessage.getMessageId();
         this.message = chatMessage.getMessage();
-        this.username = chatMessage.getUser().getUsername();
-        this.roomId = chatMessage.getChatroom().getChatRoomId();
         this.createdAt =chatMessage.getCreatedAt();
+        this.userImageUrl = chatMessage.getUser().getUserImgUrl();
+        this.nickname = chatMessage.getUser().getNickname();
+        this.userTitle = chatMessage.getUser().getUserTitle();
+        this.roomId = chatMessage.getChatroom().getChatRoomId();
         this.type = chatMessage.getMessageType();
-        this.imageUrl = chatMessage.getUser().getUserImgUrl();
     }
 }

@@ -14,10 +14,13 @@ public class ChatRoomJoin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long joinId;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoom chatRoom;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
     @Column
     private String enterTime;
 

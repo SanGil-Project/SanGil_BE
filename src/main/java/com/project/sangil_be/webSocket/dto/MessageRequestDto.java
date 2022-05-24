@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MessageRequestDto {
-    private String username;
+    private String sender;
     private Long roomId;
     private String message;
     private String createdAt;

@@ -22,7 +22,7 @@ public class ChatRoomJoinService {
         // 해당 방 가져오기
         ChatRoom chatRoom = chatUtils.selectOneChatRoom(message.getRoomId());
         // 유저 가져오기
-        User user = chatUtils.selectOneUser(message.getUsername());
+        User user = chatUtils.selectOneUser(message.getSender());
         // 해당 유저가 이미 입장했을때 확인
         return chatRoomJoinRepository.findByChatRoomAndUser(chatRoom,user);
 
@@ -31,7 +31,7 @@ public class ChatRoomJoinService {
         // 해당 방 가져오기
         ChatRoom chatRoom = chatUtils.selectOneChatRoom(message.getRoomId());
         // 유저 가져오기
-        User user = chatUtils.selectOneUser(message.getUsername());
+        User user = chatUtils.selectOneUser(message.getSender());
         // enterTime 저장
         message.setCreatedAt(chatUtils.getCurrentTime());
 

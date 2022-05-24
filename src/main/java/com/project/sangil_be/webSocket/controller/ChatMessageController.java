@@ -6,6 +6,7 @@ import com.project.sangil_be.webSocket.model.ChatMessage;
 import com.project.sangil_be.webSocket.service.ChatMessageService;
 import com.project.sangil_be.webSocket.service.ChatRoomJoinService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
@@ -25,16 +26,13 @@ public class ChatMessageController {
 
     // stomp ws를 통해 해당 경로로 메세지가 들어왔을때 메시지의 "destination header"와 "messageMapping"에
     // 설정된 경로가 일치하는 "handler"를 찾고 처리
-    // "configuration"에서 설정한 "app"이라는 "prifix"과 합쳐서 "sub/chat/message"라는 "destination header"를 가진
+    // "configuration"에서 설정한 "sub"이라는 "prifix"과 합쳐서 "pub/chat/message"라는 "destination header"를 가진
     // 메세지들이 이 handler를 타게 된다.
     @MessageMapping("/chat/message")
-    // handler에서 처리를한 반환값을 "/topic/greetings" 경로로 다시 반환
-    // 앞에 "/topic"이 붙었으니 "simpleBroker"로 전달
-    // @SendTo("/topic/greetings")
     public void greeting(@RequestBody MessageRequestDto message) {
         System.out.println("chatHandler 에서 roomId : " + message.getRoomId());
         System.out.println("chatHandler 에서 message : " + message.getMessage());
-        System.out.println("chatHandler 에서 userName : " + message.getUsername());
+        System.out.println("chatHandler 에서 userName : " + message.getSender());
         System.out.println("chatHandler 에서 type : " + message.getType());
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
         // String username = jwtDecoder.decodeUsername(token);
@@ -76,6 +74,7 @@ public class ChatMessageController {
                     , chatMessage.getCreatedAt()
                     , chatMessage.getUser().getUserImgUrl()
                     , chatMessage.getUser().getNickname()
+                    , chatMessage.getUser().getUserTitle()
                     , chatMessage.getChatroom().getChatRoomId()
                     , chatMessage.getMessageType());
 

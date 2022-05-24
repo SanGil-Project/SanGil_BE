@@ -16,14 +16,19 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
+
     @ManyToOne
     private User user;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoom chatroom; // 방번호
+
     @Column
     private MessageType messageType;
+
     @Column
     private String message; // 메시지
+
     @Column
     private String createdAt;
 

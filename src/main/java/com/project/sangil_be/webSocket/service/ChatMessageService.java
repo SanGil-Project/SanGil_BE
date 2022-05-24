@@ -25,7 +25,7 @@ public class ChatMessageService {
         // 채팅방 가져오기
         ChatRoom chatRoom = chatUtils.selectOneChatRoom(message.getRoomId());
         // 유저 가져오기
-        User chatUser = chatUtils.selectOneUser(message.getUsername());
+        User chatUser = chatUtils.selectOneUser(message.getSender());
         // 메세지 전달 시간 저장
         message.setCreatedAt(chatUtils.getCurrentTime());
         // Message 저장 객체 만들기
@@ -45,10 +45,7 @@ public class ChatMessageService {
             MessageResponseDto messageRequestDto = new MessageResponseDto(chatMessage);
             responseChatList.add(messageRequestDto);
         }
-
-
         return responseChatList;
-
     }
 
     // messageType ="ENTER" 채팅 처리

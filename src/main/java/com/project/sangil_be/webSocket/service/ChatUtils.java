@@ -27,8 +27,8 @@ public class ChatUtils {
     }
 
     // 유저 가져오기
-    public User selectOneUser(String username){
-        return userRepository.findByUsername(username).orElseThrow(
+    public User selectOneUser(String sender){
+        return userRepository.findByNickname(sender).orElseThrow(
                 ()-> new NullPointerException("해당 회원이 존재하지 않습니다.")
         );
     }
