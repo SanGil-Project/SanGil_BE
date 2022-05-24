@@ -54,4 +54,18 @@ public class PartyListDto {
         this.createdAt = party.getCreatedAt();
         this.titleDtoList = titleDtoList;
     }
+
+    public PartyListDto(Long partyId, String nickname, String title, String mountain, String address, String partyDate, String partyTime, int maxPeople, int curPeople, boolean completed, LocalDateTime createdAt) {
+        this.partyId = partyId;
+        this.nickname = nickname;
+        this.title = title;
+        this.mountain = mountain;
+        this.address = address;
+        this.partyDate = partyDate;
+        this.partyTime = partyTime;
+        this.maxPeople = maxPeople;
+        this.curPeople = curPeople;
+        this.completed = completed;
+        this.createdAt = createdAt;
+    }
 }

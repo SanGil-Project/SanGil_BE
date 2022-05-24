@@ -144,7 +144,7 @@ public class NaverUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
-            String userTitleImgUrl="없음";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
 
             naverUser = new User(naverusername,socialId, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(naverUser);
@@ -165,7 +165,6 @@ public class NaverUserService {
 
     // jwt 토큰 발급
     private void jwtToken(Authentication authentication,HttpServletResponse response) {
-
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
         response.addHeader("Authorization", "BEARER" + " " + token);

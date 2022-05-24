@@ -95,6 +95,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 // "접근 불가" 페이지 URL 설정
                 .accessDeniedPage("/forbidden.html");
+
     }
 
     @Bean
@@ -136,8 +137,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/favicon.ico");
 
-
+        skipPathList.add("GET,/chat/**");
         skipPathList.add("GET,/ws/**");
+        skipPathList.add("GET,/ws-stomp/**");
 
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
@@ -165,8 +167,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://kopite.shop");
+        configuration.addAllowedOrigin("https://yesleee.shop");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.validateAllowCredentials();
         configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
