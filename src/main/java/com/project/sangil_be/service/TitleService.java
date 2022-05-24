@@ -29,7 +29,9 @@ public class TitleService {
         String userTitle;
         String userTitleImgUrl;
         Long cnt = feedRepository.countAllByUser(user);
+
         if (getTitleRepository.findByUserAndUserTitle(user, "예비 찰칵러").isPresent()) {
+
             System.out.println("예비 찰칵러 보유중");
         } else if (cnt == 1) {
             userTitle = "예비 찰칵러";
@@ -76,7 +78,11 @@ public class TitleService {
             userTitle = "셰르파";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/rSuxu63C1v.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "셰르파").isPresent()) {
+                System.out.println("셰르파 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         }
         return titleDtoList;
@@ -108,25 +114,41 @@ public class TitleService {
             userTitle = "아싸중에인싸";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/CAnkO4OgfK.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "아싸중에인싸").isPresent()) {
+                System.out.println("아싸중에인싸 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 10) {
             userTitle = "인싸....?";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/KNUrQ0mhZ4.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "인싸....?").isPresent()) {
+                System.out.println("인싸....? 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 50) {
             userTitle = "인싸중에인싸";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/KNUrQ0mhZ4.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "인싸중에인싸").isPresent()) {
+                System.out.println("인싸중에인싸 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 100) {
             userTitle = "산길인맥왕";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/CAnkO4OgfK.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "산길인맥왕").isPresent()) {
+                System.out.println("산길인맥왕 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         }
         return titleDtoList;
@@ -149,25 +171,41 @@ public class TitleService {
             userTitle = "방구석 홍길";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/hwxojSZLBS.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "방구석 홍길").isPresent()) {
+                System.out.println("방구석 홍길 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 3) {
             userTitle = "리틀홍길";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/7DX5Hpjndy.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "리틀홍길").isPresent()) {
+                System.out.println("리틀홍길 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 10) {
             userTitle = "내장래희망 홍길형님";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ubNAtaaBLG.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내장래희망 홍길형님").isPresent()) {
+                System.out.println("내장래희망 홍길형님 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 100) {
             userTitle = "UM.....홍길?";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/97cmvqWD1f.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
+            if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "UM.....홍길").isPresent()) {
+                System.out.println("UM.....홍길 보유중");
+            }else {
+                getTitleRepository.save(getTitle);
+            }
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         }
 
