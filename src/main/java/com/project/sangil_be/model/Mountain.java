@@ -30,10 +30,10 @@ public class Mountain {
     @Column(nullable = false)
     private Double height;
 
-    @Column
+    @Column(nullable = false)
     private Double lat;
 
-    @Column
+    @Column(nullable = false)
     private Double lng;
 
     public void update(Double lat, Double lng) {

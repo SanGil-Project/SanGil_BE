@@ -41,7 +41,7 @@ public class KakaoUserService {
 
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
-        System.out.println(accessToken);
+
         // 2. 토큰으로 카카오 API 호출
         SocialLoginDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
@@ -64,15 +64,15 @@ public class KakaoUserService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         //        headers.add("code", code);
-        System.out.println("토큰 오나요? : " + code);
+
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "7e0e932177f25c237ca90728893d9a21"); // 리액트
-//        body.add("redirect_uri", "https://yesleee.shop/user/kakao/callback"); // 리액트
-        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
+        body.add("redirect_uri", "https://xn--wk0b636a.com/user/kakao/callback"); // 리액트
+//        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
         body.add("code", code);
-        System.out.println("2번째 부분 : " + code);
+
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
@@ -143,7 +143,7 @@ public class KakaoUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
-            String userTitleImgUrl="없음";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
 
             kakaoUser = new User(kakaousername,socialId,encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);

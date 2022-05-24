@@ -27,23 +27,22 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String userImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String userTitle;
 
-    @Column
+    @Column(nullable = false)
     private String userTitleImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String socialId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Party> parties;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
     public User(String username, String socialId, String encodedPassword, String nickname, String userImageUrl, String userTitle, String userTitleImgUrl) {

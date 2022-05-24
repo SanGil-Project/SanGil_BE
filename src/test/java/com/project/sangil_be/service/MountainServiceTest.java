@@ -1,12 +1,15 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.dto.BookMarkResponseDto;
-import com.project.sangil_be.dto.CommentListDto;
-import com.project.sangil_be.dto.PartyListDto;
-import com.project.sangil_be.dto.SearchDto;
+import com.project.sangil_be.dto.*;
+import com.project.sangil_be.model.QBookMark;
+import com.project.sangil_be.model.QFeed;
+import com.project.sangil_be.model.QParty;
 import com.project.sangil_be.repository.MountainRepository;
+import com.project.sangil_be.webSocket.ChatMessage;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,17 +17,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.persistence.EntityManager;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static com.project.sangil_be.model.QBookMark.bookMark;
+import static com.project.sangil_be.model.QBookMark.*;
+import static com.project.sangil_be.model.QFeed.*;
 import static com.project.sangil_be.model.QMountain.mountain1;
 import static com.project.sangil_be.model.QMountainComment.mountainComment1;
-import static com.project.sangil_be.model.QParty.party;
+import static com.project.sangil_be.model.QParty.*;
 import static com.project.sangil_be.model.QUser.user;
 import static org.assertj.core.api.Assertions.assertThat;
 

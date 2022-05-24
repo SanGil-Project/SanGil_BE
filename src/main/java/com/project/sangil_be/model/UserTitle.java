@@ -19,5 +19,13 @@ public class UserTitle {
     private String userTitle;
 
     @Column(nullable = false)
-    private String userTitleImgUrl;
+    private String bTitleImgUrl;
+
+    @Column(nullable = false)
+    private String cTitleImgUrl;
+
+    @Column(nullable = false)
+    private String qTitleImgUrl;
+
+
 }
