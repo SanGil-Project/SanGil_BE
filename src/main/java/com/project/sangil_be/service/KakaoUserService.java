@@ -143,7 +143,7 @@ public class KakaoUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
-            String userTitleImgUrl="없음";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
 
             kakaoUser = new User(kakaousername,socialId,encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);

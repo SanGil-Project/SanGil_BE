@@ -33,7 +33,7 @@ public class TitleService {
             System.out.println("패스");
         } else if (cnt == 1) {
             userTitle = "예비 찰칵러";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/dQ1lIudFdm.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, user);
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -50,7 +50,7 @@ public class TitleService {
             System.out.println("패스");
         } else if (cnt >= 1) {
             userTitle = "이구역의연습생";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ZFoUkXDMAD.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -59,7 +59,7 @@ public class TitleService {
             System.out.println("패스");
         } else if (cnt >= 100) {
             userTitle = "이구역의연예인";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/woHzXbI6mo.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -73,8 +73,8 @@ public class TitleService {
         String userTitleImgUrl;
         Long cnt = mountainCommentRepository.countAllByUserId(userDetails.getUser().getUserId());
         if (cnt == 10) {
-            userTitle = "세르파";
-            userTitleImgUrl = "";
+            userTitle = "셰르파";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/rSuxu63C1v.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -91,7 +91,7 @@ public class TitleService {
             System.out.println("패스");
         } else if (cnt == 19) {
             userTitle = "내가~~!! 등!!신!!!";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/Xgj8xW63TZ.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -106,26 +106,25 @@ public class TitleService {
         Long cnt = attendRepository.countAllByUserId(userDetails.getUser().getUserId());
         if (cnt == 1) {
             userTitle = "아싸중에인싸";
-
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/CAnkO4OgfK.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 10) {
             userTitle = "인싸....?";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/KNUrQ0mhZ4.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 50) {
             userTitle = "인싸중에인싸";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/KNUrQ0mhZ4.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 100) {
-            userTitle = "산길인맥왕?";
-            userTitleImgUrl = "";
+            userTitle = "산길인맥왕";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/CAnkO4OgfK.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -148,25 +147,25 @@ public class TitleService {
         int cnt = completedList.size();
         if (cnt == 1) {
             userTitle = "방구석 홍길";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/hwxojSZLBS.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 3) {
             userTitle = "리틀홍길";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/7DX5Hpjndy.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 10) {
             userTitle = "내장래희망 홍길형님";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ubNAtaaBLG.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         } else if (cnt == 100) {
             userTitle = "UM.....홍길?";
-            userTitleImgUrl = "";
+            userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/97cmvqWD1f.png";
             GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -177,7 +176,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "아직 여기라고?";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/1rgDaH9rqW.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -188,7 +187,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "백만불짜리다리?";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/5V6CWBTeni.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -198,7 +197,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "산타고 전국일주";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/TuRSygz4S6.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
@@ -210,7 +209,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "내가 탄 산 높이 히말라야";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/ayb4NtqfgO.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 TitleDto titleDto = new TitleDto(userTitle, userTitleImgUrl);
@@ -222,7 +221,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "구름위를걷는자";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/zd3QVGvdn3.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 TitleDto titleDto = new TitleDto(userTitle, userTitleImgUrl);
@@ -233,7 +232,7 @@ public class TitleService {
                 System.out.println("패스");
             } else {
                 userTitle = "대기권 돌파~";
-                userTitleImgUrl = "";
+                userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/H4ri7zAS3b.png";
                 GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
                 getTitleRepository.save(getTitle);
                 TitleDto titleDto = new TitleDto(userTitle, userTitleImgUrl);
