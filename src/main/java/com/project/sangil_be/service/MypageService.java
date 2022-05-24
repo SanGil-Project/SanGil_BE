@@ -7,6 +7,8 @@ import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.DistanceToUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,8 @@ public class MypageService {
     private final MountainCommentRepository mountainCommentRepository;
     private final S3Service s3Service;
     private final TitleService titleService;
+    private final FeedRepository feedRepository;
+    private final GoodRepository goodRepository;
 
     // 맵트래킹 마이페이지
     public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
@@ -82,39 +86,51 @@ public class MypageService {
         userRepository.save(user);
     }
 
-    // 쿼리
+    // 쿼리 페이지처리
     // 유저가 즐겨찾기한 산 가져오는 즐겨찾기
     @Transactional
-    public List<BookMarkResponseDto> getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails) {
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
-        List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
-
-        for (BookMark bookMark : bookMarkList) {
-            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMark.getMountainId(),
-                    userDetails.getUser().getUserId());
-            Mountain mountain = mountainRepository.findById(bookMark.getMountainId()).orElseThrow(
-                    () -> new IllegalArgumentException("해당하는 산이 없습니다.")
-            );
-
-            //유저와 즐겨찾기한 산과의 거리 계산
-            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),
-                    mountain.getLng(), "kilometer");
-
-            int star = 0;
-            Double starAvr = 0d;
-            for (int i = 0; i < 10; i++) {
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0d;
-                } else {
-                    star += mountainComments.get(i).getStar();
-                    starAvr = (double) star / mountainComments.size();
-                }
-            }
-            bookMarkResponseDtos.add(new BookMarkResponseDto(mountain, bookMarkChk, starAvr, distance));
+    public BookMarkDto getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 6);
+        Page<BookMarkResponseDto> bookMarkResponseDtos = bookMarkRepository.bookMarkMountain(userDetails.getUser().getUserId(), pageRequest);
+        for (BookMarkResponseDto bookMarkResponseDto : bookMarkResponseDtos) {
+            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMarkResponseDto.getMountainId(),userDetails.getUser().getUserId());
+            Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
+            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),mountain.getLng(), "kilometer");
+            bookMarkResponseDto.setBookMarkChk(bookMarkChk);
+            bookMarkResponseDto.setDistance(distance);
         }
-        return bookMarkResponseDtos;
+        return new BookMarkDto(bookMarkResponseDtos);
     }
+
+//        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
+//        List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
+//
+//        for (BookMark bookMark : bookMarkList) {
+//            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMark.getMountainId(),
+//                    userDetails.getUser().getUserId());
+//            Mountain mountain = mountainRepository.findById(bookMark.getMountainId()).orElseThrow(
+//                    () -> new IllegalArgumentException("해당하는 산이 없습니다.")
+//            );
+//
+//            //유저와 즐겨찾기한 산과의 거리 계산
+//            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),
+//                    mountain.getLng(), "kilometer");
+//
+//            int star = 0;
+//            Double starAvr = 0d;
+//            for (int i = 0; i < 10; i++) {
+//                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
+//                if (mountainComments.size() == 0) {
+//                    starAvr = 0d;
+//                } else {
+//                    star += mountainComments.get(i).getStar();
+//                    starAvr = (double) star / mountainComments.size();
+//                }
+//            }
+//            bookMarkResponseDtos.add(new BookMarkResponseDto(mountain, bookMarkChk, starAvr, distance));
+//        }
+//        return bookMarkResponseDtos;
+//    }
 
     // 칭호 리스트
     public UserTitleResponseDto getUserTitle(UserDetailsImpl userDetails) {
@@ -146,5 +162,17 @@ public class MypageService {
         return new ChangeTitleDto(userDetails, requestDto);
     }
 
+    // 마이페이지 피드 10개
+    public List<FeedResponseDto> myFeeds(UserDetailsImpl userDetails) {
+        List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+            FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
+            feedResponseDtos.add(feedResponseDto);
+        }
+        return feedResponseDtos;
+    }
 }
 

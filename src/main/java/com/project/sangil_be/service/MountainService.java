@@ -37,7 +37,7 @@ public class MountainService {
 
     // 검색 후 페이지
     public Page<SearchDto> searchMountain(String keyword, int pageNum) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 5);
+        PageRequest pageRequest = PageRequest.of(pageNum, 10);
         return mountainRepository.searchPage(keyword,pageRequest);
     }
 

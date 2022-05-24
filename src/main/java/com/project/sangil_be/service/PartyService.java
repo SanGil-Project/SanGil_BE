@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +60,10 @@ public class PartyService {
     private void setPartyList(List<Party> partyList, List<PartyListDto> partyListDto) {
         for (Party party : partyList) {
             boolean completed = true;
-            if(party.getMaxPeople() <= party.getCurPeople()) {
+            if (party.getMaxPeople() <= party.getCurPeople()) {
                 completed = false;
             }
-            PartyListDto partyDto = new PartyListDto(party,completed);
+            PartyListDto partyDto = new PartyListDto(party, completed);
             partyListDto.add(partyDto);
         }
     }
@@ -80,14 +81,15 @@ public class PartyService {
         List<Attend> attend = attendRepository.findByPartyId(partyId);
         List<PartymemberDto> partymemberDto = new ArrayList<>();
 
-        Party party = partyRepository.findById(partyId).orElse(null);;
+        Party party = partyRepository.findById(partyId).orElse(null);
+        ;
 
-        for (Attend attends : attend){
+        for (Attend attends : attend) {
             User user = userRepository.findByUserId(attends.getUserId());
             partymemberDto.add(new PartymemberDto(user));
         }
 
-        return new PartyDetailDto(party,partymemberDto);
+        return new PartyDetailDto(party, partymemberDto);
     }
 
     // api에 맞게 수정 필요
@@ -95,21 +97,21 @@ public class PartyService {
     @Transactional
     public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
         Party party = partyRepository.findById(partyId).orElseThrow(
-                ()-> new IllegalArgumentException("찾는 게시글이 없습니다.")
+                () -> new IllegalArgumentException("찾는 게시글이 없습니다.")
         );
         party.update(partyRequestDto.getPartyDate(), partyRequestDto.getPartyTime(),
-                     partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
+                partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
 
         return new PartyDetailDto(party);
     }
 
     // 동호회 모임 삭제 코드
     @Transactional
-    public void deleteParty(Long partyId,UserDetailsImpl userDetails) {
+    public void deleteParty(Long partyId, UserDetailsImpl userDetails) {
         try {
             partyRepository.deleteById(partyId);
-            attendRepository.deleteByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
-        }catch (IllegalArgumentException e) {
+            attendRepository.deleteByPartyIdAndUserId(partyId, userDetails.getUser().getUserId());
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("게시글을 삭제하지 못했습니다.");
         }
     }
@@ -117,28 +119,40 @@ public class PartyService {
     //동호회 참여하기 기능 구현
     @Transactional
     public TitleResponseDto attendParty(Long partyId, UserDetailsImpl userDetails) {
-        Attend attend = attendRepository.findByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
+        Attend attend = attendRepository.findByPartyIdAndUserId(partyId, userDetails.getUser().getUserId());
         Party party = partyRepository.findById(partyId).orElseThrow(
-                ()-> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
+                () -> new IllegalArgumentException("참여할 동호회 모임이 없습니다.")
         );
 
         List<TitleDto> titleDtoList = titleService.getAttendTitle(userDetails);
 
         //중복 참여 제한
         String msg;
-        if(attend==null) {
+        if (attend == null) {
             Attend saveAttend = new Attend(userDetails.getUser().getUserId(), partyId);
             int result = party.getCurPeople() + 1;
             party.updateCurpeople(result);
             attendRepository.save(saveAttend);
-            msg= "true";
-        }else{
-            attendRepository.deleteByPartyIdAndUserId(partyId,userDetails.getUser().getUserId());
+            msg = "true";
+        } else {
+            attendRepository.deleteByPartyIdAndUserId(partyId, userDetails.getUser().getUserId());
             int result = party.getCurPeople() - 1;
             party.updateCurpeople(result);
-            msg= "false";
+            msg = "false";
         }
         return new TitleResponseDto(titleDtoList, msg);
     }
 
+    public Page<PartyListDto> getSearch(String keyword, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 6);
+        Page<PartyListDto> partyListDtos = partyRepository.searchPage(keyword, pageRequest);
+        LocalDate date = LocalDate.now();
+        for (PartyListDto partyListDto : partyListDtos) {
+            LocalDate date1 = LocalDate.parse(partyListDto.getPartyDate());
+            if (date.isAfter(date1) || date.isEqual(date1)) {
+                partyListDto.setPartyDate("마감되었습니다.");
+            }
+        }
+        return partyListDtos;
+    }
 }

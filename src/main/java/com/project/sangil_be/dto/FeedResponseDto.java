@@ -3,6 +3,7 @@ package com.project.sangil_be.dto;
 import com.project.sangil_be.model.Feed;
 import com.project.sangil_be.model.Good;
 import com.project.sangil_be.model.User;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,9 +11,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class FeedResponseDto {
     private Long userId;
     private Long feedId;
@@ -53,18 +52,4 @@ public class FeedResponseDto {
         this. goodStatus = goodStatus;
     }
 
-
-    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, List<TitleDto> titleDtoList) {
-        this.userId = feed.getUser().getUserId();
-        this.feedId = feed.getFeedId();
-        this.nickname = feed.getUser().getNickname();
-        this.userTitle = feed.getUser().getUserTitle();
-        this.userImgUrl = feed.getUser().getUserImgUrl();
-        this.feedImgUrl = feed.getFeedImgUrl();
-        this.feedContent = feed.getFeedContent();
-        this.createdAt = feed.getCreatedAt();
-        this.goodCnt = goodCnt;
-        this. goodStatus = goodStatus;
-        this.titleDtoList = titleDtoList;
-    }
 }

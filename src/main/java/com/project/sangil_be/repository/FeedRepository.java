@@ -13,4 +13,8 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     List<Feed> findAllByOrderByCreatedAtDesc();
 
     Long countAllByUser(User user);
+
+    Feed findByFeedId(Long feedId);
+
+    List<Feed> findAllByUserOrderByCreatedAtDesc(User user);
 }

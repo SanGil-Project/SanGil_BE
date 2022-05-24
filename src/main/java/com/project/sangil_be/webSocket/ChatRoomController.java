@@ -21,7 +21,7 @@ public class ChatRoomController {
         return chatRoomRepository.findAllRoom();
     }
 
-    // 채팅방 생성
+    // 채팅방 생성 // 파티 타이틀과 roomID
     @PostMapping("/rooms")
     @ResponseBody
     public ChatRoom createRoom(@RequestParam("name") String name,@RequestParam Long partyId) {
@@ -29,9 +29,16 @@ public class ChatRoomController {
     }
 
     // 특정 채팅방
+//    @GetMapping("/rooms/{roomId}")
+//    @ResponseBody
+//    public ChatRoom roomInfo(@PathVariable Long roomId) {
+//        return chatRoomRepository.findRoomById(roomId);
+//    }
+
     @GetMapping("/rooms/{roomId}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable Long roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+    public List<ChatMessage> findChat(@PathVariable Long roomId) {
+          return chatRoomRepository.findChatById(String.valueOf(roomId));
     }
+
 }

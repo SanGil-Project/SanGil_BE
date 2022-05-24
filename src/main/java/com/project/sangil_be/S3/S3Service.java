@@ -50,7 +50,6 @@ public class S3Service {
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-
         amazonS3Client.deleteObject(bucket, imageKey);
 
         try(InputStream inputStream = file.getInputStream()) {
