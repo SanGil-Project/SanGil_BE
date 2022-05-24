@@ -35,7 +35,7 @@ public class MypageController {
     }
 
     // nickname 수정
-    @PutMapping("/api/mypages/profilename")
+    @PutMapping("/api/mypage/profilename")
     public UserResponseDto editname(@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.editname(usernameRequestDto, userDetails);
     }
@@ -48,9 +48,15 @@ public class MypageController {
     }
 
     // 마이페이지 즐겨찾기한 산
-    @GetMapping("/api/mypages/bookmark")
-    public List<BookMarkResponseDto> getBookMarkMountain (@RequestParam double lat, @RequestParam double lng, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mypageService.getBookMarkMountain(lat,lng,userDetails);
+    @GetMapping("/api/mypages/bookmark/{pageNum}")
+    public BookMarkDto getBookMarkMountain (@PathVariable int pageNum, @RequestParam double lat, @RequestParam double lng, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getBookMarkMountain(lat,lng,userDetails,pageNum-1);
+    }
+
+    // 마이페이지 피드 10개
+    @GetMapping("/mypages/myfeeds")
+    public List<FeedResponseDto> myFeeds (@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return mypageService.myFeeds(userDetails);
     }
 
     // 칭호 리스트

@@ -28,6 +28,13 @@ public class PartyController {
         return new PartyListResponseDto(partyService.getAllParty(pageNum-1));
     }
 
+    //모든 동호회 검색
+    @GetMapping("/parties/search")
+    public PartyListResponseDto getSearch(@RequestParam(value = "keyword") String keyword,
+                                          @RequestParam("pageNum") int pageNum) {
+        return new PartyListResponseDto(partyService.getSearch(keyword,pageNum-1));
+    }
+
     //동호회 상세 페이지
     @GetMapping("/api/party/{partyId}")
     public PartyDetailDto findParty (@PathVariable Long partyId) {
