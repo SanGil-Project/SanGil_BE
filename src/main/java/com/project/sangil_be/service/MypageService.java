@@ -146,10 +146,22 @@ public class MypageService {
                 }
             }
         }
+
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
         for (int i = 0; i < userTitles.size(); i++) {
-            UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), title.get(userTitles.get(i).getUserTitle()));
-            userTitleDtos.add(userTitleDto);
+            if(title.get(userTitles.get(i).getUserTitle().equals(true))){
+                if(getTitles.get(i).getUserTitle().equals(userTitles.get(i).getUserTitle())){
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getCTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+                    userTitleDtos.add(userTitleDto);
+                } else {
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getBTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+                    userTitleDtos.add(userTitleDto);
+                }
+
+            } else {
+                UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getQTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+                userTitleDtos.add(userTitleDto);
+            }
         }
         return new UserTitleResponseDto(userTitleDtos, titleDtoList);
     }

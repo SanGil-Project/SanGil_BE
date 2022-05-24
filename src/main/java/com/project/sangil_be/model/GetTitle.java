@@ -19,7 +19,7 @@ public class GetTitle {
     private String userTitle;
 
     @Column(nullable = false)
-    private String userTitleImgUrl;
+    private String BTitleImgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -27,7 +27,7 @@ public class GetTitle {
 
     public GetTitle(String userTitle, String userTitleImgUrl, User user) {
         this.userTitle=userTitle;
-        this.userTitleImgUrl=userTitleImgUrl;
+        this.BTitleImgUrl=userTitleImgUrl;
         this.user=user;
 
     }
