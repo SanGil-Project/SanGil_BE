@@ -1,4 +1,4 @@
-package com.project.sangil_be.webSocket;
+package com.project.sangil_be.webSocketRedis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

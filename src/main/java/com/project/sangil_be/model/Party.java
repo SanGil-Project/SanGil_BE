@@ -72,7 +72,6 @@ public class Party extends Timestamped {
     }
 
     public void updateCurpeople(int result) {
-
         this.curPeople = result;
     }
 

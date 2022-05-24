@@ -1,37 +1,35 @@
 //package com.project.sangil_be.service;
 //
 //import com.project.sangil_be.dto.*;
-//import com.project.sangil_be.model.QBookMark;
-//import com.project.sangil_be.model.QFeed;
-//import com.project.sangil_be.model.QParty;
+//import com.project.sangil_be.model.*;
+//import com.project.sangil_be.repository.BookMarkRepository;
+//import com.project.sangil_be.repository.MountainCommentRepository;
 //import com.project.sangil_be.repository.MountainRepository;
-//import com.project.sangil_be.webSocket.ChatMessage;
+//import com.project.sangil_be.utils.Direction;
+//import com.project.sangil_be.utils.DistanceToUser;
+//import com.project.sangil_be.utils.GeometryUtil;
+//import com.project.sangil_be.utils.Location;
 //import com.querydsl.core.QueryResults;
-//import com.querydsl.core.types.Predicate;
+//import com.querydsl.core.types.ExpressionUtils;
 //import com.querydsl.core.types.Projections;
-//import com.querydsl.core.types.dsl.StringPath;
+//import com.querydsl.jpa.JPAExpressions;
+//import com.querydsl.jpa.impl.JPAQuery;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.PageRequest;
-//import org.springframework.data.redis.core.HashOperations;
-//import org.springframework.data.redis.core.ListOperations;
-//import org.springframework.data.redis.core.RedisTemplate;
+//import org.springframework.data.domain.*;
 //
 //import javax.persistence.EntityManager;
 //import java.text.ParseException;
-//import java.text.SimpleDateFormat;
 //import java.time.LocalDate;
-//import java.time.chrono.ChronoLocalDate;
 //import java.util.ArrayList;
-//import java.util.Date;
 //import java.util.List;
 //
 //import static com.project.sangil_be.model.QBookMark.*;
-//import static com.project.sangil_be.model.QFeed.*;
+//import static com.project.sangil_be.model.QFeed.feed;
+//import static com.project.sangil_be.model.QGood.good;
 //import static com.project.sangil_be.model.QMountain.mountain1;
 //import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 //import static com.project.sangil_be.model.QParty.*;
@@ -42,10 +40,14 @@
 //class MountainServiceTest {
 //
 //    private final MountainRepository mountainRepository;
+//    private final MountainCommentRepository mountainCommentRepository;
+//    private final BookMarkRepository bookMarkRepository;
 //
 //    @Autowired
-//    MountainServiceTest(MountainRepository mountainRepository) {
+//    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository) {
 //        this.mountainRepository = mountainRepository;
+//        this.mountainCommentRepository = mountainCommentRepository;
+//        this.bookMarkRepository = bookMarkRepository;
 //    }
 //
 //    @Autowired
@@ -194,4 +196,68 @@
 //        long total = results.getTotal();
 //        System.out.println(total);
 //    }
+//
+//    @Test
+//    void nearByMountain() {
+//        double lat = 36.7683406;
+//        double lng = 126.4457861;
+//        double distance = 7; // km 단위 // 대략 반경 5km 이내의 주변 산
+//
+//        Location northEast = GeometryUtil.calculate(lat, lng, distance, Direction.NORTHEAST.getBearing());
+//        Location southWest = GeometryUtil.calculate(lat, lng, distance, Direction.SOUTHWEST.getBearing());
+//
+//        double x1 = northEast.getLat();
+//        double y1 = northEast.getLng();
+//        double x2 = southWest.getLat();
+//        double y2 = southWest.getLng();
+//
+//        QueryResults<NearbyMountainListDto> results = queryFactory
+//                .select(Projections.constructor(NearbyMountainListDto.class,
+//                        mountain1.mountainId,
+//                        mountain1.mountain,
+//                        mountain1.mountainImgUrl,
+//                        mountain1.mountainAddress,
+//                        mountainComment1.star.avg().as("starAvr")))
+//                .from(mountain1)
+//                .leftJoin(mountainComment1).on(mountainComment1.mountainId.eq(mountain1.mountainId))
+//                .where(mountain1.lat.between(x2, x1).and(mountain1.lng.between(y2, y1)))
+//                .groupBy(mountain1.mountainId)
+//                .offset(0)
+//                .limit(7)
+//                .fetchResults();
+//
+//        List<NearbyMountainListDto> content = results.getResults();
+//        for (NearbyMountainListDto nearbyMountainListDto : content) {
+//            System.out.println("nearbyMountainListDto.getMountainName() = " + nearbyMountainListDto.getMountainName());
+//        }
+//    }
+//
+////    @Test
+////    void mainfeed() {
+////        Long userId = 1L;
+////        QueryResults<FeedResponseDto> results = queryFactory
+////                .select(Projections.constructor(FeedResponseDto.class,
+////                        feed.user.userId,
+////                        feed.feedId,
+////                        feed.user.nickname,
+////                        feed.user.userTitle,
+////                        feed.user.userImgUrl,
+////                        feed.feedImgUrl,
+////                        feed.feedContent,
+////                        feed.createdAt,
+////                        good.count(),
+////                        JPAExpressions.selectOne().from(good).where(good.userId.eq(userId)).fetchAll().exists()).as("goodStatus"))
+////                .from(feed)
+////                .leftJoin(good).on(feed.feedId.eq(good.feedId))
+////                .where(good.feedId.eq(feed.feedId))
+////                .orderBy(feed.createdAt.desc())
+////                .limit(7)
+////                .fetchResults();
+////
+////        List<FeedResponseDto> content = results.getResults();
+////        for (FeedResponseDto feedResponseDto : content) {
+////            System.out.println("feedResponseDto.getGoodCnt() = " + feedResponseDto.getGoodCnt());
+////        }
+////
+////    }
 //}

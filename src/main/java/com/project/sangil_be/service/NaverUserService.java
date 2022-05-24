@@ -111,7 +111,6 @@ public class NaverUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        System.out.println(jsonNode);
 
 
         String socialId = String.valueOf(jsonNode.get("response").get("id").asText());

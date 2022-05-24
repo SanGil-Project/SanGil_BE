@@ -35,10 +35,10 @@ public class MainController {
         return mainService.get10Mountains(userDetails);
     }
 
-    // 메인 페이지 피드 15개
+    // 메인 페이지 피드 7개
     @GetMapping("/api/main/feeds/{pageNum}")
-    public FeedListResponseDto mainfeeds (@PathVariable("pageNum")int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return mainService.mainfeeds(pageNum-1,userDetails);
+    public FeedListResponseDto mainfeeds (@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return mainService.mainfeeds(userDetails);
     }
 
     // 자기 주변 산

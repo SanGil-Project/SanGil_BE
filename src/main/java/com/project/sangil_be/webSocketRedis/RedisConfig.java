@@ -1,4 +1,4 @@
-package com.project.sangil_be.webSocket;
+package com.project.sangil_be.webSocketRedis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

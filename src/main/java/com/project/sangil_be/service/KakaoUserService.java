@@ -71,6 +71,7 @@ public class KakaoUserService {
         body.add("client_id", "7e0e932177f25c237ca90728893d9a21"); // 리액트
 //        body.add("redirect_uri", "https://yesleee.shop/user/kakao/callback"); // 리액트
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
+//        body.add("redirect_uri", "https://xn--wk0b636a.com/user/kakao/callback"); // 리액트
         body.add("code", code);
 
         // HTTP 요청 보내기

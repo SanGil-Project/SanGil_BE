@@ -1,7 +1,6 @@
-package com.project.sangil_be.webSocket;
+package com.project.sangil_be.webSocketRedis;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
