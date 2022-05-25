@@ -2,18 +2,12 @@
 //
 //import com.project.sangil_be.dto.*;
 //import com.project.sangil_be.model.*;
-//import com.project.sangil_be.repository.BookMarkRepository;
-//import com.project.sangil_be.repository.MountainCommentRepository;
-//import com.project.sangil_be.repository.MountainRepository;
+//import com.project.sangil_be.repository.*;
 //import com.project.sangil_be.utils.Direction;
-//import com.project.sangil_be.utils.DistanceToUser;
 //import com.project.sangil_be.utils.GeometryUtil;
 //import com.project.sangil_be.utils.Location;
 //import com.querydsl.core.QueryResults;
-//import com.querydsl.core.types.ExpressionUtils;
 //import com.querydsl.core.types.Projections;
-//import com.querydsl.jpa.JPAExpressions;
-//import com.querydsl.jpa.impl.JPAQuery;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
@@ -25,11 +19,10 @@
 //import java.text.ParseException;
 //import java.time.LocalDate;
 //import java.util.ArrayList;
+//import java.util.HashMap;
 //import java.util.List;
 //
 //import static com.project.sangil_be.model.QBookMark.*;
-//import static com.project.sangil_be.model.QFeed.feed;
-//import static com.project.sangil_be.model.QGood.good;
 //import static com.project.sangil_be.model.QMountain.mountain1;
 //import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 //import static com.project.sangil_be.model.QParty.*;
@@ -42,12 +35,20 @@
 //    private final MountainRepository mountainRepository;
 //    private final MountainCommentRepository mountainCommentRepository;
 //    private final BookMarkRepository bookMarkRepository;
+//    private final TitleService titleService;
+//    private final GetTitleRepository getTitleRepository;
+//    private final UserTitleRepository userTitleRepository;
+//    private final UserRepository userRepository;
 //
 //    @Autowired
-//    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository) {
+//    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository, TitleService titleService, GetTitleRepository getTitleRepository, UserTitleRepository userTitleRepository, UserRepository userRepository) {
 //        this.mountainRepository = mountainRepository;
 //        this.mountainCommentRepository = mountainCommentRepository;
 //        this.bookMarkRepository = bookMarkRepository;
+//        this.titleService = titleService;
+//        this.getTitleRepository = getTitleRepository;
+//        this.userTitleRepository = userTitleRepository;
+//        this.userRepository = userRepository;
 //    }
 //
 //    @Autowired
@@ -260,4 +261,45 @@
 ////        }
 ////
 ////    }
+//
+//    @Test
+//    void title() {
+//        User user = userRepository.findByUserId(1L);
+//        List<TitleDto> titleDtoList = titleService.getAllTitle(user);
+//        List<UserTitle> userTitles = userTitleRepository.findAll();
+//        List<GetTitle> getTitles = getTitleRepository.findAllByUser(user);
+//
+//        HashMap<String, Boolean> title = new HashMap<>();
+//
+//
+//        for (int i = 0; i < userTitles.size(); i++) {
+//            title.put(userTitles.get(i).getUserTitle(), false);
+//            for (int j = 0; j < getTitles.size(); j++) {
+//                if (userTitles.get(i).getUserTitle().equals(getTitles.get(j).getUserTitle())) {
+//                    title.replace(userTitles.get(i).getUserTitle(), false, true);
+//                }
+//            }
+//        }
+//        List<UserTitleDto> userTitleDtos = new ArrayList<>();
+//        for (String s : title.keySet()) {
+//            UserTitle userTitle = userTitleRepository.findByUserTitle(s);
+//            if (title.get(s) == true) {
+//                if (s.equals(user.getUserTitle())) {
+//                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getCTitleImgUrl(), title.get(userTitle.getUserTitle()));
+//                    userTitleDtos.add(userTitleDto);
+//                } else {
+//                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getBTitleImgUrl(), title.get(userTitle.getUserTitle()));
+//                    userTitleDtos.add(userTitleDto);
+//                }
+//            } else {
+//                UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getQTitleImgUrl(), title.get(userTitle.getUserTitle()));
+//                userTitleDtos.add(userTitleDto);
+//            }
+//        }
+//        System.out.println(userTitleDtos.size());
+//
+//
+////        UserTitleResponseDto userTitleResponseDto = new UserTitleResponseDto(userTitleDtos, titleDtoList);
+//
+//    }
 //}

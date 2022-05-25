@@ -133,9 +133,10 @@ public class MypageService {
 
     // 칭호 리스트
     public UserTitleResponseDto getUserTitle(UserDetailsImpl userDetails) {
-        List<TitleDto> titleDtoList = titleService.getAllTitle(userDetails);
+        List<TitleDto> titleDtoList = titleService.getAllTitle(userDetails.getUser());
         List<UserTitle> userTitles = userTitleRepository.findAll();
         List<GetTitle> getTitles = getTitleRepository.findAllByUser(userDetails.getUser());
+
         HashMap<String, Boolean> title = new HashMap<>();
         for (int i = 0; i < userTitles.size(); i++) {
             title.put(userTitles.get(i).getUserTitle(), false);
@@ -147,32 +148,33 @@ public class MypageService {
         }
 
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
-        for (int i = 0; i < userTitles.size(); i++) {
-
-            if(title.get(userTitles.get(i).getUserTitle()) == true){
-
-                if(getTitles.get(i).getUserTitle().equals(userTitles.get(i).getUserTitle())){
-                    UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getCTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+        for (String s : title.keySet()) {
+            UserTitle userTitle = userTitleRepository.findByUserTitle(s);
+            if (title.get(s) == true) {
+                if (s.equals(userDetails.getUser().getUserTitle())) {
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getCTitleImgUrl(), title.get(userTitle.getUserTitle()));
                     userTitleDtos.add(userTitleDto);
                 } else {
-                    UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getBTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getBTitleImgUrl(), title.get(userTitle.getUserTitle()));
                     userTitleDtos.add(userTitleDto);
                 }
-
             } else {
-                UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), userTitles.get(i).getQTitleImgUrl(), title.get(userTitles.get(i).getUserTitle()));
+                UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getQTitleImgUrl(), title.get(userTitle.getUserTitle()));
                 userTitleDtos.add(userTitleDto);
             }
         }
+
         return new UserTitleResponseDto(userTitleDtos, titleDtoList);
     }
 
     // 칭호 변경
     @Transactional
     public ChangeTitleDto putUserTitle(ChangeTitleRequestDto requestDto, UserDetailsImpl userDetails) {
+        UserTitle userTitle2 = userTitleRepository.findByUserTitle(userDetails.getUser().getUserTitle());
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        user.update(requestDto);
-        return new ChangeTitleDto(userDetails, requestDto);
+        UserTitle userTitle = userTitleRepository.findByUserTitle(requestDto.getUserTitle());
+        user.update(userTitle);
+        return new ChangeTitleDto(userDetails,userTitle,userTitle2);
     }
 
     // 마이페이지 피드 10개

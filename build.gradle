@@ -68,11 +68,11 @@ dependencies {
     //embedded-redis
 //    compileOnly group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+//    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
     //sentry
-    implementation 'io.sentry:sentry-spring-boot-starter:5.7.4'
-    implementation 'io.sentry:sentry-logback:5.7.4'
+//    implementation 'io.sentry:sentry-spring-boot-starter:5.7.4'
+//    implementation 'io.sentry:sentry-logback:5.7.4'
 }
 
 tasks.named('test') {
