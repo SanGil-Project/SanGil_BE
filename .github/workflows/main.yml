@@ -36,7 +36,7 @@ jobs:
         shell: bash
         
       - name: Make zip file
-        run: zip -r ./CI-CD.zip .
+        run: zip -r ./sangil.zip .
         shell: bash
 
       - name: Configure AWS credentials
