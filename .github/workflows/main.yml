@@ -3,9 +3,9 @@
 name: develop CI-CD
 on:
   push:
-    branches: [ release ]
+    branches: [ develop ]
   pull_request:
-    branches: [ release ]
+    branches: [ develop ]
 
 permissions:
   contents: read
