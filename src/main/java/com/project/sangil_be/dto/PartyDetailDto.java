@@ -25,9 +25,10 @@ public class PartyDetailDto {
     private int maxPeople;
     private int curPeople;
     private LocalDateTime createdAt;
+    private String beforeTime;
     private List<PartymemberDto> partymemberDto;
 
-    public PartyDetailDto(Party party, List<PartymemberDto> partymemberDto) {
+    public PartyDetailDto(Party party, List<PartymemberDto> partymemberDto, String beforeTime) {
         this.partyId = party.getPartyId();
         this.nickname = party.getUser().getNickname();
         this.userImgUrl = party.getUser().getUserImgUrl();
@@ -41,6 +42,7 @@ public class PartyDetailDto {
         this.maxPeople = party.getMaxPeople();
         this.curPeople = party.getCurPeople();
         this.createdAt = party.getCreatedAt();
+        this.beforeTime = beforeTime;
         this.partymemberDto = partymemberDto;
     }
 

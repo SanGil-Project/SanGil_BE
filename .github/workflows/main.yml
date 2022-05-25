@@ -1,15 +1,18 @@
-name: CI
+# CI-CD Test
 
+name: CI-CD Test
 on:
-  workflow_dispatch:
-#  push:
-#    branches: [ develop ]
-#  pull_request:
-#    branches: [ develop ]
+  push:
+    branches: [ release ]
+  pull_request:
+    branches: [ release ]
 
-env:
-  S3_BUCKET_NAME: jsj-bucket
-#  PROJECT_NAME: cicd-test
+permissions:
+  contents: read
+  
+env: # 새로 추가한 부분
+  S3_BUCKET_NAME: eyetravel
+  PROJECT_NAME: SanGil
 
 jobs:
   build:
@@ -17,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
@@ -31,9 +34,9 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
-
+        
       - name: Make zip file
-        run: zip -r ./$cicd-test.zip .
+        run: zip -r ./CI-CD.zip .
         shell: bash
 
       - name: Configure AWS credentials
@@ -44,6 +47,17 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$cicd-test.zip
+        run: aws s3 cp --region ap-northeast-2 ./CI-CD.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/CI-CD.zip
 
-
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name CI-CD --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name CI-CD --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/CI-CD.zip
+      
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{job.status}}
+          fields: repo, ref, workflow, message, author
+          author_name: Github Actions
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()

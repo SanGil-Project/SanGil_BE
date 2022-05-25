@@ -5,6 +5,7 @@ import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Calculator;
 import com.project.sangil_be.utils.DistanceToUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,7 @@ public class MypageService {
     private final TitleService titleService;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
+    private final Calculator calculator;
 
     // 맵트래킹 마이페이지
     public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
@@ -182,12 +186,13 @@ public class MypageService {
         List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         if (feedList.size() < 10) {
-            for (int i = 0; i < feedList.size(); i++) {
-                int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
-                boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
-                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
-                feedResponseDtos.add(feedResponseDto);
-            }
+          for (int i = 0; i < 10; i++) {
+              int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+              boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+              long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
+              FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
+              feedResponseDtos.add(feedResponseDto);
+          }
             return feedResponseDtos;
         } else {
             for (int i = 0; i < 10; i++) {

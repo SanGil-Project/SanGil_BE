@@ -4,6 +4,7 @@ import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Calculator;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class PartyService {
     private final AttendRepository attendRepository;
     private final Validator validator;
     private final TitleService titleService;
+    private final Calculator calculator;
 
     // 등산 모임 참가 작성
     @Transactional
@@ -54,16 +58,19 @@ public class PartyService {
         int start = pageNum * 6;
         int end = Math.min((start + 6), partyList.size());
 
+
         return validator.overPagesParty(partyListDto, start, end, pageable, pageNum);
     }
 
     private void setPartyList(List<Party> partyList, List<PartyListDto> partyListDto) {
         for (Party party : partyList) {
             boolean completed = true;
+
             if (party.getMaxPeople() <= party.getCurPeople()) {
                 completed = false;
             }
-            PartyListDto partyDto = new PartyListDto(party, completed);
+            long beforeTime = ChronoUnit.MINUTES.between(party.getCreatedAt(), LocalDateTime.now());
+            PartyListDto partyDto = new PartyListDto(party, completed, calculator.time(beforeTime));
             partyListDto.add(partyDto);
         }
     }
@@ -88,8 +95,9 @@ public class PartyService {
             User user = userRepository.findByUserId(attends.getUserId());
             partymemberDto.add(new PartymemberDto(user));
         }
+        long beforeTime = ChronoUnit.MINUTES.between(party.getCreatedAt(), LocalDateTime.now());
 
-        return new PartyDetailDto(party, partymemberDto);
+        return new PartyDetailDto(party, partymemberDto, calculator.time(beforeTime));
     }
 
     // api에 맞게 수정 필요

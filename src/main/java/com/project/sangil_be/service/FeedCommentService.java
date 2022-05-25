@@ -20,6 +20,8 @@ public class FeedCommentService {
     private final FeedCommentRepository feedCommentRepository;
     private final FeedRepository feedRepository;
 
+    // createdAt 수정
+    // 댓글 작성
     public FeedCommentResDto writeComment(Long feedId, FeedCommentReqDto feedCommentReqDto, UserDetailsImpl userDetails) {
         Feed feed = feedRepository.findByFeedId(feedId);
         FeedComment feedComment = new FeedComment(feedCommentReqDto,feed,userDetails.getUser());
@@ -27,15 +29,18 @@ public class FeedCommentService {
         return new FeedCommentResDto(feedComment);
     }
 
+    // 댓글 수정
     @Transactional
     public void updateComment(Long feedCommentId, FeedCommentReqDto feedCommentReqDto, UserDetailsImpl userDetails) {
         FeedComment feedComment = feedCommentRepository.findByFeedCommentId(feedCommentId);
         feedComment.update(feedCommentReqDto,userDetails);
     }
 
+    // 댓글 삭제
     public void deleteComment(Long feedCommentId) {
         feedCommentRepository.deleteByFeedCommentId(feedCommentId);
     }
+
 
 //    // 댓글 상세 페이지
 //    public FeedCommentListDto detailComment(Long feedId, UserDetailsImpl userDetails, int pageNum) {
@@ -53,7 +58,7 @@ public class FeedCommentService {
 //        Page<CommentResponseDto> page = new PageImpl<>(commentResponseDtos.subList(start, end), pageable, commentResponseDtos.size());
 //        return new FeedCommentListDto(page);
 //    }
-//
+
 //    private Pageable getPageable(int pageNum) {
 //        Sort.Direction direction = Sort.Direction.DESC;
 //        Sort sort = Sort.by(direction, "id");
