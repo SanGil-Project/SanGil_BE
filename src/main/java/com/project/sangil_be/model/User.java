@@ -1,6 +1,5 @@
 package com.project.sangil_be.model;
 
-import com.project.sangil_be.dto.ChangeTitleRequestDto;
 import com.project.sangil_be.dto.UsernameRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,8 +64,9 @@ public class User {
         this.userImgUrl = profileImageUrl;
     }
 
-    public void update(ChangeTitleRequestDto requestDto) {
-        this.userTitle= requestDto.getUserTitle();
+    public void update(UserTitle userTitle) {
+        this.userTitle= userTitle.getUserTitle();
+        this.userTitleImgUrl = userTitle.getCTitleImgUrl();
     }
 
     public void editname(UsernameRequestDto usernameRequestDto) {

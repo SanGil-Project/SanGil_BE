@@ -88,17 +88,17 @@ public class TitleService {
         return titleDtoList;
     }
 
-    public List<TitleDto> getAllTitle(UserDetailsImpl userDetails) {
+    public List<TitleDto> getAllTitle(User user) {
         List<TitleDto> titleDtoList = new ArrayList<>();
         String userTitle;
         String userTitleImgUrl;
-        int cnt = getTitleRepository.countAllByUser(userDetails.getUser());
-        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가~~!! 등!!신!!!").isPresent()) {
+        int cnt = getTitleRepository.countAllByUser(user);
+        if (getTitleRepository.findByUserAndUserTitle(user, "내가~~!! 등!!신!!!").isPresent()) {
             System.out.println("내가~~!! 등!!신!!! 보유중");
         } else if (cnt == 19) {
             userTitle = "내가~~!! 등!!신!!!";
             userTitleImgUrl = "https://i.esdrop.com/d/f/JdarL6WQ6C/Xgj8xW63TZ.png";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
+            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, user);
             getTitleRepository.save(getTitle);
             titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
         }
