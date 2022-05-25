@@ -22,9 +22,10 @@ public class PartyListDto {
     private int curPeople;
     private boolean completed;
     private LocalDateTime createdAt;
+    private String beforeTime;
     private List<TitleDto> titleDtoList;
 
-    public PartyListDto(Party party, boolean completed) {
+    public PartyListDto(Party party, boolean completed, String beforeTime) {
         this.partyId = party.getPartyId();
         this.nickname = party.getUser().getNickname();
         this.title = party.getTitle();
@@ -37,6 +38,7 @@ public class PartyListDto {
         this.curPeople = party.getCurPeople();
         this.completed = completed;
         this.createdAt = party.getCreatedAt();
+        this.beforeTime = beforeTime;
     }
 
     public PartyListDto(Party party, boolean completed, List<TitleDto> titleDtoList) {
