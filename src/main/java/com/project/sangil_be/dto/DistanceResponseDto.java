@@ -8,6 +8,4 @@ import lombok.Setter;
 public class DistanceResponseDto {
     private Double distanceM;
     private Double distanceK;
-
-
 }

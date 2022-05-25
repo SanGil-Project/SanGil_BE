@@ -51,8 +51,8 @@ public class TrackingService {
             saveTracking.setDistanceM(distanceM);
             saveTracking.setDistanceK(distanceK);
             trackingRepository.save(saveTracking);
-            distanceResponseDto.setDistanceK(Math.round(distanceK * 100) / 100.0);
-            distanceResponseDto.setDistanceM(Math.round(distanceM * 100) / 100.0);
+            distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
+            distanceResponseDto.setDistanceM(distanceM);
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
@@ -63,8 +63,8 @@ public class TrackingService {
                 saveTracking.setDistanceM(distanceM);
                 saveTracking.setDistanceK(distanceK);
                 trackingRepository.save(saveTracking);
-                distanceResponseDto.setDistanceK(Math.round(distanceK * 100) / 100.0);
-                distanceResponseDto.setDistanceM(Math.round(distanceM * 100) / 100.0);
+                distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
+                distanceResponseDto.setDistanceM(distanceM);
             }
         }
         return distanceResponseDto;

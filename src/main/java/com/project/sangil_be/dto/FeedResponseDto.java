@@ -21,11 +21,12 @@ public class FeedResponseDto {
     private String feedImgUrl;
     private String feedContent;
     private LocalDateTime createdAt;
-    private int goodCnt;
-    private boolean goodStatus;
+    private Integer goodCnt;
+    private Boolean goodStatus;
     private Long commentCnt;
     private List<FeedCommentResDto> feedCommentResDtos;
     private List<TitleDto> titleDtoList;
+    private String beforeTime;
 
     public FeedResponseDto(User user, Feed feed, int goodCnt, boolean goodStatus,List<TitleDto> titleDtoList ) {
         this.userId = user.getUserId();
@@ -41,7 +42,7 @@ public class FeedResponseDto {
         this.titleDtoList=titleDtoList;
     }
 
-    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus) {
+    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, String beforeTime) {
         this.userId = feed.getUser().getUserId();
         this.feedId = feed.getFeedId();
         this.nickname = feed.getUser().getNickname();
@@ -51,7 +52,8 @@ public class FeedResponseDto {
         this.feedContent = feed.getFeedContent();
         this.createdAt = feed.getCreatedAt();
         this.goodCnt = goodCnt;
-        this. goodStatus = goodStatus;
+        this.goodStatus = goodStatus;
+        this.beforeTime = beforeTime;
     }
 
 
@@ -69,4 +71,5 @@ public class FeedResponseDto {
         this.commentCnt = commentCnt;
         this.feedCommentResDtos = feedCommentResDtos;
     }
+
 }

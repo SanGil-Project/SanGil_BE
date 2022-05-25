@@ -1,9 +1,6 @@
 package com.project.sangil_be.service;
 
-import com.project.sangil_be.utils.Direction;
-import com.project.sangil_be.utils.DistanceToUser;
-import com.project.sangil_be.utils.GeometryUtil;
-import com.project.sangil_be.utils.Location;
+import com.project.sangil_be.utils.*;
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
@@ -14,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class MainService {
     private final GoodRepository goodRepository;
     private final TitleService titleService;
     private final MountainCommentRepository mountainCommentRepository;
+    private final Calculator calculator;
 
     // 메인/마이페이지 예정된 등산 모임 임박한 순
     @Transactional
@@ -101,23 +101,25 @@ public class MainService {
             for (int i = 0; i < feed.size(); i++) {
                 boolean goodStatus;
                 int goodCnt = goodRepository.findByFeedId(feed.get(i).getFeedId()).size();
+                long beforeTime = ChronoUnit.MINUTES.between(feed.get(i).getCreatedAt(), LocalDateTime.now());
                 try {
                     goodStatus = goodRepository.existsByFeedIdAndUserId(feed.get(i).getFeedId(), userDetails.getUser().getUserId());
                 } catch (Exception e) {
                     goodStatus = false;
                 }
-                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus));
+                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus,calculator.time(beforeTime)));
             }
         } else {
             for (int i = 0; i < 7; i++) {
                 boolean goodStatus;
                 int goodCnt = goodRepository.findByFeedId(feed.get(i).getFeedId()).size();
+                long beforeTime = ChronoUnit.MINUTES.between(feed.get(i).getCreatedAt(), LocalDateTime.now());
                 try {
                     goodStatus = goodRepository.existsByFeedIdAndUserId(feed.get(i).getFeedId(), userDetails.getUser().getUserId());
                 } catch (Exception e) {
                     goodStatus = false;
                 }
-                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus));
+                feedResponseDtos.add(new FeedResponseDto(feed.get(i), goodCnt, goodStatus, calculator.time(beforeTime)));
             }
         }
 

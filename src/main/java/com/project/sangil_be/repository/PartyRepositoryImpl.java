@@ -23,7 +23,7 @@ public class PartyRepositoryImpl implements PartyRepositoryCustom {
                 .select(Projections.constructor(PartyListDto.class,
                         party.partyId,
                         party.user.nickname,
-                        party.user.userTitle,
+                        party.title,
                         party.mountain,
                         party.address,
                         party.partyDate,

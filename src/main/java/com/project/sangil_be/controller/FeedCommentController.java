@@ -37,12 +37,12 @@ public class FeedCommentController {
         feedCommentService.deleteComment(feedCommentId);
     }
 
-    // 댓글 상세 페이지
-    @GetMapping("/feeds/comment/{feedId}/{pageNum}")
-    public FeedCommentListDto detailComment(@PathVariable Long feedId,
-                                            @PathVariable("pageNum") int pageNum,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return feedCommentService.detailComment(feedId,userDetails,pageNum-1);
-    }
+//    // 댓글 상세 페이지
+//    @GetMapping("/feeds/comment/{feedId}/{pageNum}")
+//    public FeedCommentListDto detailComment(@PathVariable Long feedId,
+//                                            @PathVariable("pageNum") int pageNum,
+//                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return feedCommentService.detailComment(feedId,userDetails,pageNum-1);
+//    }
 
 }
