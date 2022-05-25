@@ -41,9 +41,13 @@ public class MypageService {
         List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<CompletedListDto> completedListDtos = new ArrayList<>();
         for (Completed complete : completed) {
-            Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
-            CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
-            completedListDtos.add(completedListDto);
+            if(complete.getTotalDistance() == 0) {
+                System.out.println("등산내용 저장 안됨");
+            }else {
+                Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
+                CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
+                completedListDtos.add(completedListDto);
+            }
         }
         return completedListDtos;
     }

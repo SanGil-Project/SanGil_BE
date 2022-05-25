@@ -21,4 +21,13 @@ public class FeedCommentResDto {
         this.userImageUrl = feedComment.getUser().getUserImgUrl();
     }
 
+    public FeedCommentResDto(FeedComment feedComment, String beforeTime) {
+        this.feedCommentId = feedComment.getFeedCommentId();
+        this.userId = feedComment.getUser().getUserId();
+        this.nickname = feedComment.getUser().getNickname();
+        this.userTitle = feedComment.getUser().getUserTitle();
+        this.userImageUrl = feedComment.getUser().getUserImgUrl();
+        this.beforeTime = beforeTime;
+    }
+
 }
