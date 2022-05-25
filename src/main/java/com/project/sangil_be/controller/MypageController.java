@@ -17,50 +17,56 @@ public class MypageController {
     private final MypageService mypageService;
 
     // 맵트래킹 마이페이지
-    @GetMapping("/api/mypages/tracking")
+    @GetMapping("/api/mypage/tracking")
     public List<CompletedListDto> myPageTracking(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.myPageTracking(userDetails);
     }
 
     // 맵트래킹 마이페이지 산 선택
-    @GetMapping("/api/mypages/tracking/{mountainId}")
+    @GetMapping("/api/mypage/tracking/{mountainId}")
     public List<CompletedMountainDto> selectMountain(@PathVariable Long mountainId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.selectMountain(mountainId,userDetails);
     }
 
     // 닉네임 중복체크
-    @PostMapping("/api/mypages/usernameCheck")
+    @PostMapping("/api/mypage/usernameCheck")
     public String usernameCheck (@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.usernameCheck(usernameRequestDto,userDetails);
     }
 
     // nickname 수정
-    @PutMapping("/api/mypages/profilename")
+    @PutMapping("/api/mypage/profilename")
     public UserResponseDto editname(@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return mypageService.editname(usernameRequestDto, userDetails);
     }
 
     // userimageUrl 수정
-    @PutMapping("/api/mypages/profileUrl")
+    @PutMapping("/api/mypage/profileUrl")
     public void editimage(@RequestParam("file") MultipartFile multipartFile, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         mypageService.editimage(multipartFile, user);
     }
 
     // 마이페이지 즐겨찾기한 산
-    @GetMapping("/api/mypages/bookmark")
-    public List<BookMarkResponseDto> getBookMarkMountain (@RequestParam double lat, @RequestParam double lng, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mypageService.getBookMarkMountain(lat,lng,userDetails);
+    @GetMapping("/api/mypage/bookmark/{pageNum}")
+    public BookMarkDto getBookMarkMountain (@PathVariable int pageNum, @RequestParam double lat, @RequestParam double lng, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getBookMarkMountain(lat,lng,userDetails,pageNum-1);
+    }
+
+    // 마이페이지 피드 10개
+    @GetMapping("/mypage/myfeeds")
+    public List<FeedResponseDto> myFeeds (@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return mypageService.myFeeds(userDetails);
     }
 
     // 칭호 리스트
-    @GetMapping("/api/mypages/userTitle")
+    @GetMapping("/api/mypage/userTitle")
     public UserTitleResponseDto getUserTitle(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getUserTitle(userDetails);
     }
 
     // 칭호 변경
-    @PutMapping("/api/mypages/userTitle")
+    @PutMapping("/api/mypage/userTitle")
     public ChangeTitleDto putUserTitle(@RequestBody ChangeTitleRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.putUserTitle(requestDto, userDetails);
     }

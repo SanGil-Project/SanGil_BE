@@ -1,8 +1,10 @@
 package com.project.sangil_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.sangil_be.dto.*;
-import com.project.sangil_be.model.User;
+import com.project.sangil_be.dto.ResponseDto;
+import com.project.sangil_be.dto.SignUpRequestDto;
+import com.project.sangil_be.dto.SocialLoginDto;
+import com.project.sangil_be.dto.UserResponseDto;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.service.GoogleUserService;
 import com.project.sangil_be.service.KakaoUserService;
@@ -11,10 +13,8 @@ import com.project.sangil_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +31,6 @@ public class UserController {
             @RequestParam String code,
             HttpServletResponse response
     ) throws JsonProcessingException {
-        System.out.println(code);
         return kakaoUserService.kakaoLogin(code, response);
     }
 

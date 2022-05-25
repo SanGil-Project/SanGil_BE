@@ -17,7 +17,7 @@
 //                .allowedMethods("*")
 //                .allowedHeaders("*")
 //                .exposedHeaders(HttpHeaders.AUTHORIZATION)
-////                .allowCredentials(true)
+////              .allowCredentials(true)
 //                .allowCredentials(false)
 //                .maxAge(this.MAX_AGE_SECS);
 //    }

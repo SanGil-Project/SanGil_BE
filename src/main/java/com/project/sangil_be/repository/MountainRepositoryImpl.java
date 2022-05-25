@@ -1,5 +1,6 @@
 package com.project.sangil_be.repository;
 
+import com.project.sangil_be.dto.NearbyMountainListDto;
 import com.project.sangil_be.dto.SearchDto;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -39,9 +40,29 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
                 .fetchResults();
 
         List<SearchDto> content = results.getResults();
-
         long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
 
+    @Override
+    public Page<NearbyMountainListDto> nearByMountain(double x1, double x2, double y1, double y2, Pageable pageable) {
+        QueryResults<NearbyMountainListDto> results = queryFactory
+                .select(Projections.constructor(NearbyMountainListDto.class,
+                        mountain1.mountainId,
+                        mountain1.mountain,
+                        mountain1.mountainImgUrl,
+                        mountain1.mountainAddress,
+                        mountainComment1.star.avg().as("starAvr")))
+                .from(mountain1)
+                .leftJoin(mountainComment1).on(mountainComment1.mountainId.eq(mountain1.mountainId))
+                .where(mountain1.lat.between(x2, x1).and(mountain1.lng.between(y2, y1)))
+                .groupBy(mountain1.mountainId)
+                .offset(0)
+                .limit(7)
+                .fetchResults();
+
+        List<NearbyMountainListDto> content = results.getResults();
+        long total = results.getTotal();
         return new PageImpl<>(content, pageable, total);
     }
 

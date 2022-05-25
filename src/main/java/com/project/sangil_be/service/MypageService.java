@@ -5,12 +5,17 @@ import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Calculator;
 import com.project.sangil_be.utils.DistanceToUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +31,23 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final S3Service s3Service;
+    private final TitleService titleService;
+    private final FeedRepository feedRepository;
+    private final GoodRepository goodRepository;
+    private final Calculator calculator;
 
     // 맵트래킹 마이페이지
     public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
         List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<CompletedListDto> completedListDtos = new ArrayList<>();
         for (Completed complete : completed) {
-            Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
-            CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
-            completedListDtos.add(completedListDto);
+            if(complete.getTotalDistance() == 0) {
+                System.out.println("등산내용 저장 안됨");
+            }else {
+                Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
+                CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
+                completedListDtos.add(completedListDto);
+            }
         }
         return completedListDtos;
     }
@@ -81,59 +94,57 @@ public class MypageService {
         userRepository.save(user);
     }
 
-    //유저가 즐겨찾기한 산 가져오는 즐겨찾기
-    @Transactional
-    public List<BookMarkResponseDto> getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails) {
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
-        List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
-
-
-        for (BookMark bookMark : bookMarkList) {
-            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMark.getMountainId(),
-                    userDetails.getUser().getUserId());
-            Mountain mountain = mountainRepository.findById(bookMark.getMountainId()).orElseThrow(
-                    () -> new IllegalArgumentException("해당하는 산이 없습니다.")
-            );
-
-            //유저와 즐겨찾기한 산과의 거리 계산
-            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),
-                    mountain.getLng(), "kilometer");
-
-            int star = 0;
-            Double starAvr = 0d;
-
-            for (int i = 0; i < 10; i++) {
-                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
-                if (mountainComments.size() == 0) {
-                    starAvr = 0d;
-                } else {
-                    star += mountainComments.get(i).getStar();
-                    starAvr = (double) star / mountainComments.size();
-                }
-            }
-            bookMarkResponseDtos.add(new BookMarkResponseDto(mountain, bookMarkChk, starAvr, distance));
+    // 쿼리 페이지처리
+    // 유저가 즐겨찾기한 산 가져오는 즐겨찾기
+    public BookMarkDto getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 6);
+        Page<BookMarkResponseDto> bookMarkResponseDtos = bookMarkRepository.bookMarkMountain(userDetails.getUser().getUserId(), pageRequest);
+        for (BookMarkResponseDto bookMarkResponseDto : bookMarkResponseDtos) {
+            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMarkResponseDto.getMountainId(), userDetails.getUser().getUserId());
+            Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
+            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
+            bookMarkResponseDto.setBookMarkChk(bookMarkChk);
+            bookMarkResponseDto.setDistance(Math.round(distance * 100) / 100.0);
         }
-        return bookMarkResponseDtos;
+        return new BookMarkDto(bookMarkResponseDtos);
     }
+
+//        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
+//        List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
+//
+//        for (BookMark bookMark : bookMarkList) {
+//            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMark.getMountainId(),
+//                    userDetails.getUser().getUserId());
+//            Mountain mountain = mountainRepository.findById(bookMark.getMountainId()).orElseThrow(
+//                    () -> new IllegalArgumentException("해당하는 산이 없습니다.")
+//            );
+//
+//            //유저와 즐겨찾기한 산과의 거리 계산
+//            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),
+//                    mountain.getLng(), "kilometer");
+//
+//            int star = 0;
+//            Double starAvr = 0d;
+//            for (int i = 0; i < 10; i++) {
+//                List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(bookMark.getMountainId());
+//                if (mountainComments.size() == 0) {
+//                    starAvr = 0d;
+//                } else {
+//                    star += mountainComments.get(i).getStar();
+//                    starAvr = (double) star / mountainComments.size();
+//                }
+//            }
+//            bookMarkResponseDtos.add(new BookMarkResponseDto(mountain, bookMarkChk, starAvr, distance));
+//        }
+//        return bookMarkResponseDtos;
+//    }
 
     // 칭호 리스트
     public UserTitleResponseDto getUserTitle(UserDetailsImpl userDetails) {
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        String userTitle;
-        String userTitleImgUrl;
-        int cnt = getTitleRepository.countAllByUser(userDetails.getUser());
-        if (getTitleRepository.findByUserAndUserTitle(userDetails.getUser(), "내가~~!! 등!!신!!!").isPresent()) {
-            System.out.println("패스");
-        } else if (cnt == 19) {
-            userTitle = "내가~~!! 등!!신!!!";
-            userTitleImgUrl = "";
-            GetTitle getTitle = new GetTitle(userTitle, userTitleImgUrl, userDetails.getUser());
-            getTitleRepository.save(getTitle);
-            titleDtoList.add(new TitleDto(userTitle, userTitleImgUrl));
-        }
-
+        List<TitleDto> titleDtoList = titleService.getAllTitle(userDetails.getUser());
         List<UserTitle> userTitles = userTitleRepository.findAll();
         List<GetTitle> getTitles = getTitleRepository.findAllByUser(userDetails.getUser());
+
         HashMap<String, Boolean> title = new HashMap<>();
         for (int i = 0; i < userTitles.size(); i++) {
             title.put(userTitles.get(i).getUserTitle(), false);
@@ -145,19 +156,60 @@ public class MypageService {
         }
 
         List<UserTitleDto> userTitleDtos = new ArrayList<>();
-        for (int i = 0; i < userTitles.size(); i++) {
-            UserTitleDto userTitleDto = new UserTitleDto(userTitles.get(i), title.get(userTitles.get(i).getUserTitle()));
-            userTitleDtos.add(userTitleDto);
+        for (String s : title.keySet()) {
+            UserTitle userTitle = userTitleRepository.findByUserTitle(s);
+            if (title.get(s) == true) {
+                if (s.equals(userDetails.getUser().getUserTitle())) {
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getCTitleImgUrl(), title.get(userTitle.getUserTitle()));
+                    userTitleDtos.add(userTitleDto);
+                } else {
+                    UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getBTitleImgUrl(), title.get(userTitle.getUserTitle()));
+                    userTitleDtos.add(userTitleDto);
+                }
+            } else {
+                UserTitleDto userTitleDto = new UserTitleDto(userTitle, userTitle.getQTitleImgUrl(), title.get(userTitle.getUserTitle()));
+                userTitleDtos.add(userTitleDto);
+            }
         }
+
         return new UserTitleResponseDto(userTitleDtos, titleDtoList);
     }
 
     // 칭호 변경
     @Transactional
     public ChangeTitleDto putUserTitle(ChangeTitleRequestDto requestDto, UserDetailsImpl userDetails) {
+        UserTitle userTitle2 = userTitleRepository.findByUserTitle(userDetails.getUser().getUserTitle());
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        user.update(requestDto);
-        return new ChangeTitleDto(userDetails, requestDto);
+        UserTitle userTitle = userTitleRepository.findByUserTitle(requestDto.getUserTitle());
+        user.update(userTitle);
+        return new ChangeTitleDto(userDetails, userTitle, userTitle2);
+    }
+
+    // 쿼리문 수정 필요
+    // 마이페이지 피드 10개
+    public List<FeedResponseDto> myFeeds(UserDetailsImpl userDetails) {
+        List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+        if (feedList.size() < 10) {
+          for (int i = 0; i < feedList.size(); i++) {
+              int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+              boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+              long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
+              FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
+              feedResponseDtos.add(feedResponseDto);
+          }
+            return feedResponseDtos;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+                boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+                long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
+                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
+                feedResponseDtos.add(feedResponseDto);
+            }
+            return feedResponseDtos;
+
+        }
     }
 
 }

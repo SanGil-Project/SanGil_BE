@@ -23,6 +23,9 @@ public class Feed extends Timestamped {
     @Column(nullable = false)
     private String feedContent;
 
+    @OneToMany(mappedBy = "feed" ,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<FeedComment> feedComments;
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name="userid")
     private User user;

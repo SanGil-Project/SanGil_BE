@@ -1,6 +1,5 @@
 package com.project.sangil_be.model;
 
-import com.project.sangil_be.dto.ChangeTitleRequestDto;
 import com.project.sangil_be.dto.UsernameRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,23 +26,22 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String userImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String userTitle;
 
-    @Column
+    @Column(nullable = false)
     private String userTitleImgUrl;
 
-    @Column
+    @Column(nullable = false)
     private String socialId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Party> parties;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//  @JoinColumn(name = "feedId") //있으면 안된다
     private List<Feed> feeds;
 
     public User(String username, String socialId, String encodedPassword, String nickname, String userImageUrl, String userTitle, String userTitleImgUrl) {
@@ -66,8 +64,9 @@ public class User {
         this.userImgUrl = profileImageUrl;
     }
 
-    public void update(ChangeTitleRequestDto requestDto) {
-        this.userTitle= requestDto.getUserTitle();
+    public void update(UserTitle userTitle) {
+        this.userTitle= userTitle.getUserTitle();
+        this.userTitleImgUrl = userTitle.getCTitleImgUrl();
     }
 
     public void editname(UsernameRequestDto usernameRequestDto) {

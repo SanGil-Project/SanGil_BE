@@ -26,4 +26,11 @@ public class BookMarkResponseDto {
         this.distance = Math.round(distance*100)/100.0;
     }
 
+    public BookMarkResponseDto(Long mountainId, String mountainName, String mountainAddress, String mountainImageUrl, Double starAvr) {
+        this.mountainId = mountainId;
+        this.mountainName = mountainName;
+        this.mountainAddress = mountainAddress;
+        this.mountainImageUrl = mountainImageUrl;
+        this.starAvr = starAvr;
+    }
 }

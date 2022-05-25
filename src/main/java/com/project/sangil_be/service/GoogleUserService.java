@@ -70,7 +70,8 @@ public class GoogleUserService {
         body.add("client_id" , "418085046130-194eqk6jjjmn32gnfiv6g331ooh985de.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "https://yesleee.shop/user/google/callback");
+        body.add("redirect_uri", "https://xn--wk0b636a.com/user/google/callback");
+//        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
@@ -138,7 +139,7 @@ public class GoogleUserService {
 
             String userImageUrl="없음";
             String userTitle="등린이";
-            String userTitleImgUrl="없음";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
 
             googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(googleUser);
@@ -152,7 +153,6 @@ public class GoogleUserService {
 
     // 4. 시큐리티 강제 로그인
     private Authentication securityLogin(User findUser) {
-
         UserDetails userDetails = new UserDetailsImpl(findUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
