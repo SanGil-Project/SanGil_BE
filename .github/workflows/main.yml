@@ -1,6 +1,6 @@
-# CI-CD Test
+# CI-CD
 
-name: CI-CD Test
+name: develop CI-CD
 on:
   push:
     branches: [ release ]
@@ -11,7 +11,7 @@ permissions:
   contents: read
   
 env: # 새로 추가한 부분
-  S3_BUCKET_NAME: eyetravel
+  S3_BUCKET_NAME: sangil
   PROJECT_NAME: SanGil
 
 jobs:
@@ -42,8 +42,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEVELOP }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEVELOP }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
