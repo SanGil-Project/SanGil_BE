@@ -29,9 +29,8 @@ public class FeedCommentService {
     public FeedCommentResDto writeComment(Long feedId, FeedCommentReqDto feedCommentReqDto, UserDetailsImpl userDetails) {
         Feed feed = feedRepository.findByFeedId(feedId);
         FeedComment feedComment = new FeedComment(feedCommentReqDto,feed,userDetails.getUser());
-        long beforeTime = ChronoUnit.MINUTES.between(feedComment.getCreatedAt(), LocalDateTime.now());
         feedCommentRepository.save(feedComment);
-        return new FeedCommentResDto(feedComment, calculator.time(beforeTime));
+        return new FeedCommentResDto(feedComment);
     }
 
     // 댓글 수정
