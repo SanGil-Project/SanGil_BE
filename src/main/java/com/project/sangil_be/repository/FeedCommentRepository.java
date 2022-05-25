@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FeedCommentRepository extends JpaRepository<FeedComment, Long> {
+public interface FeedCommentRepository extends JpaRepository<FeedComment, Long>,FeedCommentRepositoryCustom {
     FeedComment findByFeedCommentId(Long feedCommentId);
 
     void deleteByFeedCommentId(Long feedCommentId);

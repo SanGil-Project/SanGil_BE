@@ -56,7 +56,7 @@ public class FeedService {
         }
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
-        Long goodCnt = goodRepository.countAllByFeedId(feedId);
+        int goodCnt = goodRepository.countAllByFeedId(feedId);
         GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodCnt, goodStatus);
 
         return goodCheckResponseDto;
@@ -75,14 +75,14 @@ public class FeedService {
     }
 
     // 피드 상세
-    public FeedResponseDto detail(Long feedId, User user) {
-        Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalArgumentException("해당 피드가 없습니다.")
-        );
-        int goodCnt = goodRepository.findByFeedId(feedId).size();
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        FeedResponseDto feedResponseDto = new FeedResponseDto(feed, goodCnt, goodStatus);
-        return feedResponseDto;
+    public FeedDetailResponseDto feedDetail(Long feedId, User user, int pageNum) {
+        Feed feed = feedRepository.findByFeedId(feedId);
+        Integer goodCnt = goodRepository.countAllByFeedId(feedId);
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
+        PageRequest pageRequest = PageRequest.of(pageNum, 7);
+        Page<CommentResponseDto> commentList = feedCommentRepository.getCommentList(feedId, pageRequest);
+        FeedCommentListDto feedCommentListDto = new FeedCommentListDto(commentList);
+        return new FeedDetailResponseDto(feed, goodCnt, goodStatus, feedCommentListDto);
     }
 
     // 쿼리

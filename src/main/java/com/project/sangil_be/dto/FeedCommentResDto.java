@@ -8,11 +8,16 @@ public class FeedCommentResDto {
     private Long feedCommentId;
     private Long userId;
     private String nickname;
+    private String userTitle;
+    private String userImageUrl;
+    private String feedComment;
+    private String beforeTime;
 
     public FeedCommentResDto(FeedComment feedComment) {
         this.feedCommentId = feedComment.getFeedCommentId();
         this.userId = feedComment.getUser().getUserId();
         this.nickname = feedComment.getUser().getNickname();
     }
+
 
 }

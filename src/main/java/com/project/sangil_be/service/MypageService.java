@@ -92,9 +92,9 @@ public class MypageService {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<BookMarkResponseDto> bookMarkResponseDtos = bookMarkRepository.bookMarkMountain(userDetails.getUser().getUserId(), pageRequest);
         for (BookMarkResponseDto bookMarkResponseDto : bookMarkResponseDtos) {
-            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMarkResponseDto.getMountainId(),userDetails.getUser().getUserId());
+            boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMarkResponseDto.getMountainId(), userDetails.getUser().getUserId());
             Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
-            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),mountain.getLng(), "kilometer");
+            Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
             bookMarkResponseDto.setBookMarkChk(bookMarkChk);
             bookMarkResponseDto.setDistance(distance);
         }
@@ -174,20 +174,32 @@ public class MypageService {
         User user = userRepository.findByUserId(userDetails.getUser().getUserId());
         UserTitle userTitle = userTitleRepository.findByUserTitle(requestDto.getUserTitle());
         user.update(userTitle);
-        return new ChangeTitleDto(userDetails,userTitle,userTitle2);
+        return new ChangeTitleDto(userDetails, userTitle, userTitle2);
     }
 
     // 마이페이지 피드 10개
     public List<FeedResponseDto> myFeeds(UserDetailsImpl userDetails) {
         List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
-            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
-            FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
-            feedResponseDtos.add(feedResponseDto);
+        if (feedList.size() < 10) {
+            for (int i = 0; i < feedList.size(); i++) {
+                int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+                boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
+                feedResponseDtos.add(feedResponseDto);
+            }
+            return feedResponseDtos;
+        } else {
+            for (int i = 0; i < 10; i++) {
+                int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
+                boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
+                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
+                feedResponseDtos.add(feedResponseDto);
+            }
+            return feedResponseDtos;
+
         }
-        return feedResponseDtos;
     }
+
 }
 

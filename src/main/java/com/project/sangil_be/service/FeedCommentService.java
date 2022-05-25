@@ -37,26 +37,26 @@ public class FeedCommentService {
         feedCommentRepository.deleteByFeedCommentId(feedCommentId);
     }
 
-    // 댓글 상세 페이지
-    public FeedCommentListDto detailComment(Long feedId, UserDetailsImpl userDetails, int pageNum) {
-        Feed feed = feedRepository.findByFeedId(feedId);
-        List<FeedComment> feedComments = feedCommentRepository.findAllByFeedOrderByCreatedAtDesc(feed);
-        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
-        for (FeedComment feedComment : feedComments) {
-            CommentResponseDto commentResponseDto = new CommentResponseDto(feedComment);
-            commentResponseDtos.add(commentResponseDto);
-        }
-        Pageable pageable = getPageable(pageNum);
-        int start = pageNum * 15;
-        int end = Math.min((start + 15), feedComments.size());
-
-        Page<CommentResponseDto> page = new PageImpl<>(commentResponseDtos.subList(start, end), pageable, commentResponseDtos.size());
-        return new FeedCommentListDto(page);
-    }
-
-    private Pageable getPageable(int pageNum) {
-        Sort.Direction direction = Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
-        return PageRequest.of(pageNum, 15, sort);
-    }
+//    // 댓글 상세 페이지
+//    public FeedCommentListDto detailComment(Long feedId, UserDetailsImpl userDetails, int pageNum) {
+//        Feed feed = feedRepository.findByFeedId(feedId);
+//        List<FeedComment> feedComments = feedCommentRepository.findAllByFeedOrderByCreatedAtDesc(feed);
+//        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+//        for (FeedComment feedComment : feedComments) {
+//            CommentResponseDto commentResponseDto = new CommentResponseDto(feedComment);
+//            commentResponseDtos.add(commentResponseDto);
+//        }
+//        Pageable pageable = getPageable(pageNum);
+//        int start = pageNum * 15;
+//        int end = Math.min((start + 15), feedComments.size());
+//
+//        Page<CommentResponseDto> page = new PageImpl<>(commentResponseDtos.subList(start, end), pageable, commentResponseDtos.size());
+//        return new FeedCommentListDto(page);
+//    }
+//
+//    private Pageable getPageable(int pageNum) {
+//        Sort.Direction direction = Sort.Direction.DESC;
+//        Sort sort = Sort.by(direction, "id");
+//        return PageRequest.of(pageNum, 15, sort);
+//    }
 }
