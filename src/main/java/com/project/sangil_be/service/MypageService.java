@@ -96,7 +96,7 @@ public class MypageService {
             Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
             Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(),mountain.getLng(), "kilometer");
             bookMarkResponseDto.setBookMarkChk(bookMarkChk);
-            bookMarkResponseDto.setDistance(distance);
+            bookMarkResponseDto.setDistance(Math.round(distance * 100) / 100.0);
         }
         return new BookMarkDto(bookMarkResponseDtos);
     }
