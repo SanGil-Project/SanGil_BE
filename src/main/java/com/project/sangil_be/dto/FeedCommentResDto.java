@@ -18,7 +18,7 @@ public class FeedCommentResDto {
         this.userId = feedComment.getUser().getUserId();
         this.nickname = feedComment.getUser().getNickname();
         this.userTitle = feedComment.getUser().getUserTitle();
-        this.userImgUrl = feedComment.getUser().getUserImgUrl();
+        this.userImageUrl = feedComment.getUser().getUserImgUrl();
     }
 
 }

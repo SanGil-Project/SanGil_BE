@@ -181,12 +181,13 @@ public class MypageService {
         return new ChangeTitleDto(userDetails, userTitle, userTitle2);
     }
 
+    // 쿼리문 수정 필요
     // 마이페이지 피드 10개
     public List<FeedResponseDto> myFeeds(UserDetailsImpl userDetails) {
         List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         if (feedList.size() < 10) {
-          for (int i = 0; i < 10; i++) {
+          for (int i = 0; i < feedList.size(); i++) {
               int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
               boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
               long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
@@ -198,7 +199,8 @@ public class MypageService {
             for (int i = 0; i < 10; i++) {
                 int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
                 boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
-                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus);
+                long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
+                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
                 feedResponseDtos.add(feedResponseDto);
             }
             return feedResponseDtos;
