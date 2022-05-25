@@ -80,7 +80,6 @@ public class ChatMessageController {
 
             chatMessageList.add(messageResponseDto);
         }
-
         messagingTemplate.convertAndSend("/sub/chat/rooms/" + message.getRoomId(),chatMessageList);
     }
 }

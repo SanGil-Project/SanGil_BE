@@ -28,8 +28,9 @@ public class TrackingService {
     @Transactional
     public StartTrackingResponseDto startMyLocation(Long mountainId, StartTrackingRequestDto startTrackingRequestDto, UserDetailsImpl userDetails) {
         Completed completed = new Completed(mountainId, startTrackingRequestDto.getSend(), userDetails.getUser().getUserId());
+        Mountain mountain = mountainRepository.findByMountainId(mountainId);
         completedRepository.save(completed);
-        return new StartTrackingResponseDto(completed.getCompleteId());
+        return new StartTrackingResponseDto(completed.getCompleteId(), mountain.getMountainImgUrl());
     }
 
     // 맵 트래킹 5초 마다 저장
@@ -53,6 +54,7 @@ public class TrackingService {
             trackingRepository.save(saveTracking);
             distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
             distanceResponseDto.setDistanceM(distanceM);
+            System.out.println(distanceResponseDto.getDistanceK());
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
@@ -65,6 +67,7 @@ public class TrackingService {
                 trackingRepository.save(saveTracking);
                 distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
                 distanceResponseDto.setDistanceM(distanceM);
+                System.out.println(distanceResponseDto.getDistanceK());
             }
         }
         return distanceResponseDto;
@@ -114,5 +117,4 @@ public class TrackingService {
         }
         return new TrackingListDto(userDetails, completedId, mountain, completed, trackingResponseDtoList);
     }
-
 }

@@ -6,11 +6,14 @@ import com.project.sangil_be.model.FeedComment;
 import com.project.sangil_be.repository.FeedCommentRepository;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Calculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +22,16 @@ import java.util.List;
 public class FeedCommentService {
     private final FeedCommentRepository feedCommentRepository;
     private final FeedRepository feedRepository;
+    private final Calculator calculator;
 
     // createdAt 수정
     // 댓글 작성
     public FeedCommentResDto writeComment(Long feedId, FeedCommentReqDto feedCommentReqDto, UserDetailsImpl userDetails) {
         Feed feed = feedRepository.findByFeedId(feedId);
         FeedComment feedComment = new FeedComment(feedCommentReqDto,feed,userDetails.getUser());
+        long beforeTime = ChronoUnit.MINUTES.between(feedComment.getCreatedAt(), LocalDateTime.now());
         feedCommentRepository.save(feedComment);
-        return new FeedCommentResDto(feedComment);
+        return new FeedCommentResDto(feedComment, calculator.time(beforeTime));
     }
 
     // 댓글 수정
