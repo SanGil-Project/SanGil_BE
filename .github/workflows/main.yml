@@ -50,7 +50,7 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./CI-CD.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/CI-CD.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name CI-CD --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name CI-CD --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/CI-CD.zip
+        run: aws deploy create-deployment --application-name Sangil --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name CI-CD --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/CI-CD.zip
       
       - name: action-slack
         uses: 8398a7/action-slack@v3
