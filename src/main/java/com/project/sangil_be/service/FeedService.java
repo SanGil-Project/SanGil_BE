@@ -7,12 +7,15 @@ import com.project.sangil_be.repository.FeedCommentRepository;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.Calculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,7 @@ public class FeedService {
     private final GoodRepository goodRepository;
     private final TitleService titleService;
     private final FeedCommentRepository feedCommentRepository;
+    private final Calculator calculator;
 
     // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
@@ -75,13 +79,14 @@ public class FeedService {
     }
 
     // 피드 상세
-    public FeedResponseDto detail(Long feedId, User user) {
+    public FeedResponseDto detail(Long feedId, User user,int pageNum) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new IllegalArgumentException("해당 피드가 없습니다.")
         );
         int goodCnt = goodRepository.findByFeedId(feedId).size();
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        FeedResponseDto feedResponseDto = new FeedResponseDto(feed, goodCnt, goodStatus);
+        long beforeTime = ChronoUnit.MINUTES.between(feed.getCreatedAt(), LocalDateTime.now());
+        FeedResponseDto feedResponseDto = new FeedResponseDto(feed, goodCnt, goodStatus, calculator.time(beforeTime));
         return feedResponseDto;
     }
 
@@ -93,7 +98,8 @@ public class FeedService {
         for (Feed feeds : feed) {
             int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
             boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), user.getUserId());
-            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus));
+            long beforeTime = ChronoUnit.MINUTES.between(feeds.getCreatedAt(), LocalDateTime.now());
+            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus,calculator.time(beforeTime)));
         }
         Pageable pageable = getPageable(pageNum);
 

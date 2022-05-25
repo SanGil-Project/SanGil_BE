@@ -33,10 +33,10 @@ public class FeedController {
     }
 
     //피드 상세
-    @GetMapping("/api/feeds/detail/{feedId}")
-    public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+    @GetMapping("/feeds/detail/{feedId}/{pageNum}")
+    public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@PathVariable("pageNum") int pageNum,@AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        return feedService.detail(feedId, user);
+        return feedService.detail(feedId, user, pageNum);
     }
 
     // 피드 리스트
