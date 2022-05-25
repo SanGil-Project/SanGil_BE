@@ -71,8 +71,8 @@ dependencies {
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
     //sentry
-//    implementation 'io.sentry:sentry-spring-boot-starter:5.7.4'
-//    implementation 'io.sentry:sentry-logback:5.7.4'
+    implementation 'io.sentry:sentry-spring-boot-starter:5.7.4'
+    implementation 'io.sentry:sentry-logback:5.7.4'
 }
 
 tasks.named('test') {
