@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class cicdController {
 
     @GetMapping("/")
-    public String version() {
+    public String version() {return "Test";
+    }
 
-        return "Test";
+    @GetMapping("/health")
+    public String checkHealth() {
+        return "healthy";
     }
 }
