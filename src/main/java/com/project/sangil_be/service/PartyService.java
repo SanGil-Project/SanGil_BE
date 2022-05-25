@@ -151,6 +151,7 @@ public class PartyService {
         return new TitleResponseDto(titleDtoList, msg);
     }
 
+    // 동호회 검색
     public Page<PartyListDto> getSearch(String keyword, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<PartyListDto> partyListDtos = partyRepository.searchPage(keyword, pageRequest);

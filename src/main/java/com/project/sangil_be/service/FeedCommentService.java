@@ -41,7 +41,8 @@ public class FeedCommentService {
         feedCommentRepository.deleteByFeedCommentId(feedCommentId);
     }
 
-    // 댓글 상세 페이지
+
+//    // 댓글 상세 페이지
 //    public FeedCommentListDto detailComment(Long feedId, UserDetailsImpl userDetails, int pageNum) {
 //        Feed feed = feedRepository.findByFeedId(feedId);
 //        List<FeedComment> feedComments = feedCommentRepository.findAllByFeedOrderByCreatedAtDesc(feed);

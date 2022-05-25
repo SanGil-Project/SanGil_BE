@@ -9,7 +9,7 @@ public class FeedCommentResDto {
     private Long userId;
     private String nickname;
     private String userTitle;
-    private String userImgUrl;
+    private String userImageUrl;
     private String feedComment;
     private String beforeTime;
 
@@ -21,12 +21,4 @@ public class FeedCommentResDto {
         this.userImgUrl = feedComment.getUser().getUserImgUrl();
     }
 
-    public FeedCommentResDto(Long feedCommentId, Long userId, String nickname, String userTitle, String userImgUrl, String feedComment) {
-        this.feedCommentId = feedCommentId;
-        this.userId = userId;
-        this.nickname = nickname;
-        this.userTitle = userTitle;
-        this.userImgUrl = userImgUrl;
-        this.feedComment = feedComment;
-    }
 }

@@ -7,6 +7,7 @@ import com.project.sangil_be.utils.Direction;
 import com.project.sangil_be.utils.GeometryUtil;
 import com.project.sangil_be.utils.Location;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.project.sangil_be.model.QBookMark.*;
+import static com.project.sangil_be.model.QFeed.feed;
+import static com.project.sangil_be.model.QFeedComment.*;
+import static com.project.sangil_be.model.QGood.good;
 import static com.project.sangil_be.model.QMountain.mountain1;
 import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 import static com.project.sangil_be.model.QParty.*;
@@ -302,4 +306,27 @@ class MountainServiceTest {
 //        UserTitleResponseDto userTitleResponseDto = new UserTitleResponseDto(userTitleDtos, titleDtoList);
 
     }
+    @Test
+    public void commentList() {
+        Long feedId = 1L;
+        QueryResults<FeedCommentResDto> results = queryFactory
+                .select(Projections.constructor(FeedCommentResDto.class,
+                        feedComment1.feedCommentId,
+                        feedComment1.user.userId,
+                        feedComment1.user.nickname,
+                        feedComment1.user.userTitle,
+                        feedComment1.user.userImgUrl,
+                        feedComment1.feedComment))
+                .from(feedComment1)
+                .where(feedComment1.feed.feedId.eq(feedId))
+                .offset(0)
+                .limit(7)
+                .fetchResults();
+        List<FeedCommentResDto> content = results.getResults();
+        for (FeedCommentResDto feedCommentResDto : content) {
+            System.out.println("feedCommentResDto.getFeedComment() = " + feedCommentResDto.getFeedComment());
+        }
+        long total = results.getTotal();
+    }
+
 }

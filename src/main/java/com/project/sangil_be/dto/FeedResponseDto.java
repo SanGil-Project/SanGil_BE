@@ -71,4 +71,5 @@ public class FeedResponseDto {
         this.commentCnt = commentCnt;
         this.feedCommentResDtos = feedCommentResDtos;
     }
+
 }

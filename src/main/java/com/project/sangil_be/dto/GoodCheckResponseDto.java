@@ -9,9 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GoodCheckResponseDto {
     boolean goodStatus;
-    Long goodCnt;
+    Integer goodCnt;
 
-    public GoodCheckResponseDto(Long goodCnt, boolean goodStatus) {
+    public GoodCheckResponseDto(Integer goodCnt, boolean goodStatus) {
         this.goodCnt=goodCnt;
         this.goodStatus = goodStatus;
     }

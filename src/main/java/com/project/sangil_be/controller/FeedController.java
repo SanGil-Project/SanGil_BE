@@ -1,5 +1,6 @@
 package com.project.sangil_be.controller;
 
+import com.project.sangil_be.dto.FeedDetailResponseDto;
 import com.project.sangil_be.dto.FeedListResponseDto;
 import com.project.sangil_be.dto.FeedResponseDto;
 import com.project.sangil_be.dto.GoodCheckResponseDto;
@@ -32,11 +33,11 @@ public class FeedController {
         return feedService.saveFeed(feedContent, multipartFile, userDetails);
     }
 
-    //피드 상세
-    @GetMapping("/feeds/detail/{feedId}/{pageNum}")
-    public FeedResponseDto detail(@PathVariable("feedId") Long feedId,@PathVariable("pageNum") int pageNum,@AuthenticationPrincipal UserDetailsImpl userDetails){
+
+    @GetMapping("/api/feeds/detail/{feedId}/{pageNum}")
+    public FeedDetailResponseDto detail(@PathVariable("feedId") Long feedId, @PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        return feedService.detail(feedId, user, pageNum);
+        return feedService.feedDetail(feedId, user,pageNum-1);
     }
 
     // 피드 리스트
