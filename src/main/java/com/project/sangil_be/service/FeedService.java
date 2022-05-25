@@ -81,12 +81,18 @@ public class FeedService {
     // 피드 상세
     public FeedDetailResponseDto feedDetail(Long feedId, User user, int pageNum) {
         Feed feed = feedRepository.findByFeedId(feedId);
+        long feedBeforeTime = ChronoUnit.MINUTES.between(feed.getCreatedAt(), LocalDateTime.now());
         Integer goodCnt = goodRepository.countAllByFeedId(feedId);
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
         PageRequest pageRequest = PageRequest.of(pageNum, 7);
         Page<CommentResponseDto> commentList = feedCommentRepository.getCommentList(feedId, pageRequest);
+        for (CommentResponseDto commentResponseDto : commentList) {
+            FeedComment feedComment = feedCommentRepository.findByFeedCommentId(commentResponseDto.getCommentId());
+            long CommentBeforeTime = ChronoUnit.MINUTES.between(feedComment.getCreatedAt(), LocalDateTime.now());
+            commentResponseDto.setBeforeTime(calculator.time(CommentBeforeTime));
+        }
         FeedCommentListDto feedCommentListDto = new FeedCommentListDto(commentList);
-        return new FeedDetailResponseDto(feed, goodCnt, goodStatus, feedCommentListDto);
+        return new FeedDetailResponseDto(feed, goodCnt, goodStatus, feedCommentListDto, calculator.time(feedBeforeTime));
     }
 
     // 쿼리

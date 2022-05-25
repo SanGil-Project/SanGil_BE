@@ -13,6 +13,7 @@ public class CommentResponseDto {
     private String userTitle;
     private String userImgUrl;
     private String feedComment;
+    private String beforeTime;
     private LocalDateTime createdAt;
 
 //    public CommentResponseDto(FeedComment feedComment) {
