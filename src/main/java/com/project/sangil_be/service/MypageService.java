@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -65,11 +66,11 @@ public class MypageService {
     }
 
     // 닉네임 중복체크
-    public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
-        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        if (user.getNickname().equals(usernameRequestDto.getNickname())) {
+    public String usernameCheck(UsernameRequestDto usernameRequestDto) {
+        Optional<User> user = userRepository.findByNickname(usernameRequestDto.getNickname());
+        if(user.isPresent()) {
             return "false";
-        } else {
+        }else {
             return "true";
         }
     }
