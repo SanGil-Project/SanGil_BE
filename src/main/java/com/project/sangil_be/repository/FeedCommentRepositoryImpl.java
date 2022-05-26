@@ -31,6 +31,7 @@ public class FeedCommentRepositoryImpl implements FeedCommentRepositoryCustom{
                         feedComment1.feedComment))
                 .from(feedComment1)
                 .where(feedComment1.feed.feedId.eq(feedId))
+                .orderBy(feedComment1.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

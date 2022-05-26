@@ -56,8 +56,10 @@ public class MypageService {
         Mountain mountain = mountainRepository.findByMountainId(mountainId);
         List<CompletedMountainDto> completedMountainDtos = new ArrayList<>();
         for (Completed completed : completedList) {
-            CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed, mountain);
-            completedMountainDtos.add(completedMountainDto);
+            if(completed.getTotalDistance() != 0) {
+                CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed, mountain);
+                completedMountainDtos.add(completedMountainDto);
+            }
         }
         return completedMountainDtos;
     }
