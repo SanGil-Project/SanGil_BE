@@ -41,6 +41,7 @@ public class FeedCommentService {
     }
 
     // 댓글 삭제
+    @Transactional
     public void deleteComment(Long feedCommentId) {
         feedCommentRepository.deleteByFeedCommentId(feedCommentId);
     }

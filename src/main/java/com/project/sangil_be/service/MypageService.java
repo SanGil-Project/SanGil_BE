@@ -41,9 +41,7 @@ public class MypageService {
         List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<CompletedListDto> completedListDtos = new ArrayList<>();
         for (Completed complete : completed) {
-            if(complete.getTotalDistance() == 0) {
-                System.out.println("등산내용 저장 안됨");
-            }else {
+            if(complete.getTotalDistance() != 0) {
                 Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
                 CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
                 completedListDtos.add(completedListDto);
