@@ -9,7 +9,7 @@ on:
 
 permissions:
   contents: read
-  
+
 env: # 새로 추가한 부분
   S3_BUCKET_NAME: sangil
   PROJECT_NAME: SanGil
@@ -34,7 +34,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
-        
+
       - name: Make zip file
         run: zip -r ./sangil.zip .
         shell: bash
@@ -51,7 +51,7 @@ jobs:
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name Sangil --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name sangil --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/sangil.zip
-      
+
       - name: action-slack
         uses: 8398a7/action-slack@v3
         with:
