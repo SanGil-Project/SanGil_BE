@@ -30,8 +30,8 @@ public class MypageController {
 
     // 닉네임 중복체크
     @PostMapping("/api/mypage/usernameCheck")
-    public String usernameCheck (@RequestBody UsernameRequestDto usernameRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return mypageService.usernameCheck(usernameRequestDto,userDetails);
+    public String usernameCheck (@RequestBody UsernameRequestDto usernameRequestDto){
+        return mypageService.usernameCheck(usernameRequestDto);
     }
 
     // nickname 수정
