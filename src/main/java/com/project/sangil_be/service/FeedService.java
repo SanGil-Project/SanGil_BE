@@ -98,7 +98,7 @@ public class FeedService {
     // 쿼리
     // 나의 피드
     public FeedListResponseDto myfeeds(User user, int pageNum) {
-        List<Feed> feed = feedRepository.findByUser(user);
+        List<Feed> feed = feedRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         for (Feed feeds : feed) {
             int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();

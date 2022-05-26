@@ -70,8 +70,8 @@ public class GoogleUserService {
         body.add("client_id" , "418085046130-194eqk6jjjmn32gnfiv6g331ooh985de.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "https://xn--wk0b636a.com/user/google/callback");
-//        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
+//        body.add("redirect_uri", "https://xn--wk0b636a.com/user/google/callback");
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
