@@ -1,6 +1,9 @@
 package com.project.sangil_be.model;
 
-import com.project.sangil_be.dto.UsernameRequestDto;
+import com.project.sangil_be.login.dto.UsernameRequestDto;
+import com.project.sangil_be.model.Feed;
+import com.project.sangil_be.model.Party;
+import com.project.sangil_be.model.UserTitle;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

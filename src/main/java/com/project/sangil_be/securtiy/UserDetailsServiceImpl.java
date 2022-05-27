@@ -1,7 +1,7 @@
 package com.project.sangil_be.securtiy;
 
 import com.project.sangil_be.model.User;
-import com.project.sangil_be.repository.UserRepository;
+import com.project.sangil_be.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
