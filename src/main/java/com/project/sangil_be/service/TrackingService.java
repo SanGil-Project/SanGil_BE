@@ -34,7 +34,7 @@ public class TrackingService {
     }
 
     // 맵 트래킹 5초 마다 저장
-    @Transactional
+//    @Transactional
     public DistanceResponseDto saveMyLocation(Long completedId, TrackingRequestDto trackingRequestDto, UserDetailsImpl userDetails) {
         List<Tracking> trackinglist = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);
@@ -54,7 +54,6 @@ public class TrackingService {
             trackingRepository.save(saveTracking);
             distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
             distanceResponseDto.setDistanceM(distanceM);
-            System.out.println(distanceResponseDto.getDistanceK());
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
@@ -67,7 +66,6 @@ public class TrackingService {
                 trackingRepository.save(saveTracking);
                 distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
                 distanceResponseDto.setDistanceM(distanceM);
-                System.out.println(distanceResponseDto.getDistanceK());
             }
         }
         return distanceResponseDto;

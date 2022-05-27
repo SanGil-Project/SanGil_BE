@@ -36,10 +36,6 @@ public class Mountain {
     @Column(nullable = false)
     private Double lng;
 
-    public Mountain(Long mountainId) {
-        this.mountainId = mountainId;
-    }
-
     public void update(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;

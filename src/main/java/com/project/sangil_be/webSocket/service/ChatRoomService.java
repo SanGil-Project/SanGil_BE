@@ -15,5 +15,6 @@ public class ChatRoomService {
 
         ChatRoom createChatRoom = new ChatRoom(name, partyId);
         return chatRoomRepository.save(createChatRoom);
+        //test
     }
 }
