@@ -319,6 +319,7 @@ class MountainServiceTest {
                         feedComment1.feedComment))
                 .from(feedComment1)
                 .where(feedComment1.feed.feedId.eq(feedId))
+                .orderBy(feedComment1.createdAt.desc())
                 .offset(0)
                 .limit(7)
                 .fetchResults();

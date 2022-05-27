@@ -33,7 +33,7 @@ public class FeedController {
         return feedService.saveFeed(feedContent, multipartFile, userDetails);
     }
 
-
+    // 피드 상세페이지
     @GetMapping("/api/feeds/detail/{feedId}/{pageNum}")
     public FeedDetailResponseDto detail(@PathVariable("feedId") Long feedId, @PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();

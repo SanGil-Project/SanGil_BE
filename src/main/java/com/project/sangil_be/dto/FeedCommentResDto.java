@@ -26,4 +26,12 @@ public class FeedCommentResDto {
 
     }
 
+    public FeedCommentResDto(Long feedCommentId, Long userId, String nickname, String userTitle, String userImageUrl, String feedComment) {
+        this.feedCommentId = feedCommentId;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.userTitle = userTitle;
+        this.userImageUrl = userImageUrl;
+        this.feedComment = feedComment;
+    }
 }
