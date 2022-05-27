@@ -28,12 +28,13 @@ public class TrackingService {
     @Transactional
     public StartTrackingResponseDto startMyLocation(Long mountainId, StartTrackingRequestDto startTrackingRequestDto, UserDetailsImpl userDetails) {
         Completed completed = new Completed(mountainId, startTrackingRequestDto.getSend(), userDetails.getUser().getUserId());
+        Mountain mountain = mountainRepository.findByMountainId(mountainId);
         completedRepository.save(completed);
-        return new StartTrackingResponseDto(completed.getCompleteId());
+        return new StartTrackingResponseDto(completed.getCompleteId(), mountain.getMountainImgUrl());
     }
 
     // 맵 트래킹 5초 마다 저장
-    @Transactional
+//    @Transactional
     public DistanceResponseDto saveMyLocation(Long completedId, TrackingRequestDto trackingRequestDto, UserDetailsImpl userDetails) {
         List<Tracking> trackinglist = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);
@@ -114,5 +115,4 @@ public class TrackingService {
         }
         return new TrackingListDto(userDetails, completedId, mountain, completed, trackingResponseDtoList);
     }
-
 }

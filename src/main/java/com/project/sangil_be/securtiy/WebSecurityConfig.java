@@ -141,6 +141,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/ws/**");
         skipPathList.add("GET,/ws-stomp");
         skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/health");
 
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
@@ -163,6 +164,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
@@ -179,4 +181,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

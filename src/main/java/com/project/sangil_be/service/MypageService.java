@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -41,9 +42,11 @@ public class MypageService {
         List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<CompletedListDto> completedListDtos = new ArrayList<>();
         for (Completed complete : completed) {
-            Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
-            CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
-            completedListDtos.add(completedListDto);
+            if(complete.getTotalDistance() != 0) {
+                Mountain mountain = mountainRepository.findByMountainId(complete.getMountainId());
+                CompletedListDto completedListDto = new CompletedListDto(complete, mountain);
+                completedListDtos.add(completedListDto);
+            }
         }
         return completedListDtos;
     }
@@ -54,18 +57,20 @@ public class MypageService {
         Mountain mountain = mountainRepository.findByMountainId(mountainId);
         List<CompletedMountainDto> completedMountainDtos = new ArrayList<>();
         for (Completed completed : completedList) {
-            CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed, mountain);
-            completedMountainDtos.add(completedMountainDto);
+            if(completed.getTotalDistance() != 0) {
+                CompletedMountainDto completedMountainDto = new CompletedMountainDto(completed, mountain);
+                completedMountainDtos.add(completedMountainDto);
+            }
         }
         return completedMountainDtos;
     }
 
     // 닉네임 중복체크
-    public String usernameCheck(UsernameRequestDto usernameRequestDto, UserDetailsImpl userDetails) {
-        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
-        if (user.getNickname().equals(usernameRequestDto.getNickname())) {
+    public String usernameCheck(UsernameRequestDto usernameRequestDto) {
+        Optional<User> user = userRepository.findByNickname(usernameRequestDto.getNickname());
+        if(user.isPresent()) {
             return "false";
-        } else {
+        }else {
             return "true";
         }
     }
@@ -100,7 +105,7 @@ public class MypageService {
             Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
             Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
             bookMarkResponseDto.setBookMarkChk(bookMarkChk);
-            bookMarkResponseDto.setDistance(distance);
+            bookMarkResponseDto.setDistance(Math.round(distance * 100) / 100.0);
         }
         return new BookMarkDto(bookMarkResponseDtos);
     }
