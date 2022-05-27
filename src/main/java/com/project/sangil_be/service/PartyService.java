@@ -161,6 +161,11 @@ public class PartyService {
             if (date.isAfter(date1) || date.isEqual(date1)) {
                 partyListDto.setPartyDate("마감되었습니다.");
             }
+            if (partyListDto.getMaxPeople() <= partyListDto.getCurPeople()) {
+                partyListDto.setCompleted(false);
+            }else {
+                partyListDto.setCompleted(true);
+            }
         }
         return partyListDtos;
     }

@@ -49,15 +49,18 @@ public class FeedService {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new IllegalArgumentException("피드가 없습니다.")
         );
+        try {
+            Optional<Good> good = goodRepository.findByFeedIdAndUserId(feedId, user.getUserId());
+            if (!good.isPresent()) {
+                Good savegood = new Good(feed, user);
+                goodRepository.save(savegood);
 
-        Optional<Good> good = goodRepository.findByFeedIdAndUserId(feedId, user.getUserId());
-        if (!good.isPresent()) {
-            Good savegood = new Good(feed, user);
-            goodRepository.save(savegood);
-
-        } else {
-            goodRepository.deleteById(good.get().getGoodId());
-        }
+            } else {
+                goodRepository.deleteById(good.get().getGoodId());
+            }
+        } catch (Exception e) {
+            System.out.println("좋아요 예외처리");
+        };
 
         boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
         int goodCnt = goodRepository.countAllByFeedId(feedId);
