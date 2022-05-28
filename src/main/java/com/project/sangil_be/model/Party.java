@@ -1,15 +1,11 @@
 package com.project.sangil_be.model;
 
-import com.project.sangil_be.dto.PartyRequestDto;
-import com.project.sangil_be.utils.Timestamped;
+import com.project.sangil_be.party.dto.PartyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter

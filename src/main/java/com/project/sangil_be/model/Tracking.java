@@ -1,14 +1,13 @@
 package com.project.sangil_be.model;
 
 
-import com.project.sangil_be.dto.TrackingRequestDto;
+import com.project.sangil_be.tracking.dto.TrackingRequestDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter

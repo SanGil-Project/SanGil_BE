@@ -1,7 +1,7 @@
 package com.project.sangil_be.webSocket.service;
 
 import com.project.sangil_be.model.User;
-import com.project.sangil_be.repository.UserRepository;
+import com.project.sangil_be.login.repository.UserRepository;
 import com.project.sangil_be.webSocket.model.ChatRoom;
 import com.project.sangil_be.webSocket.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;

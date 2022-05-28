@@ -1,11 +1,11 @@
 package com.project.sangil_be.securtiy.provider;
 
 
-import com.project.sangil_be.model.User;
-import com.project.sangil_be.repository.UserRepository;
-import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.securtiy.jwt.JwtDecoder;
 import com.project.sangil_be.securtiy.jwt.JwtPreProcessingToken;
+import com.project.sangil_be.model.User;
+import com.project.sangil_be.login.repository.UserRepository;
+import com.project.sangil_be.securtiy.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
