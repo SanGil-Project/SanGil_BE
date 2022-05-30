@@ -4,6 +4,7 @@ import com.project.sangil_be.model.BookMark;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BookMarkRepository extends JpaRepository <BookMark, Long>,BookMarkRepositoryCustom {
@@ -14,4 +15,5 @@ public interface BookMarkRepository extends JpaRepository <BookMark, Long>,BookM
 
     boolean existsByMountainIdAndUserId(Long mountainId, Long userId);
 
+    int countAllByMountainId(Long id);
 }

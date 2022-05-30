@@ -2,12 +2,12 @@ package com.project.sangil_be.service;
 
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.Completed;
-import com.project.sangil_be.model.GetTitle;
 import com.project.sangil_be.model.Mountain;
 import com.project.sangil_be.model.Tracking;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.DistanceToUser;
+import com.project.sangil_be.utils.TitleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class TrackingService {
     private final CompletedRepository completedRepository;
     private final MountainRepository mountainRepository;
     private final MountainCommentRepository mountainCommentRepository;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
 
     // 트래킹 시작
     @Transactional
@@ -33,6 +33,7 @@ public class TrackingService {
         return new StartTrackingResponseDto(completed.getCompleteId(), mountain.getMountainImgUrl());
     }
 
+    // 쿼리 수정 필요
     // 맵 트래킹 5초 마다 저장
 //    @Transactional
     public DistanceResponseDto saveMyLocation(Long completedId, TrackingRequestDto trackingRequestDto, UserDetailsImpl userDetails) {
@@ -102,8 +103,8 @@ public class TrackingService {
         }
     }
 
+    // 쿼리 수정필요
     // 맵 트래킹 상세페이지
-    @Transactional
     public TrackingListDto detailTracking(Long completedId, UserDetailsImpl userDetails) {
         List<Tracking> trackingList = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);

@@ -9,4 +9,6 @@ public interface PartyRepository extends JpaRepository<Party, Long>,PartyReposit
     List<Party> findAllByOrderByCreatedAtDesc();
 
     Party findByPartyIdOrderByPartyDateAsc(Long partyId);
+
+    Party findByPartyId(Long partyId);
 }

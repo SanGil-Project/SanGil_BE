@@ -14,8 +14,8 @@ import java.util.Map;
 
 public interface MountainRepository extends JpaRepository<Mountain, Long> ,MountainRepositoryCustom{
     // jpql
-//    @Query("select u from Mountain u where u.mountain like %:keyword% or u.mountainAddress like %:keyword%")
-//    List<Mountain> searchAllByMountain(@Param("keyword") String keyword);
+    @Query("select u from Mountain u where u.mountain like %:keyword% or u.mountainAddress like %:keyword%")
+    List<Mountain> searchAllByMountain(@Param("keyword") String keyword);
 
     // jpql
     @Query("select e from Mountain e where e.lat between :x2 and :x1 and e.lng between :y2 and :y1")

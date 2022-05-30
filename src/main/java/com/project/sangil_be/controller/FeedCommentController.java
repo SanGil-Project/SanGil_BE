@@ -33,8 +33,8 @@ public class FeedCommentController {
 
     // 댓글 삭제
     @DeleteMapping("feeds/comment/{feedCommentId}")
-    public void deleteComment(@PathVariable Long feedCommentId) {
-        feedCommentService.deleteComment(feedCommentId);
+    public void deleteComment(@PathVariable Long feedCommentId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        feedCommentService.deleteComment(feedCommentId,userDetails);
     }
 
 //    // 댓글 상세 페이지

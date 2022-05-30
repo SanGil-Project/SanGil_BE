@@ -6,11 +6,13 @@ import com.project.sangil_be.repository.*;
 import com.project.sangil_be.utils.Direction;
 import com.project.sangil_be.utils.GeometryUtil;
 import com.project.sangil_be.utils.Location;
+import com.project.sangil_be.utils.TitleUtil;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,9 +21,7 @@ import org.springframework.data.domain.*;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.project.sangil_be.model.QBookMark.*;
 import static com.project.sangil_be.model.QFeed.feed;
@@ -39,13 +39,13 @@ class MountainServiceTest {
     private final MountainRepository mountainRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final BookMarkRepository bookMarkRepository;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
     private final GetTitleRepository getTitleRepository;
     private final UserTitleRepository userTitleRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository, TitleService titleService, GetTitleRepository getTitleRepository, UserTitleRepository userTitleRepository, UserRepository userRepository) {
+    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository, TitleUtil titleService, GetTitleRepository getTitleRepository, UserTitleRepository userTitleRepository, UserRepository userRepository) {
         this.mountainRepository = mountainRepository;
         this.mountainCommentRepository = mountainCommentRepository;
         this.bookMarkRepository = bookMarkRepository;
@@ -144,7 +144,7 @@ class MountainServiceTest {
 
     @Test
     void searchParty() throws ParseException {
-        String keyword = "모악";
+        String keyword = "악";
         QueryResults<PartyListDto> results = queryFactory
                 .select(Projections.constructor(PartyListDto.class,
                         party.partyId,
@@ -178,7 +178,7 @@ class MountainServiceTest {
 
     @Test
     void myPageBookmark() {
-        Long userId = 4L;
+        Long userId = 1L;
         QueryResults<BookMarkResponseDto> results = queryFactory
                 .select(Projections.constructor(BookMarkResponseDto.class,
                         mountain1.mountainId,
@@ -329,4 +329,118 @@ class MountainServiceTest {
         long total = results.getTotal();
     }
 
+    @Test
+    @DisplayName("10개 랜점으로 보여주기 jpa")
+    void searchBefore() {
+        List<Mountain> mountainList = mountainRepository.findAll();
+
+        List<Mountain100Dto> mountain100DtoList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Mountain100Dto mountain100Dto = new Mountain100Dto(mountainList.get(i));
+            mountain100DtoList.add(mountain100Dto);
+        }
+        Collections.shuffle(mountain100DtoList);
+
+        List<SearchDto> searchDto = new ArrayList<>();
+
+        int star = 0;
+        double starAvr;
+        for (int i = 0; i < 10; i++) {
+            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain100DtoList.get(i).getMountainId());
+            if (mountainComments.size() == 0) {
+                starAvr = 0;
+            } else {
+                for (MountainComment mountainComment : mountainComments) {
+                    star += mountainComment.getStar();
+                }
+                starAvr = (float) star / mountainComments.size();
+            }
+            SearchDto mountainInfo = new SearchDto(starAvr,mountain100DtoList.get(i));
+
+            searchDto.add(mountainInfo);
+        }
+        for (SearchDto dto : searchDto) {
+            System.out.println("dto.getMountain() = " + dto.getMountain());
+        }
+    }
+
+    @Test
+    @DisplayName("10개 랜덤으로 보여주기 query")
+    void searchBefore2() {
+        List<SearchDto> searchDtoList = new ArrayList<>();
+        List<Map<String, Object>> mountainList = mountainRepository.beforeSearch();
+        for (int i = 0; i < mountainList.size(); i++) {
+            SearchDto searchDto = new SearchDto(mountainList.get(i));
+            searchDtoList.add(searchDto);
+        }
+        for (Map<String, Object> stringObjectMap : mountainList) {
+            System.out.println("stringObjectMap.get(\"mountain\") = " + stringObjectMap.get("mountain"));
+        }
+    }
+
+    @Test
+    @DisplayName("검색 후 페이지 jpa")
+    void searchAfter() {
+        String keyword = "악";
+        int pageNum = 1;
+        List<Mountain> mountainList = mountainRepository.searchAllByMountain(keyword);
+        List<SearchDto> searchDtoList = new ArrayList<>();
+        Pageable pageable = getPageable(pageNum);
+        setSearchList(mountainList, searchDtoList);
+
+        int start = pageNum * 5;
+        int end = Math.min((start + 5), mountainList.size());
+
+        Page<SearchDto> page = new PageImpl<>(searchDtoList.subList(start, end), pageable, searchDtoList.size());
+        for (SearchDto searchDto : page) {
+            System.out.println("searchDto.getMountain() = " + searchDto.getMountain());
+        }
+    }
+
+    private void setSearchList(List<Mountain> mountainList, List<SearchDto> searchDtoList) {
+        int star = 0;
+        Double starAvr;
+        for (Mountain mountain : mountainList) {
+            List<MountainComment> mountainComments = mountainCommentRepository.findAllByMountainId(mountain.getMountainId());
+            if (mountainComments.size() == 0) {
+                starAvr = 0D;
+            } else {
+                for (int i = 0; i < mountainComments.size(); i++) {
+                    star += mountainComments.get(i).getStar();
+                }
+                starAvr = (double) star / mountainComments.size();
+            }
+
+            SearchDto searchDto = new SearchDto(
+                    mountain.getMountainId(),
+                    mountain.getMountain(),
+                    mountain.getMountainAddress(),
+                    mountain.getMountainImgUrl(),
+                    starAvr,
+                    mountain.getLat(),
+                    mountain.getLng()
+            );
+            searchDtoList.add(searchDto);
+        }
+    }
+
+    private Pageable getPageable(int pageNum) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        return PageRequest.of(pageNum, 5, sort);
+    }
+
+    @Test
+    @DisplayName("검색 후 페이지 Querydsl")
+    void searchAfter2() {
+        int pageNum=1;
+        String keyword = "악";
+        PageRequest pageRequest = PageRequest.of(pageNum, 5);
+        Page<SearchDto> searchDtos = mountainRepository.searchPage(keyword, pageRequest);
+        for (SearchDto searchDto : searchDtos) {
+            System.out.println("searchDto.getMountain() = " + searchDto.getMountain());
+        }
+
+
+    }
 }

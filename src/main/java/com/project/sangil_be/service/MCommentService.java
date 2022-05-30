@@ -3,19 +3,16 @@ package com.project.sangil_be.service;
 import com.project.sangil_be.dto.MCommentRequestDto;
 import com.project.sangil_be.dto.MCommentResponseDto;
 import com.project.sangil_be.dto.TitleDto;
-import com.project.sangil_be.model.GetTitle;
-import com.project.sangil_be.model.Mountain;
 import com.project.sangil_be.model.MountainComment;
-import com.project.sangil_be.repository.GetTitleRepository;
 import com.project.sangil_be.repository.MountainRepository;
 import com.project.sangil_be.repository.MountainCommentRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
+import com.project.sangil_be.utils.TitleUtil;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 //테스트
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class MCommentService {
     private final MountainRepository mountainRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final Validator validator;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
 
     // 댓글 작성
     public MCommentResponseDto writeComment(Long mountainId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
@@ -52,6 +49,7 @@ public class MCommentService {
     // 댓글 수정
     @Transactional
     public MCommentResponseDto updateComment(Long mountainCommentId, MCommentRequestDto mCommentRequestDto, UserDetailsImpl userDetails) {
+        validator.mountainCommentAutChk(mountainCommentId,userDetails.getUser().getUserId());
         MountainComment mountainComment = mountainCommentRepository.findById(mountainCommentId).orElseThrow(
                 () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );
@@ -60,7 +58,8 @@ public class MCommentService {
     }
 
     // 댓글 삭제
-    public String deleteComment(Long mountainCommentId) {
+    public String deleteComment(Long mountainCommentId, UserDetailsImpl userDetails) {
+        validator.mountainCommentAutChk(mountainCommentId,userDetails.getUser().getUserId());
         MountainComment mountainComment = mountainCommentRepository.findById(mountainCommentId).orElseThrow(
                 () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );

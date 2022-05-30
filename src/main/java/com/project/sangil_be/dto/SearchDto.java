@@ -32,15 +32,15 @@ public class SearchDto {
         this.lng = lng;
     }
 
-//    public SearchDto(String starAvr, Mountain100Dto mountain100Dto) {
-//        this.mountainId=mountain100Dto.getMountainId();
-//        this.mountain=mountain100Dto.getMountain();
-//        this.mountainAddress=mountain100Dto.getMountainAddress();
-//        this.mountainImgUrl=mountain100Dto.getMountainImgUrl();
-//        this.starAvr=starAvr;
-//        this.lat=mountain100Dto.getLat();
-//        this.lng=mountain100Dto.getLng();
-//    }
+    public SearchDto(Double starAvr, Mountain100Dto mountain100Dto) {
+        this.mountainId=mountain100Dto.getMountainId();
+        this.mountain=mountain100Dto.getMountain();
+        this.mountainAddress=mountain100Dto.getMountainAddress();
+        this.mountainImgUrl=mountain100Dto.getMountainImgUrl();
+        this.starAvr=starAvr;
+        this.lat=mountain100Dto.getLat();
+        this.lng=mountain100Dto.getLng();
+    }
 
     public SearchDto(Map<String, Object> stringObjectMap) {
         this.mountainId = Long.valueOf(String.valueOf(stringObjectMap.get("mountain_id")));

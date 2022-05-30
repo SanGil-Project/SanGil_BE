@@ -1,4 +1,4 @@
-package com.project.sangil_be.service;
+package com.project.sangil_be.utils;
 
 import com.project.sangil_be.dto.TitleDto;
 import com.project.sangil_be.model.Completed;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class TitleService {
+public class TitleUtil {
     private final FeedRepository feedRepository;
     private final GetTitleRepository getTitleRepository;
     private final GoodRepository goodRepository;

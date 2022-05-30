@@ -1,12 +1,8 @@
 package com.project.sangil_be.dto;
 
 import com.project.sangil_be.model.Feed;
-import com.project.sangil_be.model.Good;
 import com.project.sangil_be.model.User;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;

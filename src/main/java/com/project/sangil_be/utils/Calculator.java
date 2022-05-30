@@ -7,6 +7,9 @@ public class Calculator {
 
     public String time(long time) {
         // 게시글이 현재로 부터 몇 분전에 작성되었는지 보기 좋게 변경
+        if (time == 0) {
+            return "방금전";
+        }
         if (time < 60) {
             return String.format("%s분 전", time);
         }

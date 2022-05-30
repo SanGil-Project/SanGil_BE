@@ -7,6 +7,7 @@ import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Calculator;
 import com.project.sangil_be.utils.DistanceToUser;
+import com.project.sangil_be.utils.TitleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,11 +33,12 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final MountainCommentRepository mountainCommentRepository;
     private final S3Service s3Service;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
     private final Calculator calculator;
 
+    // 쿼리 필요
     // 맵트래킹 마이페이지
     public List<CompletedListDto> myPageTracking(UserDetailsImpl userDetails) {
         List<Completed> completed = completedRepository.findAllByUserId(userDetails.getUser().getUserId());
@@ -110,6 +112,7 @@ public class MypageService {
         return new BookMarkDto(bookMarkResponseDtos);
     }
 
+//    public BookMarkDto getBookMarkMountain(double lat, double lng, UserDetailsImpl userDetails, int pageNum) {
 //        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(userDetails.getUser().getUserId());
 //        List<BookMarkResponseDto> bookMarkResponseDtos = new ArrayList<>();
 //

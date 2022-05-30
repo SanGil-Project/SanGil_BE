@@ -33,12 +33,12 @@ public class FeedCommentResDto {
         this.createdAt = feedComment.getCreatedAt();
     }
 
-    public FeedCommentResDto(Long feedCommentId, Long userId, String nickname, String userTitle, String userImageUrl, String feedComment) {
-        this.feedCommentId = feedCommentId;
+    public FeedCommentResDto(Long commentId, Long userId, String nickname, String userTitle, String userImgUrl, String feedComment) {
+        this.commentId = commentId;
         this.userId = userId;
         this.nickname = nickname;
         this.userTitle = userTitle;
-        this.userImageUrl = userImageUrl;
+        this.userImgUrl = userImgUrl;
         this.feedComment = feedComment;
     }
 }

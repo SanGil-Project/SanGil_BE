@@ -5,6 +5,7 @@ import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Calculator;
+import com.project.sangil_be.utils.TitleUtil;
 import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final AttendRepository attendRepository;
     private final Validator validator;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
     private final Calculator calculator;
 
     // 등산 모임 참가 작성
@@ -46,7 +47,6 @@ public class PartyService {
         return new PartyListDto(party, completed, titleDtoList);
     }
 
-    // complete 수정 필요
     // 모든 동호회 리스트 가져오기
     @Transactional
     public Page<PartyListDto> getAllParty(int pageNum) {
@@ -82,6 +82,7 @@ public class PartyService {
         return PageRequest.of(page, 6, sort);
     }
 
+    // 쿼리 수정 필요
     // 동호회 상세페이지
     @Transactional
     public PartyDetailDto findParty(Long partyId) {
@@ -100,10 +101,10 @@ public class PartyService {
         return new PartyDetailDto(party, partymemberDto, calculator.time(beforeTime));
     }
 
-    // api에 맞게 수정 필요
     // 동호회 수정 코드
     @Transactional
-    public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
+    public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto, UserDetailsImpl userDetails) {
+        validator.partyAutChk(partyId,userDetails.getUser().getUserId());
         Party party = partyRepository.findById(partyId).orElseThrow(
                 () -> new IllegalArgumentException("찾는 게시글이 없습니다.")
         );
@@ -117,6 +118,7 @@ public class PartyService {
     @Transactional
     public void deleteParty(Long partyId, UserDetailsImpl userDetails) {
         try {
+            validator.partyAutChk(partyId,userDetails.getUser().getUserId());
             partyRepository.deleteById(partyId);
             attendRepository.deleteByPartyIdAndUserId(partyId, userDetails.getUser().getUserId());
         } catch (IllegalArgumentException e) {

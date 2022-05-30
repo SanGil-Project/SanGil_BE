@@ -17,4 +17,6 @@ public interface MountainCommentRepository extends JpaRepository<MountainComment
     Long countAllByUserId(Long userId);
 
     List<MountainComment> findAllByMountainIdOrderByCreatedAtAsc(Long mountainId);
+
+    MountainComment findByMountainCommentId(Long mountainCommentId);
 }

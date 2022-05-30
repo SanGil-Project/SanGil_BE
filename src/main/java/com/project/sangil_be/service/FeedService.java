@@ -6,8 +6,11 @@ import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.FeedCommentRepository;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.repository.GoodRepository;
+import com.project.sangil_be.model.User;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Calculator;
+import com.project.sangil_be.utils.TitleUtil;
+import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -26,9 +29,10 @@ public class FeedService {
     private final S3Service s3Service;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
     private final FeedCommentRepository feedCommentRepository;
     private final Calculator calculator;
+    private final Validator validator;
 
     // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
@@ -68,10 +72,10 @@ public class FeedService {
 
     // 피드 삭제
     @Transactional
-    public void deletefeed(Long feedId, Optional<Feed> feed) {
+    public void deletefeed(Long feedId, Optional<Feed> feed, UserDetailsImpl userDetails) {
+        validator.feedAutChk(feedId,userDetails.getUser().getUserId());
         feedRepository.deleteById(feedId);
         goodRepository.deleteByFeedId(feedId);
-
         String[] key = feed.get().getFeedImgUrl().split(".com/");
         String imageKey = key[key.length - 1];
         s3Service.deletefeed(imageKey);
@@ -95,7 +99,7 @@ public class FeedService {
         return new FeedDetailResponseDto(feed, goodCnt, goodStatus, feedCommentListDto, calculator.time(feedBeforeTime));
     }
 
-    // 쿼리
+    // 쿼리 수정 필요
     // 나의 피드
     public FeedListResponseDto myfeeds(User user, int pageNum) {
         List<Feed> feed = feedRepository.findAllByUserOrderByCreatedAtDesc(user);

@@ -7,15 +7,10 @@ import com.project.sangil_be.repository.FeedCommentRepository;
 import com.project.sangil_be.repository.FeedRepository;
 import com.project.sangil_be.securtiy.UserDetailsImpl;
 import com.project.sangil_be.utils.Calculator;
+import com.project.sangil_be.utils.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +18,7 @@ public class FeedCommentService {
     private final FeedCommentRepository feedCommentRepository;
     private final FeedRepository feedRepository;
     private final Calculator calculator;
+    private final Validator validator;
 
     // createdAt 수정
     // 댓글 작성
@@ -42,7 +38,8 @@ public class FeedCommentService {
 
     // 댓글 삭제
     @Transactional
-    public void deleteComment(Long feedCommentId) {
+    public void deleteComment(Long feedCommentId, UserDetailsImpl userDetails) {
+        validator.feedCommentAutChk(feedCommentId,userDetails.getUser().getUserId());
         feedCommentRepository.deleteByFeedCommentId(feedCommentId);
     }
 

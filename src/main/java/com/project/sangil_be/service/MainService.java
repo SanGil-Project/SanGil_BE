@@ -26,7 +26,7 @@ public class MainService {
     private final AttendRepository attendRepository;
     private final FeedRepository feedRepository;
     private final GoodRepository goodRepository;
-    private final TitleService titleService;
+    private final TitleUtil titleService;
     private final MountainCommentRepository mountainCommentRepository;
     private final Calculator calculator;
 

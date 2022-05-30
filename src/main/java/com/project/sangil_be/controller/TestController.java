@@ -11,7 +11,7 @@ public class TestController {
     private final ServiceImpl service;
 
     // 데이터베이스에
-    @PutMapping("/api/test")
+    @PutMapping("/test")
     public void updateXY() {
         service.updateXY();
     }
