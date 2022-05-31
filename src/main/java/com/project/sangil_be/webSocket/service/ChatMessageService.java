@@ -38,7 +38,7 @@ public class ChatMessageService {
         // 채팅방 가져오기
         ChatRoom chatRoom = chatUtils.selectOneChatRoom(message.getRoomId());
         message.setType(ChatMessage.MessageType.TALK);
-        List<ChatMessage> selectMessageList = chatMessageRepository.findByChatroomAndMessageTypeOrderByCreatedAtAsc(chatRoom,message.getType());
+        List<ChatMessage> selectMessageList = chatMessageRepository.findByChatroomAndMessageTypeOrderByMessageIdAsc(chatRoom,message.getType());
         List<MessageResponseDto> responseChatList = new ArrayList<>();
 
         for(ChatMessage chatMessage : selectMessageList){
