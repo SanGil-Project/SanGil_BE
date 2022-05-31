@@ -52,7 +52,7 @@ public class TrackingService {
             saveTracking.setDistanceM(distanceM);
             saveTracking.setDistanceK(distanceK);
             trackingRepository.save(saveTracking);
-            distanceResponseDto.setDistanceK(Math.round(distanceK*1000)/1000.0);
+            distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
             distanceResponseDto.setDistanceM(distanceM);
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
@@ -64,7 +64,7 @@ public class TrackingService {
                 saveTracking.setDistanceM(distanceM);
                 saveTracking.setDistanceK(distanceK);
                 trackingRepository.save(saveTracking);
-                distanceResponseDto.setDistanceK(Math.round(distanceK*1000)/1000.0);
+                distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
                 distanceResponseDto.setDistanceM(distanceM);
             }
         }
