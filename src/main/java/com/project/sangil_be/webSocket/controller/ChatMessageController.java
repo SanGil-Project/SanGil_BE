@@ -62,7 +62,7 @@ public class ChatMessageController {
                 // 존재하지않는다면 입장시간 저장
                 System.out.println("Enter가 들어왔는데================방 입장 정보가 없을때 실행합니다.=====================================");
                 chatRoomJoinService.saveEnterTime(message);
-
+                chatMessageList = chatMessageService.chatMessageList(message);
             }
             // 방을 구별해주기 위해서 @SendTo를 쓰지 않고 SimpMessageSendingOperations를 사용해서 방 구별을 해줄 수 있게 함 ex) "/topic/greetings+roomId"
 

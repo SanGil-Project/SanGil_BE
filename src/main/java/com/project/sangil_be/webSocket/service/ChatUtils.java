@@ -35,7 +35,7 @@ public class ChatUtils {
 
     // 메시지 생성 시간 계산
     public String getCurrentTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
