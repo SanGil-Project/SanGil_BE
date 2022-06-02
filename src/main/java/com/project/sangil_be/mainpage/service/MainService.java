@@ -42,7 +42,7 @@ public class MainService {
 
     // 메인/마이페이지 예정된 등산 모임 임박한 순
     @Transactional
-    public PlanResponseDto getPlan(UserDetailsImpl userDetails) {
+    public List<PlanListDto> getPlan(UserDetailsImpl userDetails) {
         List<Attend> attend = attendRepository.findAllByUserId(userDetails.getUser().getUserId());
         List<Party> partyList = new ArrayList<>();
 
@@ -54,12 +54,9 @@ public class MainService {
         List<PlanListDto> planListDtos = new ArrayList<>();
         for (Party party : partyList) {
             LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
-            String year = String.valueOf(now).split("-")[0];
-            String month = String.valueOf(now).split("-")[1];
-            String day = String.valueOf(now).split("-")[2];
-            String date = year + "-" + month + "-" + day;
+            String date = now.toString();
 
-            int compare = date.compareTo(String.valueOf(party.getPartyDate()));
+            int compare = date.compareTo(party.getPartyDate());
 
             String msg;
             if (compare > 0) {
@@ -71,11 +68,11 @@ public class MainService {
             planListDtos.add(new PlanListDto(party, msg));
         }
 
-        return new PlanResponseDto(planListDtos);
+        return planListDtos;
     }
 
     // 메인페이지 최신 2개 모임
-    public TwoPartyListResponseDto getTwoParty() {
+    public List<TwoPartyListDto> getTwoParty() {
         List<Party> partyList = partyRepository.findAllByOrderByCreatedAtDesc();
         List<TwoPartyListDto> partyListDtos = new ArrayList<>();
         if (partyList.size() < 3) {
@@ -87,24 +84,24 @@ public class MainService {
                 partyListDtos.add(new TwoPartyListDto(partyList.get(i)));
             }
         }
-        return new TwoPartyListResponseDto(partyListDtos);
+        return partyListDtos;
     }
 
     // 메인페이지 북마크 순으로 탑10
     public List<Top10MountainDto> get10Mountains(UserDetailsImpl userDetails) {
         List<Map<String, Object>> top10Mountains = mountainRepository.methodlist();
-        List<Top10MountainDto> testDtos = new ArrayList<>();
+        List<Top10MountainDto> Top10Dtos = new ArrayList<>();
         for (int i = 0; i < top10Mountains.size(); i++) {
             Boolean bookMark = bookMarkRepository.existsByMountainIdAndUserId(Long.valueOf(String.valueOf(top10Mountains.get(i).get("mountain_id"))), userDetails.getUser().getUserId());
             Top10MountainDto top10MountainDto = new Top10MountainDto(top10Mountains.get(i), bookMark);
-            testDtos.add(top10MountainDto);
+            Top10Dtos.add(top10MountainDto);
         }
-        return testDtos;
+        return Top10Dtos;
     }
 
     // 쿼리로 고칠것
     // 메인 페이지 피드 7개
-    public FeedListResponseDto mainfeeds(UserDetailsImpl userDetails) {
+    public List<FeedResponseDto> mainfeeds(UserDetailsImpl userDetails) {
         List<Feed> feed = feedRepository.findAllByOrderByCreatedAtDesc();
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         if (feed.size() < 8) {
@@ -133,8 +130,7 @@ public class MainService {
             }
         }
 
-        List<TitleDto> titleDtoList = titleService.getGoodTitle(userDetails);
-        return new FeedListResponseDto(feedResponseDtos, titleDtoList);
+        return feedResponseDtos;
     }
 
     private Pageable getPageable(int pageNum) {

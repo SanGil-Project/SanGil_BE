@@ -7,16 +7,16 @@ import lombok.Getter;
 @Data
 public class NearbyMountainListDto {
     private Long mountainId;
-    private String mountainName;
-    private String mountainImgUrl;
+    private String mountain;
     private String mountainAddress;
+    private String mountainImgUrl;
     private Double starAvr;
-    private boolean bookmark;
+    private Boolean bookmark;
     private Double distance;
 
     public NearbyMountainListDto(Mountain mountain, Double starAvr, Boolean bookmark, Double dis) {
         this.mountainId=mountain.getMountainId();
-        this.mountainName=mountain.getMountain();
+        this.mountain=mountain.getMountain();
         this.mountainImgUrl=mountain.getMountainImgUrl();
         this.mountainAddress=mountain.getMountainAddress();
         this.starAvr=starAvr;
@@ -24,9 +24,10 @@ public class NearbyMountainListDto {
         this.distance=dis;
     }
 
-    public NearbyMountainListDto(Long mountainId, String mountainName, String mountainImgUrl, String mountainAddress, Double starAvr) {
+    //query dsl (bookmark, distance -> service단에서 set으로 나감)
+    public NearbyMountainListDto(Long mountainId, String mountain, String mountainImgUrl, String mountainAddress, Double starAvr) {
         this.mountainId = mountainId;
-        this.mountainName = mountainName;
+        this.mountain = mountain;
         this.mountainImgUrl = mountainImgUrl;
         this.mountainAddress = mountainAddress;
         this.starAvr = starAvr;

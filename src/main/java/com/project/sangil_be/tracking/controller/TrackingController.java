@@ -15,7 +15,7 @@ public class TrackingController {
     private final TrackingService trackingService;
 
     // 트래킹 시작
-    @PostMapping("/api/tracking/{mountainId}")
+    @PostMapping("/tracking/{mountainId}")
     public StartTrackingResponseDto startMyLocation (
             @PathVariable Long mountainId,
             @RequestBody StartTrackingRequestDto startTrackingRequestDto,
@@ -23,28 +23,28 @@ public class TrackingController {
         return trackingService.startMyLocation(mountainId,startTrackingRequestDto, userDetails);
     }
 
-    // 맵 트래킹 5초 마다 저장
-    @PostMapping("/api/tracking/mountain/{completedId}")
+    // 맵 트래킹 3초 마다 저장
+    @PostMapping("/tracking/mountain/{completedId}")
     public DistanceResponseDto saveMyLocation (@PathVariable Long completedId, @RequestBody TrackingRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return trackingService.saveMyLocation(completedId, requestDto, userDetails);
     }
 
     // 트래킹 완료 후 저장
-    @PutMapping("/api/tracking/{completedId}")
+    @PutMapping("/tracking/{completedId}")
     public TitleResponseDto saveTracking(@PathVariable Long completedId, @RequestBody CompleteRequestDto completeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return trackingService.saveTracking(completedId,completeRequestDto,userDetails);
     }
 
     // 맵트래킹 삭제 (10분 이하)
-    @DeleteMapping("/api/tracking/{completedId}")
-    public String deleteTracking(@PathVariable Long completedId){
-        return trackingService.deleteTracking(completedId);
+    @DeleteMapping("/tracking/{completedId}")
+    public void deleteTracking(@PathVariable Long completedId){
+        trackingService.deleteTracking(completedId);
     }
 
     // 맵 트래킹 상세페이지
-    @GetMapping("/api/tracking/detail/{completedId}")
-    public TrackingListDto detailTracking (@PathVariable Long completedId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return trackingService.detailTracking(completedId, userDetails);
+    @GetMapping("/tracking/detail/{completedId}")
+    public TrackingListDto detailTracking (@PathVariable Long completedId) {
+        return trackingService.detailTracking(completedId);
     }
 
 }

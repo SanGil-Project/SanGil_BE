@@ -15,10 +15,9 @@ public class FeedListResponseDto {
     private int totalPage;
     private int currentPage;
 
-    public FeedListResponseDto(List<FeedResponseDto> feedResponseDtos, List<TitleDto> titleDtoList) {
-        this.feedList=feedResponseDtos;
-        this.titleDtoList = titleDtoList;
-    }
+//    public FeedListResponseDto(List<FeedResponseDto> feedResponseDtos) {
+//        this.feedList=feedResponseDtos;
+//    }
 
     public FeedListResponseDto(Page<FeedResponseDto> page) {
         this.feedList=page.getContent();

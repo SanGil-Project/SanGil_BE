@@ -1,5 +1,6 @@
 package com.project.sangil_be.feed.service;
 
+import com.project.sangil_be.etc.utils.Validator;
 import com.project.sangil_be.feed.dto.*;
 import com.project.sangil_be.mypage.dto.TitleDto;
 import com.project.sangil_be.etc.utils.TitleUtil;
@@ -32,30 +33,29 @@ public class FeedService {
     private final TitleUtil titleService;
     private final FeedCommentRepository feedCommentRepository;
     private final Calculator calculator;
+    private final Validator validator;
 
     // 피드 작성
     public FeedResponseDto saveFeed(String feedContent, MultipartFile multipartFile, UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
         String feedImgUrl = s3Service.upload(multipartFile, "feedimage");
-        Feed feed = new Feed(feedContent, feedImgUrl, user);
+        Feed feed = new Feed(feedContent, feedImgUrl, userDetails.getUser());
         feedRepository.save(feed);
 
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        List<TitleDto> titleDtoList = titleService.getFeedTitle(user);
-        FeedResponseDto feedResponseDto = new FeedResponseDto(user, feed, 0, goodStatus, titleDtoList);
-        return feedResponseDto;
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), userDetails.getUser().getUserId());
+        long beforeTime = ChronoUnit.MINUTES.between(feed.getCreatedAt(),LocalDateTime.now());
+        return new FeedResponseDto(userDetails.getUser(), feed, 0,calculator.time(beforeTime));
 
     }
 
     // 피드 좋아요
-    public GoodCheckResponseDto goodCheck(Long feedId, User user) {
+    public GoodCheckResponseDto goodCheck(Long feedId, UserDetailsImpl userDetails) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new IllegalArgumentException("피드가 없습니다.")
         );
         try {
-            Optional<Good> good = goodRepository.findByFeedIdAndUserId(feedId, user.getUserId());
+            Optional<Good> good = goodRepository.findByFeedIdAndUserId(feedId, userDetails.getUser().getUserId());
             if (!good.isPresent()) {
-                Good savegood = new Good(feed, user);
+                Good savegood = new Good(feed, userDetails.getUser());
                 goodRepository.save(savegood);
 
             } else {
@@ -65,31 +65,30 @@ public class FeedService {
             System.out.println("좋아요 예외처리");
         };
 
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, userDetails.getUser().getUserId());
         int goodCnt = goodRepository.countAllByFeedId(feedId);
-        GoodCheckResponseDto goodCheckResponseDto = new GoodCheckResponseDto(goodCnt, goodStatus);
 
-        return goodCheckResponseDto;
+        return new GoodCheckResponseDto(goodStatus,goodCnt);
     }
 
     // 피드 삭제
     @Transactional
-    public void deletefeed(Long feedId, Optional<Feed> feed) {
+    public void deletefeed(Long feedId, UserDetailsImpl userDetails) {
+        validator.feedAuthCheck(feedId, userDetails.getUser().getUserId());
         feedRepository.deleteById(feedId);
         goodRepository.deleteByFeedId(feedId);
-
+        Optional<Feed> feed = feedRepository.findById(feedId);
         String[] key = feed.get().getFeedImgUrl().split(".com/");
         String imageKey = key[key.length - 1];
         s3Service.deletefeed(imageKey);
-
     }
 
     // 피드 상세
-    public FeedDetailResponseDto feedDetail(Long feedId, User user, int pageNum) {
+    public FeedDetailResponseDto feedDetail(Long feedId, UserDetailsImpl userDetails, int pageNum) {
         Feed feed = feedRepository.findByFeedId(feedId);
         long feedBeforeTime = ChronoUnit.MINUTES.between(feed.getCreatedAt(), LocalDateTime.now());
         Integer goodCnt = goodRepository.countAllByFeedId(feedId);
-        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, user.getUserId());
+        boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedId, userDetails.getUser().getUserId());
         PageRequest pageRequest = PageRequest.of(pageNum, 7);
         Page<CommentResponseDto> commentList = feedCommentRepository.getCommentList(feedId, pageRequest);
         for (CommentResponseDto commentResponseDto : commentList) {
@@ -103,14 +102,14 @@ public class FeedService {
 
     // 쿼리
     // 나의 피드
-    public FeedListResponseDto myfeeds(User user, int pageNum) {
-        List<Feed> feed = feedRepository.findAllByUserOrderByCreatedAtDesc(user);
+    public FeedListResponseDto myfeeds(UserDetailsImpl userDetails, int pageNum) {
+        List<Feed> feed = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         for (Feed feeds : feed) {
             int goodCnt = goodRepository.findByFeedId(feeds.getFeedId()).size();
-            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), user.getUserId());
+            boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feeds.getFeedId(), userDetails.getUser().getUserId());
             long beforeTime = ChronoUnit.MINUTES.between(feeds.getCreatedAt(), LocalDateTime.now());
-            feedResponseDtos.add(new FeedResponseDto(feeds, goodCnt, goodStatus,calculator.time(beforeTime)));
+            feedResponseDtos.add(new FeedResponseDto(feeds));
         }
         Pageable pageable = getPageable(pageNum);
 
@@ -135,23 +134,26 @@ public class FeedService {
         for (Feed feed : feeds) {
             int goodCnt = goodRepository.findByFeedId(feed.getFeedId()).size();
             boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feed.getFeedId(), userDetails.getUser().getUserId());
-
+            long beforeTime = ChronoUnit.MINUTES.between(feed.getCreatedAt(), LocalDateTime.now());
             List<FeedComment> feedComments = feedCommentRepository.findAllByFeedOrderByCreatedAtDesc(feed);
             List<FeedCommentResDto> feedCommentResDtos = new ArrayList<>();
+
             if (feedComments.size() < 3) {
                 for (int i = 0; i < feedComments.size(); i++) {
-                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i));
+                    long commentbeforeTime = ChronoUnit.MINUTES.between(feedComments.get(i).getCreatedAt(),LocalDateTime.now());
+                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i),calculator.time(commentbeforeTime));
                     feedCommentResDtos.add(feedCommentResDto);
                 }
             } else {
                 for (int i = 0; i < 2; i++) {
-                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i));
+                    long commentbeforeTime = ChronoUnit.MINUTES.between(feedComments.get(i).getCreatedAt(),LocalDateTime.now());
+                    FeedCommentResDto feedCommentResDto = new FeedCommentResDto(feedComments.get(i),calculator.time(commentbeforeTime));
                     feedCommentResDtos.add(feedCommentResDto);
                 }
             }
             Long commentCnt = feedCommentRepository.countAllByFeed(feed);
 
-            FeedResponseDto feedResponseDto = new FeedResponseDto(feed,goodCnt,goodStatus,commentCnt,feedCommentResDtos);
+            FeedResponseDto feedResponseDto = new FeedResponseDto(feed,goodCnt,goodStatus,calculator.time(beforeTime),commentCnt,feedCommentResDtos);
             feedResponseDtos.add(feedResponseDto);
         }
 

@@ -59,7 +59,6 @@ public class TrackingService {
             saveTracking.setDistanceK(distanceK);
             trackingRepository.save(saveTracking);
             distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
-            distanceResponseDto.setDistanceM(distanceM);
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
@@ -71,7 +70,6 @@ public class TrackingService {
                 saveTracking.setDistanceK(distanceK);
                 trackingRepository.save(saveTracking);
                 distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
-                distanceResponseDto.setDistanceM(distanceM);
             }
         }
         return distanceResponseDto;
@@ -99,18 +97,18 @@ public class TrackingService {
 
     // 맵트래킹 삭제 (10분 이하)
     @Transactional
-    public String deleteTracking(Long completedId) {
+    public void deleteTracking(Long completedId) {
         try {
             completedRepository.deleteByCompleteId(completedId);
-            return "true";
+
         } catch (Exception e) {
-            return "false";
+            System.out.println("delete 오류");
         }
     }
 
     // 맵 트래킹 상세페이지
     @Transactional
-    public TrackingListDto detailTracking(Long completedId, UserDetailsImpl userDetails) {
+    public TrackingListDto detailTracking(Long completedId) {
         List<Tracking> trackingList = trackingRepository.findAllByCompletedId(completedId);
         Completed completed = completedRepository.findByCompleteId(completedId);
         List<TrackingResponseDto> trackingResponseDtoList = new ArrayList<>();
@@ -119,6 +117,6 @@ public class TrackingService {
             TrackingResponseDto trackingResponseDto = new TrackingResponseDto(tracking.getLat(), tracking.getLng());
             trackingResponseDtoList.add(trackingResponseDto);
         }
-        return new TrackingListDto(userDetails, completedId, mountain, completed, trackingResponseDtoList);
+        return new TrackingListDto(completedId, mountain, completed, trackingResponseDtoList);
     }
 }

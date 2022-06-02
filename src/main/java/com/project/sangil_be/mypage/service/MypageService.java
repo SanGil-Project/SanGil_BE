@@ -81,12 +81,12 @@ public class MypageService {
     }
 
     // 닉네임 중복체크
-    public String usernameCheck(UsernameRequestDto usernameRequestDto) {
+    public Boolean usernameCheck(UsernameRequestDto usernameRequestDto) {
         Optional<User> user = userRepository.findByNickname(usernameRequestDto.getNickname());
         if(user.isPresent()) {
-            return "false";
+            return false;
         }else {
-            return "true";
+            return true;
         }
     }
 
@@ -100,14 +100,13 @@ public class MypageService {
 
     //userimageUrl 수정
     @Transactional
-    public void editimage(MultipartFile multipartFile, User user) {
+    public void editimage(MultipartFile multipartFile, UserDetailsImpl userDetails) {
 
-        String[] key = user.getUserImgUrl().split(".com/");
+        String[] key = userDetails.getUser().getUserImgUrl().split(".com/");
         String imageKey = key[key.length - 1];
         String profileImageUrl = s3Service.reupload(multipartFile, "profileimage", imageKey);
-
+        User user = userRepository.findByUserId(userDetails.getUser().getUserId());
         user.editimage(profileImageUrl);
-        userRepository.save(user);
     }
 
     // 쿼리 페이지처리
@@ -119,7 +118,7 @@ public class MypageService {
             boolean bookMarkChk = bookMarkRepository.existsByMountainIdAndUserId(bookMarkResponseDto.getMountainId(), userDetails.getUser().getUserId());
             Mountain mountain = mountainRepository.findByMountainId(bookMarkResponseDto.getMountainId());
             Double distance = DistanceToUser.distance(lat, lng, mountain.getLat(), mountain.getLng(), "kilometer");
-            bookMarkResponseDto.setBookMarkChk(bookMarkChk);
+            bookMarkResponseDto.setBookMark(bookMarkChk);
             bookMarkResponseDto.setDistance(Math.round(distance * 100) / 100.0);
         }
         return new BookMarkDto(bookMarkResponseDtos);
@@ -205,13 +204,13 @@ public class MypageService {
     // 마이페이지 피드 10개
     public List<FeedResponseDto> myFeeds(UserDetailsImpl userDetails) {
         List<Feed> feedList = feedRepository.findAllByUserOrderByCreatedAtDesc(userDetails.getUser());
+        List<TitleDto> titleDtoList = titleService.getGoodTitle(userDetails);
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
         if (feedList.size() < 10) {
           for (int i = 0; i < feedList.size(); i++) {
               int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
               boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
-              long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
-              FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
+              FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,titleDtoList);
               feedResponseDtos.add(feedResponseDto);
           }
             return feedResponseDtos;
@@ -219,8 +218,7 @@ public class MypageService {
             for (int i = 0; i < 10; i++) {
                 int goodCnt = goodRepository.findByFeedId(feedList.get(i).getFeedId()).size();
                 boolean goodStatus = goodRepository.existsByFeedIdAndUserId(feedList.get(i).getFeedId(), userDetails.getUser().getUserId());
-                long beforeTime = ChronoUnit.MINUTES.between(feedList.get(i).getCreatedAt(), LocalDateTime.now());
-                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,calculator.time(beforeTime));
+                FeedResponseDto feedResponseDto = new FeedResponseDto(feedList.get(i), goodCnt, goodStatus,titleDtoList);
                 feedResponseDtos.add(feedResponseDto);
             }
             return feedResponseDtos;

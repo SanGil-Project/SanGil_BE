@@ -25,7 +25,6 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                         mountain1.mountainId,
                         mountain1.mountain,
                         mountain1.mountainAddress,
-                        mountain1.mountainImgUrl,
                         mountainComment1.star.avg().as("starAvr")))
                 .from(bookMark)
                 .leftJoin(mountain1).on(mountain1.mountainId.eq(bookMark.mountainId))
