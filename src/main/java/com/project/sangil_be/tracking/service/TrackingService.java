@@ -54,22 +54,22 @@ public class TrackingService {
             saveTracking.setLat(trackingRequestDto.getLat());
             saveTracking.setLng(trackingRequestDto.getLng());
             Double distanceM = 0d;
-            Double distanceK = 0d;
+//            Double distanceK = 0d;
             saveTracking.setDistanceM(distanceM);
-            saveTracking.setDistanceK(distanceK);
+//            saveTracking.setDistanceK(distanceK);
             trackingRepository.save(saveTracking);
-            distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
+            distanceResponseDto.setDistanceM(distanceM);
         } else {
             for (int i = trackinglist.size() - 1; i < trackinglist.size(); i++) {
                 Double distanceM = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "meter");
-                Double distanceK = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "kilometer");
+//                Double distanceK = DistanceToUser.distance(trackinglist.get(i).getLat(), trackinglist.get(i).getLng(), trackingRequestDto.getLat(), trackingRequestDto.getLng(), "kilometer");
                 saveTracking.setCompletedId(completedId);
                 saveTracking.setLat(trackingRequestDto.getLat());
                 saveTracking.setLng(trackingRequestDto.getLng());
                 saveTracking.setDistanceM(distanceM);
-                saveTracking.setDistanceK(distanceK);
+//                saveTracking.setDistanceK(distanceK);
                 trackingRepository.save(saveTracking);
-                distanceResponseDto.setDistanceK(Math.round(distanceK*100)/100.0);
+                distanceResponseDto.setDistanceM(distanceM);
             }
         }
         return distanceResponseDto;
