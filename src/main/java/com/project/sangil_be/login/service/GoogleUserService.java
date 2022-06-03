@@ -138,15 +138,14 @@ public class GoogleUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="등린이";
-            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
+            String userTitle="초심자";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/CPrMK6E8n8.png";
 
             googleUser = new User(googlename,socialId,encodedPassword, nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(googleUser);
             GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,googleUser);
             getTitleRepository.save(getTitle);
         }
-
 
         return googleUser;
     }
