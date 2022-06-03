@@ -21,26 +21,21 @@ public class FeedResponseDto {
     private Integer goodCnt;
     private Boolean goodStatus;
     private Long commentCnt;
-    private List<FeedCommentResDto> feedCommentResDtos;
+    private List<FeedCommentResDto> commentList;
     private List<TitleDto> titleDtoList;
     private String beforeTime;
 
-    public FeedResponseDto(User user, Feed feed, int goodCnt, boolean goodStatus,List<TitleDto> titleDtoList ) {
+    public FeedResponseDto(User user, Feed feed, int goodCnt, String beforeTime) {
         this.userId = user.getUserId();
-        this.feedId = feed.getFeedId();
         this.nickname = user.getNickname();
-        this.userTitle = user.getUserTitle();
         this.userImgUrl = user.getUserImgUrl();
         this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();
-        this.createdAt = feed.getCreatedAt();
+        this.beforeTime = beforeTime;
         this.goodCnt = goodCnt;
-        this. goodStatus = goodStatus;
-        this.titleDtoList=titleDtoList;
     }
 
     public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, String beforeTime) {
-        this.userId = feed.getUser().getUserId();
         this.feedId = feed.getFeedId();
         this.nickname = feed.getUser().getNickname();
         this.userTitle = feed.getUser().getUserTitle();
@@ -54,7 +49,7 @@ public class FeedResponseDto {
     }
 
 
-    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, Long commentCnt, List<FeedCommentResDto> feedCommentResDtos) {
+    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, String beforeTime, Long commentCnt, List<FeedCommentResDto> feedCommentResDtos) {
         this.userId = feed.getUser().getUserId();
         this.feedId = feed.getFeedId();
         this.nickname = feed.getUser().getNickname();
@@ -62,11 +57,25 @@ public class FeedResponseDto {
         this.userImgUrl = feed.getUser().getUserImgUrl();
         this.feedImgUrl = feed.getFeedImgUrl();
         this.feedContent = feed.getFeedContent();
-        this.createdAt = feed.getCreatedAt();
+        this.beforeTime = beforeTime;
         this.goodCnt = goodCnt;
-        this. goodStatus = goodStatus;
+        this.goodStatus = goodStatus;
         this.commentCnt = commentCnt;
-        this.feedCommentResDtos = feedCommentResDtos;
+        this.commentList = feedCommentResDtos;
     }
+
+    public FeedResponseDto(Feed feeds) {
+        this.feedId=feeds.getFeedId();
+        this.feedImgUrl=feeds.getFeedImgUrl();
+    }
+
+    public FeedResponseDto(Feed feed, int goodCnt, boolean goodStatus, List<TitleDto> titleDtoList) {
+        this.feedId = feed.getFeedId();
+        this.feedImgUrl = feed.getFeedImgUrl();
+        this.goodCnt = goodCnt;
+        this.goodStatus = goodStatus;
+        this. titleDtoList = titleDtoList;
+    }
+
 
 }

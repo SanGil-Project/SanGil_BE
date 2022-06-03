@@ -13,14 +13,15 @@ import java.util.List;
 public class PartyListDto {
     private Long partyId;
     private String nickname;
+    private String userTitle;
     private String title;
     private String partyContent;
     private String mountain;
-    private String address;
+    private String mountainAddress;
     private String partyDate;
     private String partyTime;
     private int maxPeople;
-    private int curPeople;
+    private int currentPeople;
     private boolean completed;
     private LocalDateTime createdAt;
     private String beforeTime;
@@ -30,45 +31,44 @@ public class PartyListDto {
         this.partyId = party.getPartyId();
         this.nickname = party.getUser().getNickname();
         this.title = party.getTitle();
-        this.partyContent = party.getPartyContent();
         this.mountain = party.getMountain();
-        this.address = party.getAddress();
+        this.mountainAddress = party.getAddress();
         this.partyDate = party.getPartyDate();
         this.partyTime = party.getPartyTime();
         this.maxPeople = party.getMaxPeople();
-        this.curPeople = party.getCurPeople();
+        this.currentPeople = party.getCurPeople();
         this.completed = completed;
-        this.createdAt = party.getCreatedAt();
         this.beforeTime = beforeTime;
+        this.userTitle = party.getUser().getUserTitle();
     }
 
-    public PartyListDto(Party party, boolean completed, List<TitleDto> titleDtoList) {
+    public PartyListDto(Party party, boolean completed, List<TitleDto> titleDtoList, String beforeTime) {
         this.partyId = party.getPartyId();
         this.nickname = party.getUser().getNickname();
         this.title = party.getTitle();
         this.partyContent = party.getPartyContent();
         this.mountain = party.getMountain();
-        this.address = party.getAddress();
+        this.mountainAddress = party.getAddress();
         this.partyDate = party.getPartyDate();
         this.partyTime = party.getPartyTime();
         this.maxPeople = party.getMaxPeople();
-        this.curPeople = party.getCurPeople();
+        this.currentPeople = party.getCurPeople();
         this.completed = completed;
-        this.createdAt = party.getCreatedAt();
+        this.beforeTime = beforeTime;
+        this.userTitle = party.getUser().getUserTitle();
         this.titleDtoList = titleDtoList;
     }
 
-    public PartyListDto(Long partyId, String nickname, String title, String mountain, String address, String partyDate, String partyTime, int maxPeople, int curPeople, boolean completed, LocalDateTime createdAt) {
+    public PartyListDto(Long partyId, String nickname, String title, String mountain, String address, String partyDate, String partyTime, int maxPeople, int curPeople, LocalDateTime createdAt) {
         this.partyId = partyId;
         this.nickname = nickname;
         this.title = title;
         this.mountain = mountain;
-        this.address = address;
+        this.mountainAddress = address;
         this.partyDate = partyDate;
         this.partyTime = partyTime;
         this.maxPeople = maxPeople;
-        this.curPeople = curPeople;
-        this.completed = completed;
+        this.currentPeople = curPeople;
         this.createdAt = createdAt;
     }
 }

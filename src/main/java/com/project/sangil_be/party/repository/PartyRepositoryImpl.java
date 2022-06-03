@@ -30,7 +30,6 @@ public class PartyRepositoryImpl implements PartyRepositoryCustom {
                         party.partyTime,
                         party.maxPeople,
                         party.curPeople,
-                        party.completed,
                         party.createdAt))
                 .from(party)
                 .where(party.mountain.contains(keyword)

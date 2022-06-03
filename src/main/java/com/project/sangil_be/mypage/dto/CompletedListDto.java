@@ -18,7 +18,7 @@ public class CompletedListDto {
     private Double lng;
     private Double totalDistance;
     private String totalTime;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public CompletedListDto(Completed complete, Mountain mountain) {
         this.completedId = complete.getCompleteId();
@@ -28,6 +28,6 @@ public class CompletedListDto {
         this.lng = mountain.getLng();
         this.totalDistance = complete.getTotalDistance();
         this.totalTime = complete.getTotalTime();
-        this.createAt = complete.getCreatedAt();
+        this.createdAt = complete.getCreatedAt();
     }
 }

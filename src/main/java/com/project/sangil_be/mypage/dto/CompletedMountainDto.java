@@ -12,14 +12,14 @@ public class CompletedMountainDto {
     private String mountain;
     private String totalDistance;
     private String totalTime;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public CompletedMountainDto(Completed completed, Mountain mountain) {
         this.completedId = completed.getCompleteId();
         this.mountain = mountain.getMountain();
         this.totalDistance = String.format("%.1f", completed.getTotalDistance());
         this.totalTime = completed.getTotalTime();
-        this.createAt = completed.getCreatedAt();
+        this.createdAt = completed.getCreatedAt();
 
     }
 }

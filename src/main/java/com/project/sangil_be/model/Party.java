@@ -47,24 +47,25 @@ public class Party extends Timestamped {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Party(PartyRequestDto partyRequestDto, int curPeople, boolean completed, User user) {
+    public Party(PartyRequestDto partyRequestDto, int currentPeople, boolean completed, User user) {
         this.title = partyRequestDto.getTitle();
         this.mountain = partyRequestDto.getMountain();
-        this.address = partyRequestDto.getAddress();
+        this.address = partyRequestDto.getMountainAddress();
         this.partyDate = partyRequestDto.getPartyDate();
         this.partyTime = partyRequestDto.getPartyTime();
         this.maxPeople = partyRequestDto.getMaxPeople();
-        this.curPeople = curPeople;
+        this.curPeople = currentPeople;
         this.partyContent = partyRequestDto.getPartyContent();
         this.completed = completed;
         this.user = user;
     }
 
-    public void update(String partyDate, String partyTime, int maxPeople, String partyContent) {
+    public void update(String partyDate, String partyTime, int maxPeople, String partyContent, boolean completed) {
         this.partyDate = partyDate;
         this.partyTime = partyTime;
         this.maxPeople = maxPeople;
         this.partyContent = partyContent;
+        this.completed = completed;
     }
 
     public void updateCurpeople(int result) {

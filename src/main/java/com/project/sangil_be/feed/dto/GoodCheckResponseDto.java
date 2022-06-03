@@ -11,8 +11,8 @@ public class GoodCheckResponseDto {
     boolean goodStatus;
     Integer goodCnt;
 
-    public GoodCheckResponseDto(Integer goodCnt, boolean goodStatus) {
-        this.goodCnt=goodCnt;
+    public GoodCheckResponseDto(boolean goodStatus, Integer goodCnt) {
         this.goodStatus = goodStatus;
+        this.goodCnt=goodCnt;
     }
 }

@@ -20,16 +20,17 @@ public class MCommentResponseDto {
     private String msg;
     private LocalDateTime createdAt;
     private List<TitleDto> titleDtoList;
+    private String beforeTime;
 
-    public MCommentResponseDto( MountainComment mountainComment, UserDetailsImpl userDetails, String msg, List<TitleDto> titleDtoList) {
+    public MCommentResponseDto( MountainComment mountainComment, UserDetailsImpl userDetails, String msg, List<TitleDto> titleDtoList, String beforeTime) {
         this.mountainCommentId = mountainComment.getMountainCommentId();
         this.mountainComment = mountainComment.getMountainComment();
         this.userTitle = userDetails.getUser().getUserTitle();
-        this.userId = userDetails.getUser().getUserId();
         this.nickname = userDetails.getNickname();
+        this.userId = mountainComment.getUserId();
         this.star = mountainComment.getStar();
         this.msg = msg;
-        this.createdAt = mountainComment.getCreatedAt();
+        this.beforeTime=beforeTime;
         this.titleDtoList = titleDtoList;
     }
 

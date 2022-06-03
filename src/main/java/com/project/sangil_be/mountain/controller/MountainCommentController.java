@@ -14,7 +14,7 @@ public class MountainCommentController {
     private final MCommentService mCommentService;
 
     // 댓글 작성
-    @PostMapping("/api/mountain/comment/{mountainId}")
+    @PostMapping("/mountain/comment/{mountainId}")
     public MCommentResponseDto writeComment(
             @PathVariable Long mountainId,
             @RequestBody MCommentRequestDto mCommentRequestDto,
@@ -23,18 +23,18 @@ public class MountainCommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/api/mountain/comment/{mountainCommentId}")
-    public MCommentResponseDto updateComment(
+    @PutMapping("/mountain/comment/{mountainCommentId}")
+    public void updateComment(
             @PathVariable Long mountainCommentId,
             @RequestBody MCommentRequestDto mCommentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return mCommentService.updateComment(mountainCommentId, mCommentRequestDto, userDetails);
+        mCommentService.updateComment(mountainCommentId, mCommentRequestDto, userDetails);
     }
 
     // 댓글 삭제
-    @DeleteMapping("/api/mountain/comment/{mountainCommentId}")
-    public String deleteComment(@PathVariable Long mountainCommentId){
-        return mCommentService.deleteComment(mountainCommentId);
+    @DeleteMapping("/mountain/comment/{mountainCommentId}")
+    public void deleteComment(@PathVariable Long mountainCommentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        mCommentService.deleteComment(mountainCommentId,userDetails);
     }
 
 }

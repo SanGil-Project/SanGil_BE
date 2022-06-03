@@ -8,17 +8,18 @@ import lombok.Getter;
 public class UserResponseDto {
     private Long userId;
     private String nickname;
-    private String userImageUrl;
+    private String userImgUrl;
     private String userTitle;
 
     public UserResponseDto(UserDetailsImpl userDetails) {
         this.userId = userDetails.getUser().getUserId();
         this.nickname = userDetails.getNickname();
-        this.userImageUrl = userDetails.getUser().getUserImgUrl();
+        this.userImgUrl = userDetails.getUser().getUserImgUrl();
         this.userTitle = userDetails.getUser().getUserTitle();
     }
 
     public UserResponseDto(User user) {
+
         this.nickname=user.getNickname();
     }
 }

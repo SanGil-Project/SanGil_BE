@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class FeedCommentResDto {
-    private Long commentId;
+    private Long feedCommentId;
     private Long userId;
     private String nickname;
     private String userTitle;
@@ -24,13 +24,21 @@ public class FeedCommentResDto {
 //        this.userImageUrl = feedComment.getUser().getUserImgUrl();
 //    }
 
-    public FeedCommentResDto(FeedComment feedComment) {
-        this.commentId = feedComment.getFeedCommentId();
-        this.userId = feedComment.getUser().getUserId();
-        this.nickname = feedComment.getUser().getNickname();
-        this.userTitle = feedComment.getUser().getUserTitle();
-        this.userImgUrl = feedComment.getUser().getUserImgUrl();
-        this.createdAt = feedComment.getCreatedAt();
-    }
+//    public FeedCommentResDto(FeedComment feedComment) {
+//        this.feedcommentId = feedComment.getFeedCommentId();
+//        this.userId = feedComment.getUser().getUserId();
+//        this.nickname = feedComment.getUser().getNickname();
+//        this.userTitle = feedComment.getUser().getUserTitle();
+//        this.userImgUrl = feedComment.getUser().getUserImgUrl();
+//    }
 
+    public FeedCommentResDto(FeedComment feedComment, String commentBeforeTime) {
+        this.feedCommentId=feedComment.getFeedCommentId();
+        this.userId=feedComment.getUser().getUserId();
+        this.nickname=feedComment.getUser().getNickname();
+        this.userTitle=feedComment.getUser().getUserTitle();
+        this.userImgUrl=feedComment.getUser().getUserImgUrl();
+//        this.feedComment=feedComment.getFeedComment();
+        this.beforeTime=commentBeforeTime;
+    }
 }

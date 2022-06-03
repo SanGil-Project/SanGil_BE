@@ -41,14 +41,15 @@ public class PartyService {
     public PartyListDto writeParty(UserDetailsImpl userDetails, PartyRequestDto partyRequestDto) throws IOException {
         validator.blankContent(partyRequestDto); //내용이 입력되어 있는지 확인
         User user = userRepository.findById(userDetails.getUser().getUserId()).orElse(null); //만든사람 ID값 추가시 필요한 메소드
-        int curPeople = 1; //만들어지면 처음 모임 인원 수는 1
+        int currentPeople = 1; //만들어지면 처음 모임 인원 수는 1
         boolean completed = true; //컴플리트 기본은 true
-        Party party = new Party(partyRequestDto, curPeople, completed, user); //Party에 작성한 내용 및 현재 모집인원 수 추가
+        Party party = new Party(partyRequestDto, currentPeople, completed, user); //Party에 작성한 내용 및 현재 모집인원 수 추가
         partyRepository.save(party); //레파지토리에 저장
         Attend attend = new Attend(userDetails.getUser().getUserId(), party.getPartyId()); //참여하기에 생성한 유저의 내용 저장
         attendRepository.save(attend);
         List<TitleDto> titleDtoList = titleService.getAttendTitle(userDetails);
-        return new PartyListDto(party, completed, titleDtoList);
+        Long beforeTime = ChronoUnit.MINUTES.between(party.getCreatedAt(), LocalDateTime.now());
+        return new PartyListDto(party, completed, titleDtoList,calculator.time(beforeTime));
     }
 
     // complete 수정 필요
@@ -95,33 +96,49 @@ public class PartyService {
 
         Party party = partyRepository.findById(partyId).orElse(null);
         ;
-
+        boolean completed;
         for (Attend attends : attend) {
             User user = userRepository.findByUserId(attends.getUserId());
             partymemberDto.add(new PartymemberDto(user));
         }
         long beforeTime = ChronoUnit.MINUTES.between(party.getCreatedAt(), LocalDateTime.now());
 
-        return new PartyDetailDto(party, partymemberDto, calculator.time(beforeTime));
+        if (party.getMaxPeople() <= party.getCurPeople()) {
+            completed = false;
+        } else {
+            completed = true;
+        }
+        return new PartyDetailDto(party, partymemberDto, completed, calculator.time(beforeTime));
     }
 
     // api에 맞게 수정 필요
     // 동호회 수정 코드
     @Transactional
-    public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto) {
+    public PartyDetailDto updateParty(Long partyId, PartyRequestDto partyRequestDto, UserDetailsImpl userDetails) {
+
+        validator.partyAuthCheck(partyId,userDetails.getUser().getUserId());
+        boolean completed;
         Party party = partyRepository.findById(partyId).orElseThrow(
                 () -> new IllegalArgumentException("찾는 게시글이 없습니다.")
         );
+        if (partyRequestDto.getMaxPeople() <= party.getCurPeople()) {
+            completed = false;
+        } else {
+            completed = true;
+        }
         party.update(partyRequestDto.getPartyDate(), partyRequestDto.getPartyTime(),
-                partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent());
+                partyRequestDto.getMaxPeople(), partyRequestDto.getPartyContent(),completed);
 
-        return new PartyDetailDto(party);
+        Long beforeTime = ChronoUnit.MINUTES.between(party.getCreatedAt(), LocalDateTime.now());
+
+        return new PartyDetailDto(party,calculator.time(beforeTime));
     }
 
     // 동호회 모임 삭제 코드
     @Transactional
     public void deleteParty(Long partyId, UserDetailsImpl userDetails) {
         try {
+            validator.partyAuthCheck(partyId,userDetails.getUser().getUserId());
             partyRepository.deleteById(partyId);
             attendRepository.deleteByPartyIdAndUserId(partyId, userDetails.getUser().getUserId());
         } catch (IllegalArgumentException e) {
@@ -163,10 +180,12 @@ public class PartyService {
         LocalDate date = LocalDate.now();
         for (PartyListDto partyListDto : partyListDtos) {
             LocalDate date1 = LocalDate.parse(partyListDto.getPartyDate());
+            Long beforeTime = ChronoUnit.MINUTES.between(partyListDto.getCreatedAt(), LocalDateTime.now());
+            partyListDto.setBeforeTime(calculator.time(beforeTime));
             if (date.isAfter(date1) || date.isEqual(date1)) {
                 partyListDto.setPartyDate("마감되었습니다.");
             }
-            if (partyListDto.getMaxPeople() <= partyListDto.getCurPeople()) {
+            if (partyListDto.getMaxPeople() <= partyListDto.getCurrentPeople()) {
                 partyListDto.setCompleted(false);
             }else {
                 partyListDto.setCompleted(true);

@@ -14,7 +14,7 @@ public class FeedCommentController {
     private final FeedCommentService feedCommentService;
 
     // 댓글 작성
-    @PostMapping("feeds/comment/{feedId}")
+    @PostMapping("/feeds/comment/{feedId}")
     public FeedCommentResDto writeComment(
             @PathVariable Long feedId,
             @RequestBody FeedCommentReqDto feedCommentReqDto,
@@ -23,7 +23,7 @@ public class FeedCommentController {
     }
 
     // 댓글 수정
-    @PutMapping("feeds/comment/{feedCommentId}")
+    @PutMapping("/feeds/comment/{feedCommentId}")
     public void updateComment(
             @PathVariable Long feedCommentId,
             @RequestBody FeedCommentReqDto feedCommentReqDto,
@@ -32,9 +32,9 @@ public class FeedCommentController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("feeds/comment/{feedCommentId}")
-    public void deleteComment(@PathVariable Long feedCommentId) {
-        feedCommentService.deleteComment(feedCommentId);
+    @DeleteMapping("/feeds/comment/{feedCommentId}")
+    public void deleteComment(@PathVariable Long feedCommentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        feedCommentService.deleteComment(feedCommentId,userDetails);
     }
 
 //    // 댓글 상세 페이지

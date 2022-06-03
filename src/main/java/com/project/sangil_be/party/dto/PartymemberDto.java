@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 public class PartymemberDto {
     private String nickname;
-    private String userImageUrl;
+    private String userImgUrl;
     private String userTitle;
 
 
     public PartymemberDto(User user) {
         this.nickname = user.getNickname();
-        this.userImageUrl = user.getUserImgUrl();
+        this.userImgUrl = user.getUserImgUrl();
         this.userTitle = user.getUserTitle();
     }
 }

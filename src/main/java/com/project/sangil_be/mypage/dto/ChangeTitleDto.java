@@ -8,13 +8,13 @@ import lombok.Getter;
 public class ChangeTitleDto {
     private Long userId;
     private String userTitle;
-    private String userTitleUrl;
-    private String beforeTitlUrl;
+    private String userTitleImgUrl;
+    private String beforeTitleImgUrl;
 
     public ChangeTitleDto(UserDetailsImpl userDetails, UserTitle usertitle, UserTitle userTitle2) {
         this.userId=userDetails.getUser().getUserId();
         this.userTitle= usertitle.getUserTitle();
-        this.userTitleUrl = usertitle.getCTitleImgUrl();
-        this.beforeTitlUrl = userTitle2.getBTitleImgUrl();
+        this.userTitleImgUrl = usertitle.getCTitleImgUrl();
+        this.beforeTitleImgUrl = userTitle2.getBTitleImgUrl();
     }
 }

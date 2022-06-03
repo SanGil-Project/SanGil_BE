@@ -1,51 +1,51 @@
 // package com.project.sangil_be.service;
-//
-// import com.project.sangil_be.feed.dto.FeedCommentResDto;
-// import com.project.sangil_be.model.User;
-// import com.project.sangil_be.login.repository.UserRepository;
-// import com.project.sangil_be.mainpage.dto.NearbyMountainListDto;
-// import com.project.sangil_be.model.*;
-// import com.project.sangil_be.mountain.dto.BookMarkResponseDto;
-// import com.project.sangil_be.mountain.dto.CommentListDto;
-// import com.project.sangil_be.mountain.dto.SearchDto;
-// import com.project.sangil_be.mountain.repository.BookMarkRepository;
-// import com.project.sangil_be.mountain.repository.MountainCommentRepository;
-// import com.project.sangil_be.mountain.repository.MountainRepository;
-// import com.project.sangil_be.mypage.dto.CompletedListDto;
-// import com.project.sangil_be.mypage.dto.TitleDto;
-// import com.project.sangil_be.mypage.dto.UserTitleDto;
-// import com.project.sangil_be.mypage.repository.CompletedRepository;
-// import com.project.sangil_be.mypage.repository.GetTitleRepository;
-// import com.project.sangil_be.mypage.repository.UserTitleRepository;
-// import com.project.sangil_be.party.dto.PartyListDto;
-// import com.project.sangil_be.etc.utils.Direction;
-// import com.project.sangil_be.etc.utils.GeometryUtil;
-// import com.project.sangil_be.etc.dto.LocationDto;
-// import com.project.sangil_be.etc.utils.TitleUtil;
-// import com.querydsl.core.QueryResults;
-// import com.querydsl.core.types.Projections;
-// import com.querydsl.jpa.impl.JPAQueryFactory;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.data.domain.*;
-//
-// import javax.persistence.EntityManager;
-// import java.text.ParseException;
-// import java.time.LocalDate;
-// import java.util.ArrayList;
-// import java.util.HashMap;
-// import java.util.List;
-//
-// import static com.project.sangil_be.model.QBookMark.*;
-// import static com.project.sangil_be.model.QFeedComment.*;
-// import static com.project.sangil_be.model.QMountain.mountain1;
-// import static com.project.sangil_be.model.QMountainComment.mountainComment1;
-// import static com.project.sangil_be.model.QParty.*;
-// import static com.project.sangil_be.model.QUser.user;
-// import static org.assertj.core.api.Assertions.assertThat;
-//
+
+ import com.project.sangil_be.feed.dto.FeedCommentResDto;
+ import com.project.sangil_be.model.User;
+ import com.project.sangil_be.login.repository.UserRepository;
+ import com.project.sangil_be.mainpage.dto.NearbyMountainListDto;
+ import com.project.sangil_be.model.*;
+ import com.project.sangil_be.mountain.dto.BookMarkResponseDto;
+ import com.project.sangil_be.mountain.dto.CommentListDto;
+ import com.project.sangil_be.mountain.dto.SearchDto;
+ import com.project.sangil_be.mountain.repository.BookMarkRepository;
+ import com.project.sangil_be.mountain.repository.MountainCommentRepository;
+ import com.project.sangil_be.mountain.repository.MountainRepository;
+ import com.project.sangil_be.mypage.dto.CompletedListDto;
+ import com.project.sangil_be.mypage.dto.TitleDto;
+ import com.project.sangil_be.mypage.dto.UserTitleDto;
+ import com.project.sangil_be.mypage.repository.CompletedRepository;
+ import com.project.sangil_be.mypage.repository.GetTitleRepository;
+ import com.project.sangil_be.mypage.repository.UserTitleRepository;
+ import com.project.sangil_be.party.dto.PartyListDto;
+ import com.project.sangil_be.etc.utils.Direction;
+ import com.project.sangil_be.etc.utils.GeometryUtil;
+ import com.project.sangil_be.etc.dto.LocationDto;
+ import com.project.sangil_be.etc.utils.TitleUtil;
+ import com.querydsl.core.QueryResults;
+ import com.querydsl.core.types.Projections;
+ import com.querydsl.jpa.impl.JPAQueryFactory;
+ import org.junit.jupiter.api.BeforeEach;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.boot.test.context.SpringBootTest;
+ import org.springframework.data.domain.*;
+
+ import javax.persistence.EntityManager;
+ import java.text.ParseException;
+ import java.time.LocalDate;
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.List;
+
+ import static com.project.sangil_be.model.QBookMark.*;
+ import static com.project.sangil_be.model.QFeedComment.*;
+ import static com.project.sangil_be.model.QMountain.mountain1;
+ import static com.project.sangil_be.model.QMountainComment.mountainComment1;
+ import static com.project.sangil_be.model.QParty.*;
+ import static com.project.sangil_be.model.QUser.user;
+ import static org.assertj.core.api.Assertions.assertThat;
+
 // @SpringBootTest
 // class MountainServiceTest {
 //
@@ -78,7 +78,7 @@
 //     public void before() {
 //         queryFactory = new JPAQueryFactory(em);
 //     }
-//
+
 //     @Test
 //     void searchMountain() {
 //         String keyword = "악";
@@ -199,7 +199,6 @@
 //                         mountain1.mountainId,
 //                         mountain1.mountain,
 //                         mountain1.mountainAddress,
-//                         mountain1.mountainImgUrl,
 //                         mountainComment1.star.avg().as("starAvr")))
 //                 .from(bookMark)
 //                 .leftJoin(mountain1).on(mountain1.mountainId.eq(bookMark.mountainId))
@@ -211,7 +210,7 @@
 //                 .fetchResults();
 //         List<BookMarkResponseDto> content = results.getResults();
 //         for (BookMarkResponseDto bookMarkResponseDto : content) {
-//             System.out.println(bookMarkResponseDto.getMountainName());
+//             System.out.println(bookMarkResponseDto.getMountain());
 //         }
 //         long total = results.getTotal();
 //         System.out.println(total);
@@ -364,4 +363,35 @@
 //         }
 //     }
 //
+//     @Test
+//     public void searchparty(){
+//            String keyword = "악";
+//
+//         QueryResults<PartyListDto> results = queryFactory
+//                 .select(Projections.constructor(PartyListDto.class,
+//                         party.partyId,
+//                         party.user.nickname,
+//                         party.title,
+//                         party.mountain,
+//                         party.address,
+//                         party.partyDate,
+//                         party.partyTime,
+//                         party.maxPeople,
+//                         party.curPeople))
+//                 .from(party)
+//                 .where(party.mountain.contains(keyword)
+//                         .or(party.address.contains(keyword)
+//                                 .or(party.title.contains(keyword))))
+//                 .offset(0)
+//                 .limit(5)
+//                 .fetchResults();
+//         List<PartyListDto> content = results.getResults();
+//         for (PartyListDto partyListDto : content) {
+//
+//             System.out.println("partyListDto = " + partyListDto.getPartyDate());
+//
+//         }
+//
+//     }
+
 // }

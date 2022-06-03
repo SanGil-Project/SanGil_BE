@@ -54,14 +54,15 @@ public class UserController {
     }
 
     // 회원가입
-    @PostMapping("/user/signup")
+    @PostMapping("api/user/signup")
     public SignUpResponseDto signup(@RequestBody SignUpRequestDto requestDto) {
         return userService.registerUser(requestDto);
     }
 
     // 로그인 체크
-    @GetMapping("/api/user/loginCheck")
+    @GetMapping("/user/loginCheck")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        System.out.println(userDetails);
         return new UserResponseDto(userDetails);
     }
 

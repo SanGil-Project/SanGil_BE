@@ -11,7 +11,7 @@ import java.time.LocalTime;
 public class PartyRequestDto {
     private String title;
     private String mountain;
-    private String address;
+    private String mountainAddress;
     private String partyDate;
     private String partyTime;
     private int maxPeople;

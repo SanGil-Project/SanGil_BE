@@ -25,7 +25,7 @@ public class FeedController {
     private final FeedRepository feedRepository;
 
     //피드 작성
-    @PostMapping("/api/feeds/write")
+    @PostMapping("/feeds/write")
     public FeedResponseDto save(
             @RequestParam("file") MultipartFile multipartFile,
             @RequestParam("feedContent") String feedContent,
@@ -36,8 +36,7 @@ public class FeedController {
 
     @GetMapping("/feeds/detail/{feedId}/{pageNum}")
     public FeedDetailResponseDto detail(@PathVariable("feedId") Long feedId, @PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        return feedService.feedDetail(feedId, user,pageNum-1);
+        return feedService.feedDetail(feedId, userDetails,pageNum-1);
     }
 
     // 피드 리스트
@@ -47,24 +46,21 @@ public class FeedController {
     }
 
     //나의 피드
-    @GetMapping("/api/myfeeds/{pageNum}")
+    @GetMapping("/myfeeds/{pageNum}")
     public FeedListResponseDto myfeeds (@PathVariable("pageNum") int pageNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        return feedService.myfeeds(user, pageNum-1);
+        return feedService.myfeeds(userDetails, pageNum-1);
     }
 
     //피드 좋아요
-    @PostMapping("/api/feeds/good/{feedId}")
+    @PostMapping("/feeds/good/{feedId}")
     public GoodCheckResponseDto goodCheck(@PathVariable("feedId") Long feedId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        return feedService.goodCheck(feedId, user);
+        return feedService.goodCheck(feedId, userDetails);
     }
 
     //피드 삭제
     @Transactional
-    @DeleteMapping("/api/feeds/delete/{feedId}")
-    public void deleteFeed(@PathVariable("feedId") Long feedId){
-        Optional<Feed> feed = feedRepository.findById(feedId);
-        feedService.deletefeed(feedId, feed);
+    @DeleteMapping("/feeds/delete/{feedId}")
+    public void deleteFeed(@PathVariable("feedId") Long feedId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        feedService.deletefeed(feedId,userDetails);
     }
 }
