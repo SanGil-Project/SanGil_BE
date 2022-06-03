@@ -28,6 +28,10 @@ public class BookMarkResponseDto {
         this.mountainId = mountainId;
         this.mountain = mountain;
         this.mountainAddress = mountainAddress;
-        this.starAvr = String.format("%.1f", starAvr);
+        if (starAvr == null) {
+            this.starAvr = String.valueOf(0.0);
+        } else {
+            this.starAvr = String.format("%.1f", starAvr);
+        }
     }
 }
