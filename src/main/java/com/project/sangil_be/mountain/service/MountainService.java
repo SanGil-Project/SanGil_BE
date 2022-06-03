@@ -85,7 +85,8 @@ public class MountainService {
             CourseListDto courseListDto = new CourseListDto(courses.get(i));
             courseLists.add(courseListDto);
         }
-        return new MountainResponseDto(mountain,bookmark, String.format("%.1f", starAvr), courseLists, commentDto);
+        Long commentCnt = Long.valueOf(mountainComments.size());
+        return new MountainResponseDto(mountain,bookmark, String.format("%.1f", starAvr), courseLists, commentDto, commentCnt);
     }
 
     //북마크 생성

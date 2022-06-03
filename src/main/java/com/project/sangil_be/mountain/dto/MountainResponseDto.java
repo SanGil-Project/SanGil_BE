@@ -22,7 +22,7 @@ public class MountainResponseDto {
     private CommentDto commentDto;
 
 
-    public MountainResponseDto(Mountain mountain, Boolean bookmark ,String starAvr, List<CourseListDto> courseLists, CommentDto commentDto) {
+    public MountainResponseDto(Mountain mountain, Boolean bookmark ,String starAvr, List<CourseListDto> courseLists, CommentDto commentDto, Long commentCnt) {
         this.mountainId = mountain.getMountainId();
         this.mountain = mountain.getMountain();
 //        this.weather = weatherDto.getWeather();
@@ -35,6 +35,7 @@ public class MountainResponseDto {
         this.bookmark=bookmark;
         this.courseList = courseLists;
         this.commentDto = commentDto;
+        this.commentCnt = commentCnt;
     }
 
 
