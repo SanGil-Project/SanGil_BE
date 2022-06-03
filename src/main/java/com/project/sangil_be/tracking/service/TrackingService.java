@@ -57,6 +57,7 @@ public class TrackingService {
 //            Double distanceK = 0d;
             saveTracking.setDistanceM(distanceM);
 //            saveTracking.setDistanceK(distanceK);
+
             trackingRepository.save(saveTracking);
             distanceResponseDto.setDistanceM(distanceM);
         } else {
