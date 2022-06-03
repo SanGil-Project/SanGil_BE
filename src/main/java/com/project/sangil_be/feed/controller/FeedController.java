@@ -61,7 +61,6 @@ public class FeedController {
     @Transactional
     @DeleteMapping("/feeds/delete/{feedId}")
     public void deleteFeed(@PathVariable("feedId") Long feedId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-
-        feedService.deletefeed(feedId, userDetails);
+        feedService.deletefeed(feedId,userDetails);
     }
 }

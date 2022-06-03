@@ -74,10 +74,10 @@ public class FeedService {
     // 피드 삭제
     @Transactional
     public void deletefeed(Long feedId, UserDetailsImpl userDetails) {
+        Optional<Feed> feed = feedRepository.findById(feedId);
         validator.feedAuthCheck(feedId, userDetails.getUser().getUserId());
         feedRepository.deleteById(feedId);
         goodRepository.deleteByFeedId(feedId);
-        Optional<Feed> feed = feedRepository.findById(feedId);
         String[] key = feed.get().getFeedImgUrl().split(".com/");
         String imageKey = key[key.length - 1];
         s3Service.deletefeed(imageKey);
