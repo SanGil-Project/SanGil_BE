@@ -147,7 +147,6 @@ public class GoogleUserService {
             getTitleRepository.save(getTitle);
         }
 
-
         return googleUser;
     }
 
