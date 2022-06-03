@@ -24,8 +24,8 @@ public class Tracking {
     @Column(nullable = false)
     private Double lng;
 
-//    @Column(nullable = false)
-//    private Double distanceK;
+    @Column(nullable = false)
+    private Double distanceK;
 
     @Column(nullable = false)
     private Double distanceM;
