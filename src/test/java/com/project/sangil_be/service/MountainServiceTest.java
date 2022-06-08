@@ -3,12 +3,8 @@ package com.project.sangil_be.service;
 import com.project.sangil_be.dto.*;
 import com.project.sangil_be.model.*;
 import com.project.sangil_be.repository.*;
-import com.project.sangil_be.utils.Direction;
-import com.project.sangil_be.utils.GeometryUtil;
-import com.project.sangil_be.utils.Location;
-import com.project.sangil_be.utils.TitleUtil;
+import com.project.sangil_be.utils.*;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +17,12 @@ import org.springframework.data.domain.*;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.project.sangil_be.model.QBookMark.*;
-import static com.project.sangil_be.model.QFeed.feed;
 import static com.project.sangil_be.model.QFeedComment.*;
-import static com.project.sangil_be.model.QGood.good;
 import static com.project.sangil_be.model.QMountain.mountain1;
 import static com.project.sangil_be.model.QMountainComment.mountainComment1;
 import static com.project.sangil_be.model.QParty.*;
@@ -43,9 +39,12 @@ class MountainServiceTest {
     private final GetTitleRepository getTitleRepository;
     private final UserTitleRepository userTitleRepository;
     private final UserRepository userRepository;
+    private final PartyRepository partyRepository;
+    private final Validator validator;
+    private final Calculator calculator;
 
     @Autowired
-    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository, TitleUtil titleService, GetTitleRepository getTitleRepository, UserTitleRepository userTitleRepository, UserRepository userRepository) {
+    MountainServiceTest(MountainRepository mountainRepository, MountainCommentRepository mountainCommentRepository, BookMarkRepository bookMarkRepository, TitleUtil titleService, GetTitleRepository getTitleRepository, UserTitleRepository userTitleRepository, UserRepository userRepository, PartyRepository partyRepository, Validator validator, Calculator calculator) {
         this.mountainRepository = mountainRepository;
         this.mountainCommentRepository = mountainCommentRepository;
         this.bookMarkRepository = bookMarkRepository;
@@ -53,6 +52,9 @@ class MountainServiceTest {
         this.getTitleRepository = getTitleRepository;
         this.userTitleRepository = userTitleRepository;
         this.userRepository = userRepository;
+        this.partyRepository = partyRepository;
+        this.validator = validator;
+        this.calculator = calculator;
     }
 
     @Autowired
@@ -302,10 +304,8 @@ class MountainServiceTest {
         }
         System.out.println(userTitleDtos.size());
 
-
-//        UserTitleResponseDto userTitleResponseDto = new UserTitleResponseDto(userTitleDtos, titleDtoList);
-
     }
+
     @Test
     public void commentList() {
         Long feedId = 1L;
@@ -355,7 +355,7 @@ class MountainServiceTest {
                 }
                 starAvr = (float) star / mountainComments.size();
             }
-            SearchDto mountainInfo = new SearchDto(starAvr,mountain100DtoList.get(i));
+            SearchDto mountainInfo = new SearchDto(starAvr, mountain100DtoList.get(i));
 
             searchDto.add(mountainInfo);
         }
@@ -433,7 +433,7 @@ class MountainServiceTest {
     @Test
     @DisplayName("검색 후 페이지 Querydsl")
     void searchAfter2() {
-        int pageNum=1;
+        int pageNum = 1;
         String keyword = "악";
         PageRequest pageRequest = PageRequest.of(pageNum, 5);
         Page<SearchDto> searchDtos = mountainRepository.searchPage(keyword, pageRequest);
@@ -441,6 +441,6 @@ class MountainServiceTest {
             System.out.println("searchDto.getMountain() = " + searchDto.getMountain());
         }
 
-
     }
+
 }

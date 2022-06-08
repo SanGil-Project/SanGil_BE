@@ -8,6 +8,7 @@ import com.project.sangil_be.utils.DistanceToUser;
 import com.project.sangil_be.utils.TitleUtil;
 import com.project.sangil_be.utils.Validator;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.*;
 
 import javax.persistence.EntityManager;
 import java.util.*;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 public class NPlus1Test {
@@ -153,9 +156,26 @@ public class NPlus1Test {
             Top10MountainDto top10MountainDto = new Top10MountainDto(top10Mountains.get(i), bookMark);
             testDtos.add(top10MountainDto);
         }
+
         for (Top10MountainDto testDto : testDtos) {
             System.out.println("testDto.getMountain() = " + testDto.getMountain());
         }
+
+//        List<String> list = new ArrayList<>();
+//        list.add("용두봉");
+//        list.add("용두산");
+//        list.add("가리왕산");
+//        list.add("관악산");
+//        list.add("명지산");
+//        list.add("변산");
+//        list.add("부춘산");
+//        list.add("가리산");
+//        list.add("가야산");
+//        list.add("가지산");
+//
+//        for (int i = 0; i < testDtos.size(); i++) {
+//            assertThat(testDtos.get(i).getMountain()).isEqualTo(list.get(i));
+//        }
     }
 
     @Test
@@ -206,10 +226,10 @@ public class NPlus1Test {
             Top10MountainDtos.add(mountain10ResponseDto);
 
         }
-
         for (Top10MountainDto top10MountainDto : Top10MountainDtos) {
-            System.out.println("top10MountainDto.getMountain() = " + top10MountainDto.getMountain());
+            System.out.println(top10MountainDto.getMountain());
         }
+
     }
 
     private class CntComparator implements Comparator<Mountain10ResponseDto> {
@@ -241,7 +261,7 @@ public class NPlus1Test {
             bookMarkResponseDto.setDistance(Math.round(distance * 100) / 100.0);
         }
         for (BookMarkResponseDto bookMarkResponseDto : bookMarkResponseDtos) {
-            System.out.println("bookMarkResponseDto.getMountainId() = " + bookMarkResponseDto.getMountainId());
+            System.out.println("bookMarkResponseDto.getMountainId() = " + bookMarkResponseDto.getStarAvr());
         }
     }
 

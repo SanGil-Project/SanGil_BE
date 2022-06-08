@@ -22,8 +22,8 @@ public class BookMarkResponseDto {
         this.mountainAddress = mountain.getMountainAddress();
         this.mountainImageUrl = mountain.getMountainImgUrl();
         this.bookMarkChk = bookMarkChk;
-        this.starAvr = Math.round(starAvr*10)/10.0;
-        this.distance = Math.round(distance*100)/100.0;
+        this.starAvr = Math.round(starAvr * 10) / 10.0;
+        this.distance = Math.round(distance * 100) / 100.0;
     }
 
     public BookMarkResponseDto(Long mountainId, String mountainName, String mountainAddress, String mountainImageUrl, Double starAvr) {
@@ -31,6 +31,10 @@ public class BookMarkResponseDto {
         this.mountainName = mountainName;
         this.mountainAddress = mountainAddress;
         this.mountainImageUrl = mountainImageUrl;
-        this.starAvr = starAvr;
+        if (starAvr == null) {
+            this.starAvr = 0d;
+        } else {
+            this.starAvr = starAvr;
+        }
     }
 }
