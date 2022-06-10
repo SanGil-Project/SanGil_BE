@@ -71,8 +71,8 @@ public class KakaoUserService {
         body.add("client_id", "7e0e932177f25c237ca90728893d9a21"); // 리액트
 
 //        body.add("redirect_uri", "https://yesleee.shop/user/kakao/callback"); // 리액트
-//        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
-        body.add("redirect_uri", "https://xn--wk0b636a.com/user/kakao/callback"); // 리액트
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback"); // 리액트
+//        body.add("redirect_uri", "https://xn--wk0b636a.com/user/kakao/callback"); // 리액트
 
         body.add("code", code);
 
@@ -145,8 +145,8 @@ public class KakaoUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String userImageUrl="없음";
-            String userTitle="등린이";
-            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/OYARElFqqr.png";
+            String userTitle="초심자";
+            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/CPrMK6E8n8.png";
 
             kakaoUser = new User(kakaousername,socialId,encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
             userRepository.save(kakaoUser);

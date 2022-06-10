@@ -18,12 +18,10 @@ public class Calculator {
         if (time < 7) {
             return String.format("%s일 전", time);
         }
-
         time = time / 30;
         if (time < 12) {
             return String.format("%s개월 전", time);
         }
-
         time = time / 12;
         return String.format("%s년 전", time);
     }
